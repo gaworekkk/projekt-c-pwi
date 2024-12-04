@@ -1,6 +1,6 @@
 # projekt-c-pwi
 
-{huge} skład zespołu:
+Skład zespołu://
 -Dominika Szymaniak
 -Ignacy Wereniuk
 -Krzysztof Ball
