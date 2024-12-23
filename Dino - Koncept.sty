@@ -1,0 +1,448 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+%-----------USTAWIENIA CZCIONEK----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Dostosowanie marginesów
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Formatowanie sekcji
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Zapewnienie, że wygenerowany PDF jest czytelny dla maszyn
+\pdfgentounicode=1
+
+%-------------------------
+% Własne komendy
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\title{Dino 2D - Wstępny koncept fabuły i mechanik}
+
+\author{Opracowano przez: Mateusz Kucio}
+
+
+
+\begin{document}
+\maketitle
+
+
+\section{Fabuła}
+
+\resumeItemListStart
+    \resumeItem{Fabuła kręci się wokół ucieczki Dino przed BBe. 
+    Dino w tym celu pokonuje co raz to kolejne etapy zwiedzając po drodze różne światy.}
+    \resumeItem{Kolejne komunikaty wyświetlają się na początku każdego etapu.}
+    \resumeItem{Przejścia między światami odbywają się na zasadzie komiksów wzorowanych na grze Angry Birds Star Wars.}
+\resumeItemListEnd
+
+\subsection{Wprowadzenie} 
+Komiks zawiera scenki:
+
+\resumeItemListStart
+    \resumeItem{Dino zapisuje na tablicy: \[
+      \sigma(\varphi) = \text{T}, \quad \sigma(\psi) = \text{F}, \quad \sigma(\varphi \rightarrow \psi) = \text{T}
+      \]}
+    \resumeItem{BBe robi się czerwony}
+    \resumeItem{Dino ucieka przed BBe, który go goni z Turbo-Grzybem}
+\resumeItemListEnd
+\\[5mm]
+\textbf{Etapy:}
+\\[5mm]
+\resumeSubHeadingListStart
+\resumeSubheading{Klasyk}{Zwykły bieg z kaktusami}{Nie daj się złapać BBe!}{Klasyczna, prosta plansza z pojawiąjącymi się losowo kaktusami.}
+\\[5mm]
+\resumeSubheading{Klasyk + Woda}{Utrudnienie będące wodą}{Dino nie umie pływać! Przeskakuj rwące wody Odry!}{Woda od kaktusów różni się szerokością.}
+\resumeItemListStart
+\resumeItem {Gracz aby przeskoczyć wodę musi skoczyć w odpowiednim momencie, inaczej nie wyląduje na drugim brzegu.}
+\resumeItem{Kaktusy oczywiście również występują.}
+\resumeItemListEnd
+\\[5mm]
+\resumeSubheading{Klasyk + Woda + Ptaki}{Dodatkowo pojawiają się ptaki.}{O nie! BBe łatwo się nie poddaje. Po jego stronie stoi armia ptaków!}{Ptaki zrzucają bomby.}
+\resumeItemListStart
+\resumeItem {Ptak zrzuca bomby w jednakowym odstępie czasu.}
+\resumeItem{Bomba uśmierca Dino, gdy na niego spadnie.}
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+\subsection{Przejście - platformy}
+Dino w tej sekcji potrafi skakać dwukrotnie wyżej.\\
+Komiks zawiera scenki:
+\resumeItemListStart
+    \resumeItem{Dino wskakuje na dach na oczach zdumionego BBe.}
+    \resumeItem{Następny obrazek zawiera Dino, strzałkę do góry i napis 2x - informuje on gracza o nowej zdolności Dino.}
+\resumeItemListEnd 
+\\[5mm]
+\textbf{Etapy:}
+\\[5mm]
+\resumeSubHeadingListStart
+\resumeSubheading{Platformy}{Klasyk, ale na platformach}{Skacz i nie spadnij}{Platformy pojawiają się na różnych wysokościach.}
+\\[5mm]
+\resumeSubheading{Platformy + Ptaki}{Mechanizm ptaków jak w klasycznej wersji.}{Ptaki powracają! Czy uda Ci się przetrwać tym razem?}{Należy nie spaść i nie dać się ustrzelić.}
+\resumeItemListStart
+\resumeItem {Trudność dla gracza polega na jednoczesnym kontrolowaniu zarówno skoku między platformami, skoku nad kaktusami, jak i bomb spadających na Dino.}
+\resumeItemListEnd
+\\[5mm]
+\resumeSubheading{Platformy + Woda + Ptaki}{Dodatkowo pojawia się woda.}{Pamiętaj aby się nie utopić!}{Kolejne zwiększenie poziomu trudności.}
+\\[5mm]
+\resumeSubheading{Ograniczona widoczność}{Połowa ekranu jest rozmyta}{Nadchodzi mgła! Przygotuj się na konieczność szybszego reagowania.}{Hardcorowy poziom}
+\resumeSubHeadingListEnd
+
+\subsection{Przejście - niebo}
+Dino w tej sekcji potrafi latać.\\
+Komiks zawiera scenki:
+\resumeItemListStart
+    \resumeItem{Meteoryt uderza w świat.}
+    \resumeItem{Fala uderzeniowa zmiata BBe.}
+    \resumeItem{Dino zaczyna biec bardzo szybko, aby uciec przed falą uderzeniową.}
+    \resumeItem{Dino biegnie tak szybko, że wzbija się w powietrze niczym samolot.}
+\resumeItemListEnd 
+\\[5mm]
+\textbf{Etapy:}
+\\[5mm]
+\resumeSubHeadingListStart
+\resumeSubheading{Latanie + Ptaki}{Dino musi omijać ptaki wraz z ich pociskami.}{Lawiruj wśród pocisków!}{Ptaki pojawiają się na różnych wysokościach.}
+\resumeItemListStart
+    \resumeItem{Ptaki lecą wolniej niż Dino.}
+    \resumeItem{W przypadku kolizji z ptakiem Dino umiera.}
+    \resumeItem{Dino może używać ognia, aby likwidować ptaki.}
+\resumeItemListEnd
+\\[5mm]
+\resumeSubheading{Latanie + Ptaki + Chmury}{Wersja ubogacona o chmury.}{Ptaki powracają! Czy uda Ci się przetrwać tym razem?}{Chmury są statyczne - nie poruszają się. Ptaki nie są.}
+\resumeSubHeadingListEnd
+
+\subsection{Przejście - Podziemia}
+Ostatnia sekcja z Final Bossem, którego Dino na koniec musi pokonać. 
+Dino na tej planszy może używać podwójnego skoku (nie mylić z 2x wyższym skokiem).\\
+Komiks zawiera scenki:
+\resumeItemListStart
+    \resumeItem{Dino wytraca prędkość i zaczyna spadać.}
+    \resumeItem{Na wysokości powierzchni wpada przez dziurę do podziemi.}
+    \resumeItem{Dino widzi przed sobą ciemny korytarz z dwoma czerwonymi punktami świecącymi w oddali.}
+\resumeItemListEnd 
+\\[5mm]
+\textbf{Etapy:}
+\\[5mm]
+\resumeSubHeadingListStart
+\resumeSubheading{Podziemia - Klasyk}{Klasyk, ale zamiast kaktusów pojawiają się grzyby.}{Więcej grzybów! Użyj podwójnego skoku, aby nie wpaść na dużego!}{Występują dwa rodzaje grzybów.}
+\resumeItemListStart
+    \resumeItem{Grzyb zwykły - działa dokładnie jak kaktus tylko ma inną teksturę.}
+    \resumeItem{Turbo-Grzyb - Tarcza nie chroni przed Turbo-Grzybem}
+\resumeItemListEnd
+\\[5mm]
+\resumeSubheading{Podziemia+Lawa}{Wersja ubogacona o lawę.}{Dino nie lubi pływać w lawie...}{Lawa działa tak samo jak woda.}
+\resumeItemListStart
+\resumeItem{Lawa od wody różni się jedynie teksturą.}
+\resumeItemListEnd
+\\[5mm]
+\resumeSubheading{Final Boss}{Dino musi pokonać BBe}{Pora na pojedynek! Używaj ognia aby walczyć i nie daj się trafić grzybem!}{Grzyb rzucany-zabija Dino.}
+\resumeItemListStart
+\resumeItem{Grzyb-rzucany działa tak jak pocisk ptaków tyle, że w poziomie. Okres rzutu jest taki sam za każdym razem.}
+\resumeItem{Tarcza może uchronić przed Grzybem-rzucanym.}
+\resumeItem{BBe ma teksturę klasyczną, jedynie oczy są zmienione na czerwone. Trzyma w ręce grzyba.}
+\resumeItem{Punkty życia BBe wyświetlają się na górze ekranu. Domyślnie jest ich 50. Po pokonaniu BBe, traci on grzyba którego trzyma w ręce.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\subsection{Zakończenie}
+Komiks zawiera scenki:
+\resumeItemListStart
+    \resumeItem{BBe pokonany odchodzi w dal tunelu.}
+    \resumeItem{Dino cieszy się.}
+    \resumeItem{Dino widzi przed sobą wyjście na powierzchnie.}
+\resumeItemListEnd 
+Wyświetlany jest komunikat: Gratulacje udało Ci się przejść Dino 2D. Teraz dostępny jest tryb endless gdzie rozgrywka przebiega co raz szybciej. Staw czoła wyzwaniu!\\[5mm]
+W trybie endless nie ma komunikatów na początku każdego etapu i przejść z komiksami.
+
+\section{Koncepty dodatkowych mechanik}
+\label{sec:examples}
+
+\subsection{Wprowadzenie mechaniki "zrzutu" ptaków}
+Koncept polega na upuszczaniu przez ptaki jakiegoś obiektu np. bomby, kamienia, kleksa itd. który przy kolizji zabija dino.\\
+\textbf{Zalety}: Wprowadza kolejny element do rozgryki; utrudnia ją i czyni ciekawszą.
+
+\subsection{Ptaki - Kolizja}
+W wypadku kolizji z ptakiem Dino traci życie.
+
+\subsection{Broń Dino - Ogień}
+Dino zieje ogniem. Ogień zabiera 5 punktów życia na sekundę, trwa dwie sekundy. Obiekt traci punkty życia, gdy następuje kolizja z płomieniem przez wystarczająco długi okres czasu. Ładowanie ognia po użyciu zajmuje 5 sekund.
+Aktywacja następuje poprzez naciśnięcie przycisku. Ptaki mają po 5 punktów życia, Final Boss 50. Nie oddziałuje na nic innego.\\
+\resumeItemListStart
+\resumeItem{\textbf{Zalety:} Urozmaica rozgrywkę i pozwala walczyć z Final Bossem - stanowi nieodłączną część gry.}
+\resumeItemListEnd
+
+\subsection{Spowolnienie}
+Spowalnia prędkość generowania świata, czyli poruszania się Dino (lub pozostawia ją taką samą a ptaki przyspiesza). Aktywacja następuje poprzez naciśnięcie przycisku.\\
+\resumeItemListStart
+    \resumeItem{\textbf{Zalety}: Pozwala na unikanie pocisków ptaków.}\\
+    \resumeItem{\textbf{Wady}: Możliwe trudności implementacyjne ze względu na rozłączną prędkość generowania ptaków względem generowania reszty świata.}\\
+\resumeItemListEnd
+
+\subsection{Zmodyfikowany skok}
+\textbf{Nie należy} mylić dwukrotnie wyższego skoku z podwójnym.
+\resumeItemListStart
+\resumeItem{Dwukrotnie wyższy skok, pozwala wskakiwać na wysokie platformy i może lekko utrudnić rozgrywkę gdy dwie platformy są blisko siebie (Dino uderzy w sufit, co może go spowolnić - jak w Mario)}
+\resumeItem{Podwójny skok (double jump) pozwala uniknąć Turbo-Grzyba, który jest zbyt wysoki, aby było to możliwe przy normalnym skoku - utrudnienie. Po prostu Dino może "odbić się" w powietrzu i w ten sposób wykona dwa razy zwykły skok. }
+\resumeItemListEnd
+
+\subsection{Chmury}
+Chmury generują się na tej samej zasadzie jak platformy, z taką różnicą, że kolizja z którejkolwiek strony zakończy się utratą życia Dino. Podobnie jak kolizja z wodą - na całej szerokości pasa wody jest "sfera rażenia".
+
+\subsection{Final Boss}
+\resumeItemListStart
+\resumeItem{Dino nie może go przeskoczyć, w wypadku kolizji umiera.}
+\resumeItem{Powinien znajdować się cały czas po środku ekranu.}
+\resumeItem{Dino podczas normalnego biegu się do niego przybliża, natomiast używając spowolnienia oddala.}
+\resumeItem{Tekstura: BBe z czerwonymi oczami, w ręku trzyma grzyba.}
+\resumeItem{Final Boss posiada 50 punktów życia. Jest nieczuły na grzyby, lawę.}
+\resumeItem{Atakuje przez cykliczny rzut Grzybem-rzucanym o stałym okresie trwania.}
+\resumeItem{Grzyb-rzucany porusza się dokładnie tak samo jak pocisk ptaków, jedynie nie w pionie a w poziomie.}
+\resumeItem{Gdy pokonany, traci grzyba którego trzyma w ręce.}
+\resumeItemListEnd
+
+\resumeItemListStart
+\resumeItem{\textbf{Zalety:} Wątek fabuły otrzymuje rozwiązanie.}
+\resumeItem{\textbf{Wady:} Pozdrowienia dla back-endu.}
+\resumeItemListEnd
+
+\section{Power-up'y, monety}
+
+\subsection{Monety}
+\resumeItemListStart
+\resumeItem{Występują losowo we wszytskich światach.}
+\resumeItem{Za ich pomocą można kupować Skrzynki lub Tarcze w sklepie.}
+\resumeItemListEnd
+
+\subsection{Tarcza}
+\resumeItemListStart
+\resumeItem{Występuje bardzo rzadko; we wszystkich światach. Można kupić jedną na grę w sklepie za 50 monet.}
+\resumeItem{Chroni przed utratą życia. Po użyciu znika. Nie działa na Turbo-Grzyby.}
+\resumeItemListEnd
+
+\subsection{Monety x2}
+\resumeItemListStart
+\resumeItem{Występuje losowo we wszystkich światach.}
+\resumeItem{Podwaja zdobywane monety przez 10 sekund.}
+\resumeItemListEnd
+
+\subsection{Magnes}
+\resumeItemListStart
+\resumeItem{Występuje losowo we wszystkich światach.}
+\resumeItem{Zbiera wszystkie monety z aktualnej planszy, działa 10 sekund.}
+\resumeItemListEnd
+
+\subsection{Przyspieszenie}
+\resumeItemListStart
+\resumeItem{Nie występuje w trybie fabularnym.}
+\resumeItem{Ustawia prędkość Dino na x1,5 przez 10 sekund.}
+\resumeItemListEnd
+
+\subsection{Spowolnienie}
+\resumeItemListStart
+\resumeItem{Nie występuje w trybie fabularnym.}
+\resumeItem{Ustawia prędkość Dino na x0,5 przez 10 sekund.}
+\resumeItemListEnd
+
+\subsection{Monety -50}
+\resumeItemListStart
+\resumeItem{Występuje losowo we wszystkich światach.}
+\resumeItem{Odejmuje graczowi 50 monet. Gdy ilość monet wychodzi ujemna, saldo wynosi 0.}
+\resumeItemListEnd
+
+\subsection{Monety +10}
+\resumeItemListStart
+\resumeItem{Występuje losowo we wszystkich światach.}
+\resumeItem{Dodaje 10 monet do salda gracza.}
+\resumeItemListEnd
+
+\section{Questy}
+Pula questów jest stała, wybierane są dla gracza losowo. Quest da się pominąć za 25 monet. Aktualny quest powinien być widoczny w okienku rozgrywki. Ilość przyznawanych monet jest zawsze taka sama i wynosi 20.
+
+\resumeItemListStart
+\resumeItem{Zdobądź 100 monet}
+\resumeItem{Zabij 2 ptaki ogniem}
+\resumeItem{Otwórz 3 skrzynki}
+\resumeItem{Przeskocz 20 kaktusów}
+\resumeItem{Użyj 7x power-up}
+\resumeItem{Uniknij 30 pocisków}
+\resumeItem{Przebiegnij 2000m}
+\resumeItem{Leć przez 500m}
+\resumeItemListEnd
+
+\section{Achievementy}
+\subsection{Przez (...)}
+\resumeItemListStart
+\resumeItem{Odblokowuje się po przejściu danej sekcji.}
+\resumeItemListEnd
+
+\subsection{Dziś grzyba nie będzie!}
+\resumeItemListStart
+\resumeItem{Pokonaj Final Bossa}
+\resumeItemListEnd
+
+
+\subsection{Czy to na pewno koniec?}
+\resumeItemListStart
+\resumeItem{Odblokuj tryb endless}
+\resumeItemListEnd
+
+
+\subsection{Pora umierać: I, II , III}
+\resumeItemListStart
+\resumeItem{I- 10 śmierci, II- 25 śmierci, III- 100 śmierci}
+\resumeItemListEnd
+
+\subsection{Skazany na banicję}
+\resumeItemListStart
+\resumeItem{Wpadnij na Turbo-Grzyba I-raz, II- 5 razy, III- 15 razy}
+\resumeItemListEnd
+
+\subsection{Niech moc będzie z Tobą!}
+\resumeItemListStart
+\resumeItem{Użyj power up'y: I-5x, II-20x, III-100x}
+\resumeItemListEnd
+
+\subsection{Twarda głowa}
+\resumeItemListStart
+\resumeItem{Użyj tarczy: I- raz, II- 10 razy, III- 50 razy}
+\resumeItemListEnd
+
+\subsection{Nope!}
+\resumeItemListStart
+\resumeItem{Zablokuj pocisk Final Bossa tarczą}
+\resumeItemListEnd
+
+\subsection{Ja to zawsze miałem łeb do interesów}
+\resumeItemListStart
+\resumeItem{Zbierz monety: I-100, II- 250, III- 1000}
+\resumeItemListEnd
+
+\subsection{Skrzynia mocy}
+\resumeItemListStart
+\resumeItem{Otwórz skrzynkę: I-raz, II-15 razy, III- 100 razy}
+\resumeItemListEnd
+
+\subsection{Pełna szafa}
+\resumeItemListStart
+\resumeItem{Odblokuj skiny: I-1, II-3, III- wszystkie}
+\resumeItemListEnd
+
+\subsection{Biegacz}
+\resumeItemListStart
+\resumeItem{Przebiegnij: I-1000m, II-10000m, III-100km}
+\resumeItemListEnd
+
+\subsection{Latać każdy może!}
+\resumeItemListStart
+\resumeItem{Przeleć: I-500m, II-2km, III- 15km}
+\resumeItemListEnd
+
+\subsection{Długa droga w dół}
+\resumeItemListStart
+\resumeItem{Zgiń od pocisku ptaka}
+\resumeItemListEnd
+
+\subsection{Dino nie lubieć pływać}
+\resumeItemListStart
+\resumeItem{Przeskocz wodę/lawę: I-raz, II-100razy, III-1000 razy}
+\resumeItemListEnd
+
+
+\section{Sklep}
+W sklepie będzie można kupić skrzynki za monety z których są do uzyskania skórki. Ze skrzynki będzie można również otrzymać tarczę albo losowy power'up (aktywacja power-up'a przyciskiem, trwa 10 sekund).\\
+Można wylosować nieskończenie wiele razy tą samą skórkę. Wylosowana tarcza, gdy gracz ma już jedną, przepada.
+
+\subsection{Szansa na otrzymanie danego itemu:}
+\resumeItemListStart
+\resumeItem{Dowolny power-up z puli (Monety x2, Magnes,) - 35\% }
+\resumeItem{Tarcza: 10\% }
+\resumeItem{Zwykły skórka z puli 6-ciu: 50\%}
+\resumeItem{Rzadka skórka z puli 4-rech: 4\% }
+\resumeItem{Legendarna skórka z puli dwóch: 1\% }
+\resumeItemListEnd
+
+\subsection{Tarcza}
+Można również zakupić \textbf{tarczę za 50 monet}.
+
+
+
+
+\end{document}
+
+
