@@ -4,7 +4,10 @@
 #include "ObstacleManager.h"
 #include <iostream>
 
-enum GameState { MainMenu, OptionsMenu, Gameplay, Pause };
+enum GameState { MainMenu, OptionsMenu, Gameplay, Pause, GameOver };
+
+// Ustawienie domyślnego stanu gry
+GameState gameState = MainMenu;
 
 int main() {
     // Tworzenie okna
@@ -16,9 +19,6 @@ int main() {
         std::cerr << "Nie udało się załadować czcionki!" << std::endl;
         return -1;
     }
-
-    // Ustawienie domyślnego stanu gry
-    GameState gameState = MainMenu;
 
     // Tworzenie przycisków
     Button playButton(sf::Vector2f(200, 50), sf::Vector2f(500, 250), "Graj", font);
@@ -91,6 +91,15 @@ int main() {
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         gameState = MainMenu; // Powrót do MainMenu
                     }
+                } else if (gameState == GameOver) {
+                    if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                        obstacleManager.restart();
+                        gameState = Gameplay; // Restart gry
+                    }
+                    if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                    window.close(); // Zamknięcie gry
+                    }
                 }
             }
 
@@ -124,11 +133,9 @@ int main() {
             player.handleInput(deltaTime);
             player.update(deltaTime);
 	    obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
-	    // Sprawdzenie kolizji i restart
+	    // Sprawdzenie kolizji i koniec gry lub restart
             if (obstacleManager.checkCollisions(player.getGlobalBounds())) {
-                player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
-                obstacleManager.restart(); // Restart przeszkód
-                gameState = Gameplay; // Restart gry
+                gameState = GameOver;
             }
         }
 
@@ -145,6 +152,9 @@ int main() {
             resumeButton.update(sf::Mouse::getPosition(window));
             restartButton.update(sf::Mouse::getPosition(window));
             mainMenuButton.update(sf::Mouse::getPosition(window));
+        } else if (gameState == GameOver) {
+            restartButton.update(sf::Mouse::getPosition(window));
+            exitButton.update(sf::Mouse::getPosition(window));
         }
 
         // Rysowanie
@@ -168,8 +178,14 @@ int main() {
             resumeButton.draw(window);
             restartButton.draw(window);
             mainMenuButton.draw(window);
+        } else if (gameState == GameOver) {
+            window.clear(sf::Color::Black);
+            sf::Text gameOverText("Sprobuj jeszcze raz", font, 50);
+            gameOverText.setPosition(400, 200);
+            window.draw(gameOverText);
+            restartButton.draw(window);
+            exitButton.draw(window);
         }
-
         window.display();
     }
 

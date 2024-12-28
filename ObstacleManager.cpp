@@ -2,6 +2,11 @@
 #include <cstdlib>
 #include <ctime>
 
+enum GameState { MainMenu, OptionsMenu, Gameplay, Pause, GameOver }; 
+extern GameState gameState;
+
+extern GameState gameState;
+
 ObstacleManager::ObstacleManager(float windowWidth, float windowHeight)
     : screenWidth(windowWidth), screenHeight(windowHeight), obstacleSpawnTimer(0.f), spawnInterval(2.f) {
     std::srand(static_cast<unsigned int>(std::time(nullptr))); // Inicjalizacja generatora losowego
@@ -43,7 +48,8 @@ void ObstacleManager::generateObstacle() {
 bool ObstacleManager::checkCollisions(const sf::FloatRect& playerBounds) {
     for (auto& obstacle : obstacles) {
         if (playerBounds.intersects(obstacle.getBounds())) {
-           return true;
+            gameState = GameOver;
+            return true;
         }
     }
     return false;
