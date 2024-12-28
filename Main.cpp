@@ -98,7 +98,7 @@ int main() {
                         gameState = Gameplay; // Restart gry
                     }
                     if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                    window.close(); // Zamknięcie gry
+                        window.close(); // Zamknięcie gry
                     }
                 }
             }
@@ -132,7 +132,7 @@ int main() {
         if (gameState == Gameplay) {
             player.handleInput(deltaTime);
             player.update(deltaTime);
-	    obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
+	          obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
 	    // Sprawdzenie kolizji i koniec gry lub restart
             if (obstacleManager.checkCollisions(player.getGlobalBounds())) {
                 gameState = GameOver;
@@ -170,7 +170,7 @@ int main() {
             backButton.draw(window);
         } else if (gameState == Gameplay) {
             player.draw(window); // Rysowanie gracza
-	    obstacleManager.draw(window);  // Rysowanie przeszkód
+	          obstacleManager.draw(window);  // Rysowanie przeszkód
             window.draw(gameplayText);
             pauseButton.draw(window);
         } else if (gameState == Pause) {
@@ -188,7 +188,6 @@ int main() {
         }
         window.display();
     }
-
     return 0;
 }
 
