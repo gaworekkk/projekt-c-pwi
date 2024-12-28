@@ -1,133 +1,13 @@
 #include <SFML/Graphics.hpp>
+#include "Player.h"
+#include "Button.h"
+#include "ObstacleManager.h"
 #include <iostream>
 
-enum GameState { MainMenu, OptionsMenu, Gameplay, Pause };
-class Player {
-public:
-    Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color) {
-        player.setSize(size);
-        player.setPosition(position);
-        player.setFillColor(color);
-        velocity = sf::Vector2f(0.f, 0.f);
-        isJumping = false;
-        isHoldingJump = false;
-        jumpHoldTime = 0.f;
-    }
+enum GameState { MainMenu, OptionsMenu, Gameplay, Pause, GameOver };
 
-    // Copy assignment operator
-    Player& operator=(const Player& other) {
-        if (this != &other) {
-            player = other.player;
-            velocity = other.velocity;
-            isJumping = other.isJumping;
-            isHoldingJump = other.isHoldingJump;
-            jumpHoldTime = other.jumpHoldTime;
-        }
-        return *this;
-    }
-
-    void handleInput(float deltaTime) {
-        // Ruch w lewo i prawo
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            velocity.x = -moveSpeed;
-        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            velocity.x = moveSpeed;
-        } else {
-            velocity.x = 0.f;
-        }
-
-        // Skakanie - wykrywanie przytrzymania klawisza
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            if (!isJumping) {
-                velocity.y = -baseJumpSpeed;
-                isJumping = true;
-                isHoldingJump = true;
-                jumpHoldTime = 0.f;
-            } else if (isHoldingJump && jumpHoldTime < maxHoldTime) {
-                jumpHoldTime += deltaTime;
-                velocity.y = std::max(velocity.y - jumpBoost * deltaTime, -maxJumpSpeed);
-            }
-        } else {
-            isHoldingJump = false;
-        }
-    }
-
-    void update(float deltaTime) {
-        // Grawitacja
-        velocity.y += gravity * deltaTime;
-
-        // Poruszanie graczem
-        player.move(velocity * deltaTime);
-
-        // Ograniczenie pozycji do "podłogi"
-        if (player.getPosition().y + player.getSize().y >= groundHeight) {
-            player.setPosition(player.getPosition().x, groundHeight - player.getSize().y);
-            velocity.y = 0.f;
-            isJumping = false;
-        }
-    }
-
-    void draw(sf::RenderWindow& window) {
-        window.draw(player);
-    }
-
-private:
-    sf::RectangleShape player;
-    sf::Vector2f velocity;
-    bool isJumping;
-    bool isHoldingJump;
-    float jumpHoldTime;
-
-    const float moveSpeed = 200.f;
-    const float baseJumpSpeed = 250.f; // Bazowa prędkość skoku
-    const float maxJumpSpeed = 500.f; // Maksymalna prędkość w górę
-    const float gravity = 981.f;
-    const float groundHeight = 600.f;
-    const float maxHoldTime = 1.0f; // Maksymalny czas trzymania klawisza (sekundy)
-    const float jumpBoost = 500.f; // Dodatkowe przyspieszenie przy trzymaniu klawisza
-};
-
-class Button {
-public:
-    Button(const sf::Vector2f& size, const sf::Vector2f& position, const sf::String& text, const sf::Font& font) {
-        button.setSize(size);
-        button.setPosition(position);
-        button.setFillColor(normalColor);
-
-        buttonText.setFont(font); 
-        buttonText.setString(text);
-        buttonText.setCharacterSize(50);
-        buttonText.setFillColor(sf::Color::White);
-        buttonText.setPosition(
-            position.x + (size.x - buttonText.getLocalBounds().width) / 2,
-            position.y + (size.y - buttonText.getLocalBounds().height) / 2
-        );
-    }
-
-    void draw(sf::RenderWindow& window) {
-        window.draw(button);
-        window.draw(buttonText);
-    }
-
-    void update(const sf::Vector2i& mousePos) {
-        if (button.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
-            button.setFillColor(hoverColor);
-        } else {
-            button.setFillColor(normalColor);
-        }
-    }
-
-    bool isClicked(const sf::Vector2i& mousePos, sf::Event::MouseButtonEvent mouseEvent) {
-        return button.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) &&
-               mouseEvent.button == sf::Mouse::Left;
-    }
-
-private:
-    sf::RectangleShape button;
-    sf::Text buttonText;
-    sf::Color normalColor = sf::Color::Blue;
-    sf::Color hoverColor = sf::Color::Green;
-};
+// Ustawienie domyślnego stanu gry
+GameState gameState = MainMenu;
 
 int main() {
     // Tworzenie okna
@@ -140,9 +20,6 @@ int main() {
         return -1;
     }
 
-    // Ustawienie domyślnego stanu gry
-    GameState gameState = MainMenu;
-
     // Tworzenie przycisków
     Button playButton(sf::Vector2f(200, 50), sf::Vector2f(500, 250), "Graj", font);
     Button optionsButton(sf::Vector2f(200, 50), sf::Vector2f(500, 320), "Opcje", font);
@@ -154,8 +31,10 @@ int main() {
     Button mainMenuButton(sf::Vector2f(200, 50), sf::Vector2f(500, 390), "Menu Główne", font);
 
     // Tworzenie gracza
-    Player player(sf::Vector2f(50.f, 50.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+    Player player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
 
+    // Tworzenie generatora przeszkód
+    ObstacleManager obstacleManager(window.getSize().x, window.getSize().y);
     // Teksty do wyświetlania
     sf::Text optionsMenuText("Menu Opcji", font, 50);
     optionsMenuText.setPosition(500, 100);
@@ -212,6 +91,15 @@ int main() {
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         gameState = MainMenu; // Powrót do MainMenu
                     }
+                } else if (gameState == GameOver) {
+                    if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                        obstacleManager.restart();
+                        gameState = Gameplay; // Restart gry
+                    }
+                    if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        window.close(); // Zamknięcie gry
+                    }
                 }
             }
 
@@ -244,6 +132,11 @@ int main() {
         if (gameState == Gameplay) {
             player.handleInput(deltaTime);
             player.update(deltaTime);
+	          obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
+	    // Sprawdzenie kolizji i koniec gry lub restart
+            if (obstacleManager.checkCollisions(player.getGlobalBounds())) {
+                gameState = GameOver;
+            }
         }
 
         // Aktualizacja przycisków zależnie od stanu
@@ -259,6 +152,9 @@ int main() {
             resumeButton.update(sf::Mouse::getPosition(window));
             restartButton.update(sf::Mouse::getPosition(window));
             mainMenuButton.update(sf::Mouse::getPosition(window));
+        } else if (gameState == GameOver) {
+            restartButton.update(sf::Mouse::getPosition(window));
+            exitButton.update(sf::Mouse::getPosition(window));
         }
 
         // Rysowanie
@@ -274,6 +170,7 @@ int main() {
             backButton.draw(window);
         } else if (gameState == Gameplay) {
             player.draw(window); // Rysowanie gracza
+	          obstacleManager.draw(window);  // Rysowanie przeszkód
             window.draw(gameplayText);
             pauseButton.draw(window);
         } else if (gameState == Pause) {
@@ -281,11 +178,16 @@ int main() {
             resumeButton.draw(window);
             restartButton.draw(window);
             mainMenuButton.draw(window);
+        } else if (gameState == GameOver) {
+            window.clear(sf::Color::Black);
+            sf::Text gameOverText("Sprobuj jeszcze raz", font, 50);
+            gameOverText.setPosition(400, 200);
+            window.draw(gameOverText);
+            restartButton.draw(window);
+            exitButton.draw(window);
         }
-
         window.display();
     }
-
     return 0;
 }
 
