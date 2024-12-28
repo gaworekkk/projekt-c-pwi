@@ -27,7 +27,9 @@ Player& Player::operator=(const Player& other) {
     }
     return *this;
 }
-
+sf::FloatRect Player::getGlobalBounds() {
+    return player.getGlobalBounds();
+}
 // Obsługa wejścia gracza
 void Player::handleInput(float deltaTime) {
 

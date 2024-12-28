@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Button.h"
+#include "ObstacleManager.h"
 #include <iostream>
 
 enum GameState { MainMenu, OptionsMenu, Gameplay, Pause };
@@ -32,6 +33,8 @@ int main() {
     // Tworzenie gracza
     Player player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
 
+    // Tworzenie generatora przeszkód
+    ObstacleManager obstacleManager(window.getSize().x, window.getSize().y);
     // Teksty do wyświetlania
     sf::Text optionsMenuText("Menu Opcji", font, 50);
     optionsMenuText.setPosition(500, 100);
@@ -120,6 +123,13 @@ int main() {
         if (gameState == Gameplay) {
             player.handleInput(deltaTime);
             player.update(deltaTime);
+	    obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
+	    // Sprawdzenie kolizji i restart
+            if (obstacleManager.checkCollisions(player.getGlobalBounds())) {
+                player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                obstacleManager.restart(); // Restart przeszkód
+                gameState = Gameplay; // Restart gry
+            }
         }
 
         // Aktualizacja przycisków zależnie od stanu
@@ -150,6 +160,7 @@ int main() {
             backButton.draw(window);
         } else if (gameState == Gameplay) {
             player.draw(window); // Rysowanie gracza
+	    obstacleManager.draw(window);  // Rysowanie przeszkód
             window.draw(gameplayText);
             pauseButton.draw(window);
         } else if (gameState == Pause) {
