@@ -72,14 +72,17 @@ int main() {
                     if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         window.close(); // Zamknięcie okna
                     }
+
                 } else if (gameState == OptionsMenu) {
                     if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         gameState = MainMenu; // Powrót do MainMenu
                     }
+
                 } else if (gameState == Gameplay) {
                     if (pauseButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         gameState = Pause; // Przejście do Pause
                     }
+
                 } else if (gameState == Pause) {
                     if (resumeButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         gameState = Gameplay; // Powrót do Gameplay
@@ -91,6 +94,7 @@ int main() {
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         gameState = MainMenu; // Powrót do MainMenu
                     }
+
                 } else if (gameState == GameOver) {
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
@@ -132,7 +136,7 @@ int main() {
         if (gameState == Gameplay) {
             player.handleInput(deltaTime);
             player.update(deltaTime);
-	          obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
+	        obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
 	    // Sprawdzenie kolizji i koniec gry lub restart
             if (obstacleManager.checkCollisions(player.getGlobalBounds())) {
                 gameState = GameOver;
@@ -170,7 +174,7 @@ int main() {
             backButton.draw(window);
         } else if (gameState == Gameplay) {
             player.draw(window); // Rysowanie gracza
-	          obstacleManager.draw(window);  // Rysowanie przeszkód
+	        obstacleManager.draw(window);  // Rysowanie przeszkód
             window.draw(gameplayText);
             pauseButton.draw(window);
         } else if (gameState == Pause) {
