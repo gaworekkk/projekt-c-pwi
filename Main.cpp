@@ -30,7 +30,7 @@ int main() {
     Button mainMenuButton(sf::Vector2f(200, 50), sf::Vector2f(500, 390), "Menu Główne", font);
 
     // Tworzenie gracza
-    Player player(sf::Vector2f(50.f, 50.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+    Player player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
 
     // Teksty do wyświetlania
     sf::Text optionsMenuText("Menu Opcji", font, 50);

@@ -18,12 +18,17 @@ private:
     bool isJumping;
     bool isHoldingJump;
     float jumpHoldTime;
+    bool isCrouching;               
+    sf::Vector2f originalSize;       
+    sf::Vector2f crouchSize;          
 
+    const float crouchSpeedFactor = 0.75f;
     const float moveSpeed = 200.f;
     const float baseJumpSpeed = 250.f;
     const float maxJumpSpeed = 500.f;
     const float gravity = 981.f;
     const float groundHeight = 600.f;
+    const float screenWidth = 1200;
     const float maxHoldTime = 1.0f;
     const float jumpBoost = 500.f;
 };
