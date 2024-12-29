@@ -9,6 +9,8 @@ public:
     void update(float deltaTime);
     void draw(sf::RenderWindow& window);
     sf::FloatRect getBounds() const;
+    float getSpeed() const;
+    void setSpeed(float newSpeed);
 
 private:
     sf::RectangleShape obstacleShape;
