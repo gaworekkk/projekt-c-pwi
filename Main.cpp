@@ -2,9 +2,10 @@
 #include "Player.h"
 #include "Button.h"
 #include "ObstacleManager.h"
+#include "Utils.h"
 #include <iostream>
 
-enum GameState { MainMenu, OptionsMenu, Gameplay, Pause, GameOver };
+enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Pause, GameOver };
 
 // Ustawienie domyślnego stanu gry
 GameState gameState = MainMenu;
@@ -21,12 +22,23 @@ int main() {
     }
 
     // Tworzenie przycisków
-    Button playButton(sf::Vector2f(200, 50), sf::Vector2f(500, 250), "Graj", font);
-    Button optionsButton(sf::Vector2f(200, 50), sf::Vector2f(500, 320), "Opcje", font);
+    Button storyButton(sf::Vector2f(324, 54), sf::Vector2f(438, 260), "Tryb fabularny", font);
+    storyButton.setTexture("Tekstury/ustawienia.png");
+    Button endlessButton(sf::Vector2f(324, 54), sf::Vector2f(438, 352), "Endless", font);
+    endlessButton.setTexture("Tekstury/ustawienia.png");
+    Button optionsButton(sf::Vector2f(54, 54), sf::Vector2f(300, 486), "Opcje", font);
+    optionsButton.setTexture("Tekstury/ustawienia.png");
+    Button achievementsButton(sf::Vector2f(54, 54), sf::Vector2f(482, 486), "Osiągnięcia", font);
+    achievementsButton.setTexture("Tekstury/ustawienia.png");
+    Button statisticsButton(sf::Vector2f(54, 54), sf::Vector2f(664, 486), "Statystyki", font);
+    statisticsButton.setTexture("Tekstury/ustawienia.png");
     Button backButton(sf::Vector2f(200, 50), sf::Vector2f(500, 400), "Powrót", font);
-    Button exitButton(sf::Vector2f(200, 50), sf::Vector2f(500, 470), "Wyjście", font);
+    Button exitButton(sf::Vector2f(54, 54), sf::Vector2f(846, 486), "Wyjście", font);
+    exitButton.setTexture("Tekstury/ustawienia.png");
     Button pauseButton(sf::Vector2f(200, 50), sf::Vector2f(10, 10), "Pause", font);
+    //pauseButton.setTexture("Tekstury/.png");
     Button resumeButton(sf::Vector2f(200, 50), sf::Vector2f(10, 10), "Wznów", font);
+    //resumeButton.setTexture("Tekstury/.png");
     Button restartButton(sf::Vector2f(200, 50), sf::Vector2f(500, 320), "Restart", font);
     Button mainMenuButton(sf::Vector2f(200, 50), sf::Vector2f(500, 390), "Menu Główne", font);
 
@@ -35,18 +47,27 @@ int main() {
 
     // Tworzenie generatora przeszkód
     ObstacleManager obstacleManager(window.getSize().x, window.getSize().y);
+
     // Teksty do wyświetlania
+
+     std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
+    std::vector<std::string> statistics = {"Statistic 1", "Statistic 2", "Statistic 3"};
+
+    // Tworzenie tekstu
+    sf::Text nameText("Dino Game", font, 70);
+
+    // Wyśrodkowanie tekstu
+    centerText(nameText, 1200, 640, 60);  // Wyśrodkowanie w poziomie, wysokość 60
+
     sf::Text optionsMenuText("Menu Opcji", font, 50);
-    optionsMenuText.setPosition(500, 100);
+    centerText(optionsMenuText, 1200, 640, 100);
 
     sf::Text gameplayText("Gejmplej!", font, 50);
-    gameplayText.setPosition(500, 200);
+    centerText(gameplayText, 1200, 640, 200);
 
     sf::Text pauseText("Pause", font, 50);
-    pauseText.setPosition(500, 200);
-
-    sf::Text nameText("Dino Game", font, 50);
-    nameText.setPosition(500, 50);
+    centerText(pauseText, 1200, 640, 200);
+    
 
     float deltaTime;
     sf::Clock clock;
@@ -58,22 +79,41 @@ int main() {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
-                window.close();
+                window.close(); 
 
             // Obsługa kliknięć w różnych stanach
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (gameState == MainMenu) {
-                    if (playButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                    if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        gameState = Gameplay; // Przejście do Gameplay
+                    }
+                    if (endlessButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         gameState = Gameplay; // Przejście do Gameplay
                     }
                     if (optionsButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         gameState = OptionsMenu; // Przejście do OptionsMenu
+                    }
+                    if (achievementsButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        gameState = Achievements; // Przejście do Achievements
+                    }
+                    if (statisticsButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        gameState = Statistics; // Przejście do Statistics
                     }
                     if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         window.close(); // Zamknięcie okna
                     }
 
                 } else if (gameState == OptionsMenu) {
+                    if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        gameState = MainMenu; // Powrót do MainMenu
+                    }
+
+                } else if (gameState == Achievements) {
+                    if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        gameState = MainMenu; // Powrót do MainMenu
+                    }
+
+                } else if (gameState == Statistics) {
                     if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         gameState = MainMenu; // Powrót do MainMenu
                     }
@@ -113,9 +153,16 @@ int main() {
                     if (gameState == OptionsMenu) {
                         gameState = MainMenu; // Powrót do MainMenu
                     }
+                    if (gameState == Achievements) {
+                        gameState = MainMenu; // Powrót do MainMenu
+                    }
+                    if (gameState == Statistics) {
+                        gameState = MainMenu; // Powrót do MainMenu
+                    }
                     if (gameState == Gameplay) {
                         gameState = Pause; // Przejście do Pause
-                    } else if (gameState == Pause) {
+                    } 
+                    else if (gameState == Pause) {
                         gameState = Gameplay; // Powrót do Gameplay
                     }
                 }
@@ -145,10 +192,15 @@ int main() {
 
         // Aktualizacja przycisków zależnie od stanu
         if (gameState == MainMenu) {
-            playButton.update(sf::Mouse::getPosition(window));
+            storyButton.update(sf::Mouse::getPosition(window));
+            endlessButton.update(sf::Mouse::getPosition(window));
             optionsButton.update(sf::Mouse::getPosition(window));
             exitButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == OptionsMenu) {
+            backButton.update(sf::Mouse::getPosition(window));
+        } else if (gameState == Achievements) {
+            backButton.update(sf::Mouse::getPosition(window));
+        } else if (gameState == Statistics) {
             backButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == Gameplay) {
             pauseButton.update(sf::Mouse::getPosition(window));
@@ -165,12 +217,21 @@ int main() {
         window.clear(sf::Color::Black);
 
         if (gameState == MainMenu) {
-            playButton.draw(window);
+            storyButton.draw(window);
+            endlessButton.draw(window);
             optionsButton.draw(window);
+            achievementsButton.draw(window);
+            statisticsButton.draw(window);
             exitButton.draw(window);
             window.draw(nameText);
         } else if (gameState == OptionsMenu) {
             window.draw(optionsMenuText);
+            backButton.draw(window);
+        } else if (gameState == Achievements) {
+            drawScrollableList(window, achievements, font);
+            backButton.draw(window);
+        } else if (gameState == Statistics) {
+            drawScrollableList(window, statistics, font);
             backButton.draw(window);
         } else if (gameState == Gameplay) {
             player.draw(window); // Rysowanie gracza

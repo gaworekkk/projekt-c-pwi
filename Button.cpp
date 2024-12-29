@@ -1,17 +1,10 @@
 #include "Button.h"
 
 Button::Button(const sf::Vector2f& size, const sf::Vector2f& position, const sf::String& text, const sf::Font& font) {
-    // Inicjalizacja kształtu przycisku
     button.setSize(size);
     button.setPosition(position);
-    normalColor = sf::Color::Blue;  // Domyślny kolor
-    hoverColor = sf::Color::Green; // Kolor podczas najechania
-    button.setFillColor(normalColor);
-
-    // Inicjalizacja tekstu
     buttonText.setFont(font);
     buttonText.setString(text);
-    buttonText.setCharacterSize(50);
     buttonText.setFillColor(sf::Color::White);
 
     // Centrowanie tekstu na przycisku
@@ -20,10 +13,15 @@ Button::Button(const sf::Vector2f& size, const sf::Vector2f& position, const sf:
         position.x + (size.x - textBounds.width) / 2,
         position.y + (size.y - textBounds.height) / 2 - textBounds.top
     );
+
+    normalColor = sf::Color::Blue;
+    hoverColor = sf::Color::Red;
+    button.setFillColor(normalColor);
 }
 
 void Button::draw(sf::RenderWindow& window) {
     window.draw(button);
+    window.draw(buttonSprite); // Rysowanie sprite
     window.draw(buttonText);
 }
 
@@ -44,3 +42,13 @@ std::string Button::getText() const {
     return buttonText.getString(); // Zwraca tekst przycisku jako std::string
 }
 
+void Button::setTexture(const std::string& textureFile) {
+    if (buttonTexture.loadFromFile(textureFile)) {
+        buttonSprite.setTexture(buttonTexture);
+        buttonSprite.setPosition(button.getPosition());
+        buttonSprite.setScale(
+            button.getSize().x / buttonTexture.getSize().x,
+            button.getSize().y / buttonTexture.getSize().y
+        );
+    }
+};
