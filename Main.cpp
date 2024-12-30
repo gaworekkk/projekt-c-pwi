@@ -69,8 +69,13 @@ int main() {
     centerText(pauseText, 1200, 640, 200);
     
 
+    sf::Text distanceText("Odleglosc:", font, 50);
+    distanceText.setPosition(820, 10); //Zmienić setPosition na cos innego (moze centerText?)
+
     float deltaTime;
     sf::Clock clock;
+
+    float distance;
 
     // Główna pętla gry
     while (window.isOpen()) {
@@ -85,9 +90,13 @@ int main() {
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (gameState == MainMenu) {
                     if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        distance = 0.0f;
+                        obstacleManager.restart();
                         gameState = Gameplay; // Przejście do Gameplay
                     }
                     if (endlessButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        distance = 0.0f;
+                        obstacleManager.restart();
                         gameState = Gameplay; // Przejście do Gameplay
                     }
                     if (optionsButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -128,7 +137,9 @@ int main() {
                         gameState = Gameplay; // Powrót do Gameplay
                     }
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        player = Player(sf::Vector2f(50.f, 50.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                        player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                        distance = 0.0f;
+                        obstacleManager.restart();
                         gameState = Gameplay; // Restart gry
                     }
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -138,6 +149,7 @@ int main() {
                 } else if (gameState == GameOver) {
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                        distance = 0.0f;
                         obstacleManager.restart();
                         gameState = Gameplay; // Restart gry
                     }
@@ -170,7 +182,9 @@ int main() {
                     window.close(); // Zamknięcie okna
                 }
                 if (event.key.code == sf::Keyboard::R) {
-                    player = Player(sf::Vector2f(50.f, 50.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                    player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                    obstacleManager.restart();
+                    distance = 0.0f;
                     gameState = Gameplay; // Restart gry
                 }
                 if (event.key.code == sf::Keyboard::P) {
@@ -184,7 +198,11 @@ int main() {
             player.handleInput(deltaTime);
             player.update(deltaTime);
 	        obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
-	    // Sprawdzenie kolizji i koniec gry lub restart
+
+            distance += 0.05f;
+            distanceText.setString("Odleglosc: " + std::to_string(static_cast<int>(distance)));
+	    
+        // Sprawdzenie kolizji i koniec gry lub restart
             if (obstacleManager.checkCollisions(player.getGlobalBounds())) {
                 gameState = GameOver;
             }
@@ -238,6 +256,7 @@ int main() {
 	        obstacleManager.draw(window);  // Rysowanie przeszkód
             window.draw(gameplayText);
             pauseButton.draw(window);
+            window.draw(distanceText);
         } else if (gameState == Pause) {
             window.draw(pauseText);
             resumeButton.draw(window);
