@@ -3,7 +3,6 @@
 #include <ctime>
 
 enum GameState { MainMenu, OptionsMenu, Gameplay, Pause, GameOver }; 
-extern GameState gameState;
 
 extern GameState gameState;
 

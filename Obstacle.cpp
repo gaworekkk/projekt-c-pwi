@@ -4,7 +4,7 @@ Obstacle::Obstacle(float x, float y, float width, float height) {
     obstacleShape.setSize(sf::Vector2f(width, height));
     obstacleShape.setPosition(x, y);
     obstacleShape.setFillColor(sf::Color::Green);  // Można zmienić na odpowiednią teksturę
-    speed = 150.f; // Prędkość przeszkody w jednostkach na sekundę
+    speed = 150.f; // Początkowa prędkość przeszkody w jednostkach na sekundę
 }
 
 void Obstacle::update(float deltaTime) {
@@ -20,3 +20,11 @@ sf::FloatRect Obstacle::getBounds() const {
     return obstacleShape.getGlobalBounds();
 }
 
+float Obstacle::getSpeed() const {
+    return speed;
+}
+
+void Obstacle::setSpeed(float newSpeed) {
+    // Zmiana prędkości przeszkody
+    speed = newSpeed;
+}
