@@ -17,7 +17,7 @@ int main() {
 
     sf::Font font;
     if (!font.loadFromFile("arial.ttf")) {
-        std::cerr << "Nie udało się załadować czcionki!" << std::endl;
+        std::cerr << L"Nie udało się załadować czcionki!" << std::endl;
         return -1;
     }
 
@@ -28,19 +28,19 @@ int main() {
     endlessButton.setTexture("Tekstury/ustawienia.png");
     Button optionsButton(sf::Vector2f(54, 54), sf::Vector2f(300, 486), "Opcje", font);
     optionsButton.setTexture("Tekstury/ustawienia.png");
-    Button achievementsButton(sf::Vector2f(54, 54), sf::Vector2f(482, 486), "Osiągnięcia", font);
+    Button achievementsButton(sf::Vector2f(54, 54), sf::Vector2f(482, 486), L"Osiągnięcia", font);
     achievementsButton.setTexture("Tekstury/ustawienia.png");
     Button statisticsButton(sf::Vector2f(54, 54), sf::Vector2f(664, 486), "Statystyki", font);
     statisticsButton.setTexture("Tekstury/ustawienia.png");
-    Button backButton(sf::Vector2f(200, 50), sf::Vector2f(500, 400), "Powrót", font);
-    Button exitButton(sf::Vector2f(54, 54), sf::Vector2f(846, 486), "Wyjście", font);
+    Button backButton(sf::Vector2f(200, 50), sf::Vector2f(500, 400), L"Powrót", font);
+    Button exitButton(sf::Vector2f(54, 54), sf::Vector2f(846, 486), L"Wyjście", font);
     exitButton.setTexture("Tekstury/ustawienia.png");
     Button pauseButton(sf::Vector2f(200, 50), sf::Vector2f(10, 10), "Pause", font);
     //pauseButton.setTexture("Tekstury/.png");
-    Button resumeButton(sf::Vector2f(200, 50), sf::Vector2f(10, 10), "Wznów", font);
+    Button resumeButton(sf::Vector2f(200, 50), sf::Vector2f(10, 10), L"Wznów", font);
     //resumeButton.setTexture("Tekstury/.png");
     Button restartButton(sf::Vector2f(200, 50), sf::Vector2f(500, 320), "Restart", font);
-    Button mainMenuButton(sf::Vector2f(200, 50), sf::Vector2f(500, 390), "Menu Główne", font);
+    Button mainMenuButton(sf::Vector2f(200, 50), sf::Vector2f(500, 390), L"Menu Główne", font);
 
     // Tworzenie gracza
     Player player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
@@ -51,7 +51,7 @@ int main() {
     // Teksty do wyświetlania
 
      std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
-    std::vector<std::string> statistics = {"Statistic 1", "Statistic 2", "Statistic 3"};
+    std::vector<std::string> statistics = {"Statistic 1", "Statistic 2", "Statistic 3", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos", "cos","cos", "cos","cos"};
 
     // Tworzenie tekstu
     sf::Text nameText("Dino Game", font, 70);
@@ -245,7 +245,7 @@ int main() {
             mainMenuButton.draw(window);
         } else if (gameState == GameOver) {
             window.clear(sf::Color::Black);
-            sf::Text gameOverText("Sprobuj jeszcze raz", font, 50);
+            sf::Text gameOverText(L"Spróbuj jeszcze raz", font, 50);
             gameOverText.setPosition(400, 200);
             window.draw(gameOverText);
             restartButton.draw(window);
