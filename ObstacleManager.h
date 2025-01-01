@@ -14,6 +14,7 @@ public:
     void generateObstacle();
     bool checkCollisions(const sf::FloatRect& playerBounds);
     void removeOffscreenObstacles();
+    std::vector<sf::FloatRect> getObstacleBounds() const; 
 
 private:
     float screenWidth;

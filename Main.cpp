@@ -3,6 +3,7 @@
 #include "Button.h"
 #include "ObstacleManager.h"
 #include "Utils.h"
+#include "CoinManager.h"
 #include <iostream>
 
 enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Pause, GameOver };
@@ -47,10 +48,14 @@ int main() {
 
     // Tworzenie generatora przeszkód
     ObstacleManager obstacleManager(window.getSize().x, window.getSize().y);
+    
+    // Tworzenie menedzera monet
+    CoinManager coinManager(1.0f, 150.0f);
+    int coinCount = 0;
 
     // Teksty do wyświetlania
 
-     std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
+    std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
     std::vector<std::string> statistics = {"Statistic 1", "Statistic 2", "Statistic 3"};
 
     // Tworzenie tekstu
@@ -72,6 +77,10 @@ int main() {
     sf::Text distanceText("Odleglosc:", font, 50);
     distanceText.setPosition(820, 10); //Zmienić setPosition na cos innego (moze centerText?)
 
+    sf::Text coinCountText("Monety: 0", font, 50);
+    coinCountText.setPosition(820, 80); 
+
+
     float deltaTime;
     sf::Clock clock;
 
@@ -91,11 +100,13 @@ int main() {
                 if (gameState == MainMenu) {
                     if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         distance = 0.0f;
+                        coinCount = 0.0f;
                         obstacleManager.restart();
                         gameState = Gameplay; // Przejście do Gameplay
                     }
                     if (endlessButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         distance = 0.0f;
+                        coinCount = 0.0f;
                         obstacleManager.restart();
                         gameState = Gameplay; // Przejście do Gameplay
                     }
@@ -139,6 +150,7 @@ int main() {
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                         distance = 0.0f;
+                        coinCount = 0.0f;
                         obstacleManager.restart();
                         gameState = Gameplay; // Restart gry
                     }
@@ -150,6 +162,7 @@ int main() {
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                         distance = 0.0f;
+                        coinCount = 0.0f;
                         obstacleManager.restart();
                         gameState = Gameplay; // Restart gry
                     }
@@ -198,9 +211,12 @@ int main() {
             player.handleInput(deltaTime);
             player.update(deltaTime);
 	        obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
+            coinManager.update(deltaTime, player.getGlobalBounds(), coinCount, obstacleManager.getObstacleBounds()); // Aktualizacja monet
 
             distance += 0.05f;
             distanceText.setString("Odleglosc: " + std::to_string(static_cast<int>(distance)));
+            coinCountText.setString("Monety: " + std::to_string(coinCount));
+
 	    
         // Sprawdzenie kolizji i koniec gry lub restart
             if (obstacleManager.checkCollisions(player.getGlobalBounds())) {
@@ -254,9 +270,11 @@ int main() {
         } else if (gameState == Gameplay) {
             player.draw(window); // Rysowanie gracza
 	        obstacleManager.draw(window);  // Rysowanie przeszkód
+            coinManager.draw(window);
             window.draw(gameplayText);
             pauseButton.draw(window);
             window.draw(distanceText);
+            window.draw(coinCountText);
         } else if (gameState == Pause) {
             window.draw(pauseText);
             resumeButton.draw(window);
