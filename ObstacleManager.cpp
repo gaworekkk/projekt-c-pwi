@@ -7,8 +7,9 @@ enum GameState { MainMenu, OptionsMenu, Gameplay, Pause, GameOver };
 extern GameState gameState;
 
 ObstacleManager::ObstacleManager(float windowWidth, float windowHeight)
-    : screenWidth(windowWidth), screenHeight(windowHeight), obstacleSpawnTimer(0.f), spawnInterval(2.f) {
+    : screenWidth(windowWidth), screenHeight(windowHeight), obstacleSpawnTimer(0.f) {
     std::srand(static_cast<unsigned int>(std::time(nullptr))); // Inicjalizacja generatora losowego
+    spawnInterval = getRandomSpawnInterval();
 }
 
 void ObstacleManager::update(float deltaTime) {
@@ -18,6 +19,7 @@ void ObstacleManager::update(float deltaTime) {
     if (obstacleSpawnTimer >= spawnInterval) {
         generateObstacle();
         obstacleSpawnTimer = 0.f;
+        spawnInterval = getRandomSpawnInterval();
     }
 
     // Aktualizacja przeszkód
@@ -72,3 +74,7 @@ std::vector<sf::FloatRect> ObstacleManager::getObstacleBounds() const {
     return bounds;
 }
 
+float ObstacleManager::getRandomSpawnInterval() const {
+    return 1.5f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 2.5f)); 
+    // Losowe generowanie czasu spawnu przeszkód od 1.5 do 4 sekund
+}
