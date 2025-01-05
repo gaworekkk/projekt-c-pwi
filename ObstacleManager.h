@@ -21,7 +21,7 @@ private:
     float screenWidth;
     float screenHeight;
     std::string obstacleType;
-    const float groundHeight = 600.f;
+    const float groundHeight = 589.f;
     const float skyHeight = 525.f;
     const float birdSpeed = 300.f;
     const float birdWidth = 30.f;

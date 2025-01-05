@@ -13,7 +13,7 @@ GameState gameState = MainMenu;
 
 int main() {
     // Tworzenie okna
-    sf::RenderWindow window(sf::VideoMode(1200, 640), "Dino Game");
+    sf::RenderWindow window(sf::VideoMode(1200, 640), "Dino Game", sf::Style::Close);
     window.setFramerateLimit(60); // Ograniczenie FPS do 60
 
     // Załaduj teksturę tła
