@@ -64,3 +64,11 @@ void ObstacleManager::restart() {
     obstacleSpawnTimer = 0.f;   // Resetujemy timer spawnu
 }
 
+std::vector<sf::FloatRect> ObstacleManager::getObstacleBounds() const {
+    std::vector<sf::FloatRect> bounds;
+    for (const auto& obstacle : obstacles) {
+        bounds.push_back(obstacle.getBounds());
+    }
+    return bounds;
+}
+
