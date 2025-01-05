@@ -80,11 +80,13 @@ int main() {
     // Tworzenie gracza
     Player player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
 
-    // Tworzenie generatora przeszkód
-    ObstacleManager obstacleManager(window.getSize().x, window.getSize().y);
-    
+    // Tworzenie generatorów przeszkód kaktusy, szerokie kaktusy i ptaki 
+    ObstacleManager birdManager(window.getSize().x, window.getSize().y, "bird");
+    ObstacleManager cactusManager(window.getSize().x, window.getSize().y, "cactus");
+
+
     // Tworzenie menedzera monet
-    CoinManager coinManager(1.0f, 150.0f);
+    CoinManager coinManager(1.0f, 200.0f);
     int coinCount = 0;
 
     // Teksty do wyświetlania
@@ -135,13 +137,15 @@ int main() {
                     if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         distance = 0.0f;
                         coinCount = 0.0f;
-                        obstacleManager.restart();
+                        cactusManager.restart();
+			birdManager.restart();
                         gameState = Gameplay; // Przejście do Gameplay
                     }
                     if (endlessButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         distance = 0.0f;
                         coinCount = 0.0f;
-                        obstacleManager.restart();
+                        cactusManager.restart();
+			birdManager.restart();
                         gameState = Gameplay; // Przejście do Gameplay
                     }
                     if (optionsButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -185,7 +189,8 @@ int main() {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                         distance = 0.0f;
                         coinCount = 0.0f;
-                        obstacleManager.restart();
+                        cactusManager.restart();
+			birdManager.restart();
                         gameState = Gameplay; // Restart gry
                     }
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -197,7 +202,8 @@ int main() {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                         distance = 0.0f;
                         coinCount = 0.0f;
-                        obstacleManager.restart();
+                        cactusManager.restart();
+			birdManager.restart();
                         gameState = Gameplay; // Restart gry
                     }
                     if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -230,7 +236,8 @@ int main() {
                 }
                 if (event.key.code == sf::Keyboard::R) {
                     player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
-                    obstacleManager.restart();
+                    birdManager.restart();
+		    cactusManager.restart();
                     distance = 0.0f;
                     gameState = Gameplay; // Restart gry
                 }
@@ -244,16 +251,24 @@ int main() {
         if (gameState == Gameplay) {
             player.handleInput(deltaTime);
             player.update(deltaTime);
-	        obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
-            coinManager.update(deltaTime, player.getGlobalBounds(), coinCount, obstacleManager.getObstacleBounds()); // Aktualizacja monet
+	        cactusManager.update(deltaTime);  // Aktualizacja przeszkód
+		birdManager.update(deltaTime);
+		//łączę tutaj wszystkie przeszkody żeby je podać do coinManager.update
+		std::vector<sf::FloatRect> allObstacles;
 
+		auto cactusBounds = cactusManager.getObstacleBounds();
+		auto birdBounds = birdManager.getObstacleBounds();
+
+		allObstacles.insert(allObstacles.end(), cactusBounds.begin(), cactusBounds.end());
+		allObstacles.insert(allObstacles.end(), birdBounds.begin(), birdBounds.end());
+            coinManager.update(deltaTime, player.getGlobalBounds(), coinCount, allObstacles);
             distance += 0.05f;
           
             distanceText.setString(L"Odleglosc: " + std::to_wstring(static_cast<int>(distance)));
             coinCountText.setString(L"Monety: " + std::to_wstring(coinCount));
           
         // Sprawdzenie kolizji i koniec gry lub restart
-            if (obstacleManager.checkCollisions(player.getGlobalBounds())) {
+            if ( (cactusManager.checkCollisions(player.getGlobalBounds())) || (birdManager.checkCollisions(player.getGlobalBounds()))) {
                 gameState = GameOver;
             }
         }
@@ -305,7 +320,8 @@ int main() {
         } else if (gameState == Gameplay) {
             window.draw(storyBackgroundSprite); // Rysowanie tła trybu fabularnego
             player.draw(window); // Rysowanie gracza
-	        obstacleManager.draw(window);  // Rysowanie przeszkód
+	    cactusManager.draw(window);  // Rysowanie przeszkód
+	    birdManager.draw(window);
             coinManager.draw(window);
             window.draw(gameplayText);
             pauseButton.draw(window);

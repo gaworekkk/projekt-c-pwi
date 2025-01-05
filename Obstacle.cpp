@@ -1,10 +1,10 @@
 #include "Obstacle.h"
 
-Obstacle::Obstacle(float x, float y, float width, float height) {
+Obstacle::Obstacle(float x, float y, float width, float height, float obstacleSpeed) {
     obstacleShape.setSize(sf::Vector2f(width, height));
     obstacleShape.setPosition(x, y);
-    obstacleShape.setFillColor(sf::Color::Green);  // Można zmienić na odpowiednią teksturę
-    speed = 150.f; // Początkowa prędkość przeszkody w jednostkach na sekundę
+    obstacleShape.setFillColor(sf::Color::Blue);  // do zmiany na teksturę
+    speed = obstacleSpeed;
 }
 
 void Obstacle::update(float deltaTime) {
@@ -25,6 +25,5 @@ float Obstacle::getSpeed() const {
 }
 
 void Obstacle::setSpeed(float newSpeed) {
-    // Zmiana prędkości przeszkody
     speed = newSpeed;
 }

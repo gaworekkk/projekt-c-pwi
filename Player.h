@@ -30,7 +30,7 @@ private:
     const float groundHeight = 600.f;
     const float screenWidth = 1200;
     const float maxHoldTime = 1.0f;
-    const float jumpBoost = 800.f;
+    const float jumpBoost = 600.f;
 };
 
 #endif
