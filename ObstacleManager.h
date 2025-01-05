@@ -16,7 +16,8 @@ public:
     void removeOffscreenObstacles();
     std::vector<sf::FloatRect> getObstacleBounds() const; 
     float getRandomSpawnInterval() const;
-
+    void setSpeed(float speed);
+    float getSpeed() const;
 private:
     float screenWidth;
     float screenHeight;
@@ -24,6 +25,7 @@ private:
     std::vector<Obstacle> obstacles;
     float obstacleSpawnTimer;
     float spawnInterval;
+    float speed;
 };
 
 #endif // OBSTACLEMANAGER_H

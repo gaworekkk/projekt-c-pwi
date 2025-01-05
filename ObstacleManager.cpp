@@ -9,6 +9,7 @@ extern GameState gameState;
 ObstacleManager::ObstacleManager(float windowWidth, float windowHeight)
     : screenWidth(windowWidth), screenHeight(windowHeight), obstacleSpawnTimer(0.f) {
     std::srand(static_cast<unsigned int>(std::time(nullptr))); // Inicjalizacja generatora losowego
+    speed = 250.f; // Początkowa prędkość przeszkody w jednostkach na sekundę
     spawnInterval = getRandomSpawnInterval();
 }
 
@@ -24,7 +25,7 @@ void ObstacleManager::update(float deltaTime) {
 
     // Aktualizacja przeszkód
     for (auto& obstacle : obstacles) {
-        obstacle.update(deltaTime);
+        obstacle.update(deltaTime, speed);
     }
 
     // Usuwanie przeszkód poza ekranem
@@ -77,4 +78,13 @@ std::vector<sf::FloatRect> ObstacleManager::getObstacleBounds() const {
 float ObstacleManager::getRandomSpawnInterval() const {
     return 1.5f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 2.5f)); 
     // Losowe generowanie czasu spawnu przeszkód od 1.5 do 4 sekund
+}
+
+float ObstacleManager::getSpeed() const {
+    return speed;
+}
+
+void ObstacleManager::setSpeed(float newSpeed) {
+    // Zmiana prędkości przeszkody
+    speed = newSpeed;
 }

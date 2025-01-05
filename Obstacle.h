@@ -6,12 +6,9 @@
 class Obstacle {
 public:
     Obstacle(float x, float y, float width, float height);
-    void update(float deltaTime);
+    void update(float deltaTime, float speed);
     void draw(sf::RenderWindow& window);
     sf::FloatRect getBounds() const;
-    float getSpeed() const;
-    void setSpeed(float newSpeed);
-
 private:
     sf::RectangleShape obstacleShape;
     float speed;
