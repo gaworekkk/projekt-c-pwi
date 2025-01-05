@@ -11,7 +11,6 @@ public:
     sf::FloatRect getBounds() const;
 private:
     sf::RectangleShape obstacleShape;
-    float speed;
 };
 
 #endif // OBSTACLE_H

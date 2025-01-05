@@ -1,16 +1,22 @@
 #include "ObstacleManager.h"
 #include <cstdlib>
 #include <ctime>
+#include <string>
 
 enum GameState { MainMenu, OptionsMenu, Gameplay, Pause, GameOver }; 
 
 extern GameState gameState;
 
-ObstacleManager::ObstacleManager(float windowWidth, float windowHeight)
-    : screenWidth(windowWidth), screenHeight(windowHeight), obstacleSpawnTimer(0.f) {
+ObstacleManager::ObstacleManager(float windowWidth, float windowHeight, std::string Type)
+    : screenWidth(windowWidth), screenHeight(windowHeight), obstacleType(Type), obstacleSpawnTimer(0.f) {
     std::srand(static_cast<unsigned int>(std::time(nullptr))); // Inicjalizacja generatora losowego
-    initialSpeed = 250.f; // Początkowa prędkość przeszkody w jednostkach na sekundę
-    speed = initialSpeed; // Prędkość przeszkody w jednostkach na sekundę
+    if(obstacleType == "cactus"){
+	    speed = initialCactusSpeed;
+    }else if(obstacleType == "bird"){
+	    speed = initialBirdSpeed;
+    }else{
+	    speed = defaultInitialSpeed;
+    }
     spawnInterval = getRandomSpawnInterval();
 }
 
@@ -40,9 +46,18 @@ void ObstacleManager::draw(sf::RenderWindow& window) {
 }
 
 void ObstacleManager::generateObstacle() {
-    float obstacleHeight = static_cast<float>(rand() % 50 + 50);  // Losowa wysokość przeszkody (od 50 do 100)
-    float obstacleWidth = 50.f;  // Szerokość przeszkody
-    float obstacleY = groundHeight - obstacleHeight;  // Pozycja Y przeszkody (na ziemii)
+    float obstacleHeight;
+    float obstacleWidth;
+    float obstacleY;
+    if(obstacleType == "cactus"){
+	    obstacleHeight = cactusHeight;
+            obstacleWidth = cactusWidth;
+	    obstacleY = groundHeight - cactusHeight;
+    }else if(obstacleType == "bird"){
+	    obstacleHeight = birdHeight;
+	    obstacleWidth = birdWidth;
+	    obstacleY = skyHeight - birdHeight;
+    }
 
     // Tworzenie przeszkody po prawej stronie ekranu
     obstacles.push_back(Obstacle(screenWidth, obstacleY, obstacleWidth, obstacleHeight));
@@ -90,11 +105,18 @@ void ObstacleManager::setSpeed(float newSpeed) {
     speed = newSpeed;
 }
 
-void ObstacleManager::setInitialSpeed(float newSpeed) {
+/*void ObstacleManager::setInitialSpeed(float newSpeed) {
     // Zmiana początkowej prędkości przeszkody
     initialSpeed = newSpeed;
 }
 
+*/
 float ObstacleManager::getInitialSpeed() const {
-    return initialSpeed;
+	if(obstacleType == "cactus"){
+		return initialCactusSpeed;
+	}else if(obstacleType == "bird"){
+		return initialBirdSpeed;
+	}else{
+		return defaultInitialSpeed;
+	}
 }
