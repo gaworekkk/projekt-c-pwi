@@ -9,7 +9,8 @@ extern GameState gameState;
 ObstacleManager::ObstacleManager(float windowWidth, float windowHeight)
     : screenWidth(windowWidth), screenHeight(windowHeight), obstacleSpawnTimer(0.f) {
     std::srand(static_cast<unsigned int>(std::time(nullptr))); // Inicjalizacja generatora losowego
-    speed = 250.f; // Początkowa prędkość przeszkody w jednostkach na sekundę
+    initialSpeed = 250.f; // Początkowa prędkość przeszkody w jednostkach na sekundę
+    speed = initialSpeed; // Prędkość przeszkody w jednostkach na sekundę
     spawnInterval = getRandomSpawnInterval();
 }
 
@@ -87,4 +88,13 @@ float ObstacleManager::getSpeed() const {
 void ObstacleManager::setSpeed(float newSpeed) {
     // Zmiana prędkości przeszkody
     speed = newSpeed;
+}
+
+void ObstacleManager::setInitialSpeed(float newSpeed) {
+    // Zmiana początkowej prędkości przeszkody
+    initialSpeed = newSpeed;
+}
+
+float ObstacleManager::getInitialSpeed() const {
+    return initialSpeed;
 }

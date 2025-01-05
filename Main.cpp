@@ -124,6 +124,10 @@ int main() {
 
     float distance;
 
+    // Zmienne "zapadki"
+
+    bool if_changed_speed = false;
+
     // Główna pętla gry
     while (window.isOpen()) {
         deltaTime = clock.restart().asSeconds();
@@ -251,10 +255,22 @@ int main() {
 	        obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
             coinManager.update(deltaTime, player.getGlobalBounds(), coinCount, obstacleManager.getObstacleBounds()); // Aktualizacja monet
 
+            // Obliczanie odległości
+            float obstacleSpeed = obstacleManager.getSpeed();
+            float obstacleInitialSpeed = obstacleManager.getInitialSpeed();
             float playerVelocity = player.getVelocity().x;
-            distance += (deltaTime * (obstacleManager.getSpeed() + playerVelocity)) / 250;
-          
-            distanceText.setString(L"Odleglosc: " + std::to_wstring(static_cast<int>(distance)));
+            distance += (deltaTime * (obstacleSpeed + playerVelocity)) / obstacleInitialSpeed;
+            
+            // Zmiana prędkości co 50 jednostek
+            int distanceInt = static_cast<int>(distance);
+            if(distanceInt % 50 == 0 && if_changed_speed == false){
+                obstacleManager.setSpeed(obstacleSpeed + 25);
+                if_changed_speed = true;
+            } else if(distanceInt % 50 != 0) {
+                if_changed_speed = false;
+            }
+
+            distanceText.setString(L"Odleglosc: " + std::to_wstring(distanceInt));
             coinCountText.setString(L"Monety: " + std::to_wstring(coinCount));
           
         // Sprawdzenie kolizji i koniec gry lub restart
