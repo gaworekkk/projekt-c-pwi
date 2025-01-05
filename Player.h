@@ -12,6 +12,7 @@ public:
     void update(float deltaTime);
     void draw(sf::RenderWindow& window);
    sf::FloatRect getGlobalBounds();
+   sf::Vector2f getVelocity() const;
 private:
     sf::RectangleShape player;
     sf::Vector2f velocity;

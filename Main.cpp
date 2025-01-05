@@ -251,7 +251,14 @@ int main() {
 	        obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
             coinManager.update(deltaTime, player.getGlobalBounds(), coinCount, obstacleManager.getObstacleBounds()); // Aktualizacja monet
 
-            distance += 0.05f;
+            float playerSpeed = player.getVelocity().x;
+            if(playerSpeed > 0) {
+                distance += 0.1f;
+            } else if (playerSpeed < 0) {
+                distance += 0.025f;
+            } else {
+                distance += 0.05f;
+            }
           
             distanceText.setString(L"Odleglosc: " + std::to_wstring(static_cast<int>(distance)));
             coinCountText.setString(L"Monety: " + std::to_wstring(coinCount));

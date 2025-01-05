@@ -104,3 +104,6 @@ void Player::draw(sf::RenderWindow& window) {
     window.draw(player);
 }
 
+sf::Vector2f Player::getVelocity() const {
+    return velocity;
+}
