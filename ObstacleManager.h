@@ -15,7 +15,11 @@ public:
     bool checkCollisions(const sf::FloatRect& playerBounds);
     void removeOffscreenObstacles();
     std::vector<sf::FloatRect> getObstacleBounds() const; 
-
+    float getRandomSpawnInterval() const;
+    void setSpeed(float speed);
+    float getSpeed() const;
+    void setInitialSpeed(float speed);
+    float getInitialSpeed() const;
 private:
     float screenWidth;
     float screenHeight;
@@ -23,6 +27,8 @@ private:
     std::vector<Obstacle> obstacles;
     float obstacleSpawnTimer;
     float spawnInterval;
+    float speed;
+    float initialSpeed;
 };
 
 #endif // OBSTACLEMANAGER_H

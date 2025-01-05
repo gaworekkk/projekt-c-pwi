@@ -12,8 +12,12 @@ enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Paus
 GameState gameState = MainMenu;
 
 int main() {
+    // Ustawienia okna
+    sf::VideoMode videoMode(1200, 640);
+    sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close;
+
     // Tworzenie okna
-    sf::RenderWindow window(sf::VideoMode(1200, 640), "Dino Game");
+    sf::RenderWindow window(videoMode, "Dino Game", style);
     window.setFramerateLimit(60); // Ograniczenie FPS do 60
 
     // Załaduj teksturę tła
@@ -119,6 +123,10 @@ int main() {
     sf::Clock clock;
 
     float distance;
+
+    // Zmienne "zapadki"
+
+    bool if_changed_speed = false;
 
     // Główna pętla gry
     while (window.isOpen()) {
@@ -247,9 +255,22 @@ int main() {
 	        obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
             coinManager.update(deltaTime, player.getGlobalBounds(), coinCount, obstacleManager.getObstacleBounds()); // Aktualizacja monet
 
-            distance += 0.05f;
-          
-            distanceText.setString(L"Odleglosc: " + std::to_wstring(static_cast<int>(distance)));
+            // Obliczanie odległości
+            float obstacleSpeed = obstacleManager.getSpeed();
+            float obstacleInitialSpeed = obstacleManager.getInitialSpeed();
+            float playerVelocity = player.getVelocity().x;
+            distance += (deltaTime * (obstacleSpeed + playerVelocity)) / obstacleInitialSpeed;
+            
+            // Zmiana prędkości co 50 jednostek
+            int distanceInt = static_cast<int>(distance);
+            if(distanceInt % 50 == 0 && if_changed_speed == false){
+                obstacleManager.setSpeed(obstacleSpeed + 25);
+                if_changed_speed = true;
+            } else if(distanceInt % 50 != 0) {
+                if_changed_speed = false;
+            }
+
+            distanceText.setString(L"Odleglosc: " + std::to_wstring(distanceInt));
             coinCountText.setString(L"Monety: " + std::to_wstring(coinCount));
           
         // Sprawdzenie kolizji i koniec gry lub restart
