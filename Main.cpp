@@ -12,8 +12,12 @@ enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Paus
 GameState gameState = MainMenu;
 
 int main() {
+    // Ustawienia okna
+    sf::VideoMode videoMode(1200, 640);
+    sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close;
+
     // Tworzenie okna
-    sf::RenderWindow window(sf::VideoMode(1200, 640), "Dino Game");
+    sf::RenderWindow window(videoMode, "Dino Game", style);
     window.setFramerateLimit(60); // Ograniczenie FPS do 60
 
     // Załaduj teksturę tła
