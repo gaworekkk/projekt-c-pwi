@@ -70,7 +70,7 @@ int main() {
 
     // Załaduj teksturę tła trybu Statistics
     sf::Texture statisticsBackgroundTexture;
-    if (!statisticsBackgroundTexture.loadFromFile("Tekstury/extinguished-menu.png")) {
+    if (!statisticsBackgroundTexture.loadFromFile("Tekstury/statistic-menu.png")) {
         std::cerr << L"Nie udało się załadować tekstury tła trybu Statistics!" << std::endl;
         return -1;
     }
@@ -86,7 +86,7 @@ int main() {
 
     // Załaduj teksturę tła trybu Achievements
     sf::Texture achievementsBackgroundTexture;
-    if (!achievementsBackgroundTexture.loadFromFile("Tekstury/extinguished-menu.png")) {
+    if (!achievementsBackgroundTexture.loadFromFile("Tekstury/archivment-menu.png")) {
         std::cerr << L"Nie udało się załadować tekstury tła trybu Achievements!" << std::endl;
         return -1;
     }
