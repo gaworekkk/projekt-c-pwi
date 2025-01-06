@@ -48,6 +48,85 @@ int main() {
     float storyScaleY = static_cast<float>(window.getSize().y) / storyBackgroundTexture.getSize().y;
     storyBackgroundSprite.setScale(storyScaleX, storyScaleY);
 
+    // Załaduj teksturę tła trybu GameOver
+    sf::Texture gameOverBackgroundTexture;
+    if (!gameOverBackgroundTexture.loadFromFile("Tekstury/GAMEOVER-background.png")) {
+        std::cerr << L"Nie udało się załadować tekstury tła trybu GameOver!" << std::endl;
+        return -1;
+    }
+
+    // Utwórz sprite z tekstury tła trybu GameOver
+    sf::Sprite gameOverBackgroundSprite;
+    gameOverBackgroundSprite.setTexture(gameOverBackgroundTexture);
+
+    // Oblicz skalę dla tła trybu GameOver
+    float gameOverScaleX = static_cast<float>(window.getSize().x) / gameOverBackgroundTexture.getSize().x;
+    float gameOverScaleY = static_cast<float>(window.getSize().y) / gameOverBackgroundTexture.getSize().y;
+    gameOverBackgroundSprite.setScale(gameOverScaleX, gameOverScaleY);
+
+    // Załaduj teksturę tła trybu Statistics
+    sf::Texture statisticsBackgroundTexture;
+    if (!statisticsBackgroundTexture.loadFromFile("Tekstury/extinguished-menu.png")) {
+        std::cerr << L"Nie udało się załadować tekstury tła trybu Statistics!" << std::endl;
+        return -1;
+    }
+
+    // Utwórz sprite z tekstury tła trybu Statistics
+    sf::Sprite statisticsBackgroundSprite;
+    statisticsBackgroundSprite.setTexture(statisticsBackgroundTexture);
+
+    // Oblicz skalę dla tła trybu Statistics
+    float statisticsScaleX = static_cast<float>(window.getSize().x) / statisticsBackgroundTexture.getSize().x;
+    float statisticsScaleY = static_cast<float>(window.getSize().y) / statisticsBackgroundTexture.getSize().y;
+    statisticsBackgroundSprite.setScale(statisticsScaleX, statisticsScaleY);
+
+    // Załaduj teksturę tła trybu Achievements
+    sf::Texture achievementsBackgroundTexture;
+    if (!achievementsBackgroundTexture.loadFromFile("Tekstury/extinguished-menu.png")) {
+        std::cerr << L"Nie udało się załadować tekstury tła trybu Achievements!" << std::endl;
+        return -1;
+    }
+
+    // Utwórz sprite z tekstury tła trybu Achievements
+    sf::Sprite achievementsBackgroundSprite;
+    achievementsBackgroundSprite.setTexture(achievementsBackgroundTexture);
+
+    // Oblicz skalę dla tła trybu Achievements
+    float achievementsScaleX = static_cast<float>(window.getSize().x) / achievementsBackgroundTexture.getSize().x;
+    float achievementsScaleY = static_cast<float>(window.getSize().y) / achievementsBackgroundTexture.getSize().y;
+    achievementsBackgroundSprite.setScale(achievementsScaleX, achievementsScaleY);
+
+    // Załaduj teksturę tła trybu OptionsMenu (Settings)
+    sf::Texture optionsMenuBackgroundTexture;
+    if (!optionsMenuBackgroundTexture.loadFromFile("Tekstury/settings-menu.png")) {
+        std::cerr << L"Nie udało się załadować tekstury tła trybu OptionsMenu!" << std::endl;
+        return -1;
+    }
+
+    // Utwórz sprite z tekstury tła trybu OptionsMenu
+    sf::Sprite optionsMenuBackgroundSprite;
+    optionsMenuBackgroundSprite.setTexture(optionsMenuBackgroundTexture);
+
+    // Oblicz skalę dla tła trybu OptionsMenu
+    float optionsMenuScaleX = static_cast<float>(window.getSize().x) / optionsMenuBackgroundTexture.getSize().x;
+    float optionsMenuScaleY = static_cast<float>(window.getSize().y) / optionsMenuBackgroundTexture.getSize().y;
+    optionsMenuBackgroundSprite.setScale(optionsMenuScaleX, optionsMenuScaleY);
+
+    // Załaduj teksturę tła trybu Pause
+    sf::Texture pauseBackgroundTexture;
+    if (!pauseBackgroundTexture.loadFromFile("Tekstury/pause-background.png")) {
+        std::cerr << L"Nie udało się załadować tekstury tła trybu Pause!" << std::endl;
+        return -1;
+    }
+
+    // Utwórz sprite z tekstury tła trybu Pause
+    sf::Sprite pauseBackgroundSprite;
+    pauseBackgroundSprite.setTexture(pauseBackgroundTexture);
+
+    // Oblicz skalę dla tła trybu Pause
+    float pauseScaleX = static_cast<float>(window.getSize().x) / pauseBackgroundTexture.getSize().x;
+    float pauseScaleY = static_cast<float>(window.getSize().y) / pauseBackgroundTexture.getSize().y;
+    pauseBackgroundSprite.setScale(pauseScaleX, pauseScaleY);
 
     // Sprawdzenie czy udało się załadować czcionkę
     sf::Font font;
@@ -74,8 +153,8 @@ int main() {
     //pauseButton.setTexture("Tekstury/.png");
     Button resumeButton(sf::Vector2f(200, 50), sf::Vector2f(10, 10), L"Wznów", font);
     //resumeButton.setTexture("Tekstury/.png");
-    Button restartButton(sf::Vector2f(200, 50), sf::Vector2f(500, 320), "Restart", font);
-    Button mainMenuButton(sf::Vector2f(200, 50), sf::Vector2f(500, 390), L"Menu Główne", font);
+    Button restartButton(sf::Vector2f(200, 50), sf::Vector2f(500, 370), "Restart", font);
+    Button mainMenuButton(sf::Vector2f(200, 50), sf::Vector2f(500, 440), L"Menu Główne", font);
 
     // Tworzenie gracza
     Player player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
@@ -297,12 +376,15 @@ int main() {
             window.draw(nameText);
         } else if (gameState == OptionsMenu) {
             window.draw(optionsMenuText);
+            window.draw(optionsMenuBackgroundSprite); // Rysowanie tła trybu OptionsMenu
             backButton.draw(window);
         } else if (gameState == Achievements) {
             drawScrollableList(window, achievements, font);
+            window.draw(achievementsBackgroundSprite); // Rysowanie tła trybu Achievements
             backButton.draw(window);
         } else if (gameState == Statistics) {
             drawScrollableList(window, statistics, font);
+            window.draw(statisticsBackgroundSprite); // Rysowanie tła trybu Statistics
             backButton.draw(window);
         } else if (gameState == Gameplay) {
             window.draw(storyBackgroundSprite); // Rysowanie tła trybu fabularnego
@@ -315,14 +397,13 @@ int main() {
             window.draw(coinCountText);
         } else if (gameState == Pause) {
             window.draw(pauseText);
+            window.draw(pauseBackgroundSprite); // Rysowanie tła trybu Pause
             resumeButton.draw(window);
             restartButton.draw(window);
             mainMenuButton.draw(window);
         } else if (gameState == GameOver) {
             window.clear(sf::Color::Black);
-            sf::Text gameOverText(L"Spróbuj jeszcze raz", font, 50);
-            gameOverText.setPosition(400, 200);
-            window.draw(gameOverText);
+            window.draw(gameOverBackgroundSprite); // Rysowanie tła trybu GameOver
             restartButton.draw(window);
             exitButton.draw(window);
         }

@@ -4,7 +4,11 @@
 CoinManager::CoinManager(float spawnInterval, float speed) {
     this->spawnTimer = 0;             
     this->spawnInterval = spawnInterval; 
-    this->speed = speed;             
+    this->speed = speed;   
+    // Załaduj teksturę dla monet
+    if (!coinTexture.loadFromFile("Tekstury/coin.png")) {
+        // Obsłuż błąd ładowania tekstury
+    }          
 }
 
 void CoinManager::update(float deltaTime, sf::FloatRect playerBounds, int& coinCount, const std::vector<sf::FloatRect>& obstacleBounds) {
@@ -24,7 +28,7 @@ void CoinManager::update(float deltaTime, sf::FloatRect playerBounds, int& coinC
                 }
             }
             if (!isColliding) {
-                coins.emplace_back(position, 10.0f); // Promien monety = 10
+                coins.emplace_back(position, 10.0f, coinTexture); // Promien monety = 10
                 break;
             }
         }
