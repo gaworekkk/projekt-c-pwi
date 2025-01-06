@@ -4,6 +4,7 @@
 #include "ObstacleManager.h"
 #include "Utils.h"
 #include "CoinManager.h"
+#include "StatisticsManager.h"
 #include <iostream>
 
 enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Pause, GameOver };
@@ -88,11 +89,14 @@ int main() {
     ObstacleManager obstacleManager(window.getSize().x, window.getSize().y);
     
     // Tworzenie menedzera monet
-    CoinManager coinManager(1.0f, 150.0f);
-    int coinCount = 0;
+    float obstacleInitialSpeed = obstacleManager.getInitialSpeed();
+    CoinManager coinManager(2.0f, obstacleInitialSpeed, obstacleInitialSpeed);
+    int coinCount = 0, currentCoinCount;
+
+    // Zaladowanie statystyk
+    StatisticsManager::loadStatistics(coinCount);
 
     // Teksty do wyświetlania
-
     std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
     std::vector<std::string> statistics = {"Statistic 1", "Statistic 2", "Statistic 3"};
 
@@ -111,13 +115,15 @@ int main() {
     sf::Text pauseText("Pause", font, 50);
     centerText(pauseText, 1200, 640, 200);
     
-
     sf::Text distanceText("Odleglosc:", font, 50);
     distanceText.setPosition(820, 10); //Zmienić setPosition na cos innego (moze centerText?)
 
     sf::Text coinCountText("Monety: 0", font, 50);
     coinCountText.setPosition(820, 80); 
 
+    sf::Text coinCountMainMenuText("Zebrane monety: 0", font, 50);
+    coinCountMainMenuText.setPosition(20, 20);
+    coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
 
     float deltaTime;
     sf::Clock clock;
@@ -141,14 +147,15 @@ int main() {
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (gameState == MainMenu) {
                     if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
                         distance = 0.0f;
-                        coinCount = 0.0f;
+                        currentCoinCount = 0.0f;
                         obstacleManager.restart();
                         gameState = Gameplay; // Przejście do Gameplay
                     }
                     if (endlessButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         distance = 0.0f;
-                        coinCount = 0.0f;
+                        currentCoinCount = 0.0f;
                         obstacleManager.restart();
                         gameState = Gameplay; // Przejście do Gameplay
                     }
@@ -192,8 +199,9 @@ int main() {
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                         distance = 0.0f;
-                        coinCount = 0.0f;
+                        currentCoinCount = 0.0f;
                         obstacleManager.restart();
+                        coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
                         gameState = Gameplay; // Restart gry
                     }
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -204,8 +212,9 @@ int main() {
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                         distance = 0.0f;
-                        coinCount = 0.0f;
+                        currentCoinCount = 0.0f;
                         obstacleManager.restart();
+                        coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
                         gameState = Gameplay; // Restart gry
                     }
                     if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -240,6 +249,7 @@ int main() {
                     player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                     obstacleManager.restart();
                     distance = 0.0f;
+                    coinCount = 0.0f;
                     gameState = Gameplay; // Restart gry
                 }
                 if (event.key.code == sf::Keyboard::P) {
@@ -253,11 +263,10 @@ int main() {
             player.handleInput(deltaTime);
             player.update(deltaTime);
 	        obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
-            coinManager.update(deltaTime, player.getGlobalBounds(), coinCount, obstacleManager.getObstacleBounds()); // Aktualizacja monet
+            coinManager.update(deltaTime, player.getGlobalBounds(), currentCoinCount, obstacleManager.getObstacleBounds()); // Aktualizacja monet
 
             // Obliczanie odległości
             float obstacleSpeed = obstacleManager.getSpeed();
-            float obstacleInitialSpeed = obstacleManager.getInitialSpeed();
             float playerVelocity = player.getVelocity().x;
             distance += (deltaTime * (obstacleSpeed + playerVelocity)) / obstacleInitialSpeed;
             
@@ -265,16 +274,20 @@ int main() {
             int distanceInt = static_cast<int>(distance);
             if(distanceInt % 50 == 0 && if_changed_speed == false){
                 obstacleManager.setSpeed(obstacleSpeed + 25);
+                coinManager.setObstacleSpawnSpeed(obstacleSpeed + 25);
+                coinManager.setSpeed(obstacleSpeed + 25);
                 if_changed_speed = true;
             } else if(distanceInt % 50 != 0) {
                 if_changed_speed = false;
             }
 
             distanceText.setString(L"Odleglosc: " + std::to_wstring(distanceInt));
-            coinCountText.setString(L"Monety: " + std::to_wstring(coinCount));
+            coinCountText.setString(L"Monety: " + std::to_wstring(currentCoinCount));
           
         // Sprawdzenie kolizji i koniec gry lub restart
             if (obstacleManager.checkCollisions(player.getGlobalBounds())) {
+                coinCount += currentCoinCount;
+                StatisticsManager::saveStatistics(coinCount); // zapisanie statystyk
                 gameState = GameOver;
             }
         }
@@ -314,6 +327,7 @@ int main() {
             statisticsButton.draw(window);
             exitButton.draw(window);
             window.draw(nameText);
+            window.draw(coinCountMainMenuText);
         } else if (gameState == OptionsMenu) {
             window.draw(optionsMenuText);
             backButton.draw(window);
