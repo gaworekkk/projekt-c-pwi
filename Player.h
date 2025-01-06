@@ -12,6 +12,7 @@ public:
     void update(float deltaTime);
     void draw(sf::RenderWindow& window);
    sf::FloatRect getGlobalBounds();
+   sf::Vector2f getVelocity() const;
 private:
     sf::RectangleShape player;
     sf::Vector2f velocity;
@@ -27,7 +28,7 @@ private:
     const float baseJumpSpeed = 250.f;
     const float maxJumpSpeed = 500.f;
     const float gravity = 981.f;
-    const float groundHeight = 600.f;
+    const float groundHeight = 589.f;
     const float screenWidth = 1200;
     const float maxHoldTime = 1.0f;
     const float jumpBoost = 800.f;

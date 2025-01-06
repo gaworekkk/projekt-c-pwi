@@ -12,8 +12,12 @@ enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Paus
 GameState gameState = MainMenu;
 
 int main() {
+    // Ustawienia okna
+    sf::VideoMode videoMode(1200, 640);
+    sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close;
+
     // Tworzenie okna
-    sf::RenderWindow window(sf::VideoMode(1200, 640), "Dino Game");
+    sf::RenderWindow window(videoMode, "Dino Game", style);
     window.setFramerateLimit(60); // Ograniczenie FPS do 60
 
     // Załaduj teksturę tła
@@ -160,8 +164,8 @@ int main() {
     Player player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
 
     // Tworzenie generatora przeszkód
-    ObstacleManager obstacleManager(window.getSize().x, window.getSize().y);
-    
+    ObstacleManager cactusManager(window.getSize().x, window.getSize().y, "cactus");
+    ObstacleManager birdManager(window.getSize().x, window.getSize().y, "bird");
     // Tworzenie menedzera monet
     CoinManager coinManager(1.0f, 150.0f);
     int coinCount = 0;
@@ -199,6 +203,10 @@ int main() {
 
     float distance;
 
+    // Zmienne "zapadki"
+
+    bool if_changed_speed = false;
+
     // Główna pętla gry
     while (window.isOpen()) {
         deltaTime = clock.restart().asSeconds();
@@ -214,13 +222,15 @@ int main() {
                     if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         distance = 0.0f;
                         coinCount = 0.0f;
-                        obstacleManager.restart();
+                        cactusManager.restart();
+			birdManager.restart();
                         gameState = Gameplay; // Przejście do Gameplay
                     }
                     if (endlessButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         distance = 0.0f;
                         coinCount = 0.0f;
-                        obstacleManager.restart();
+			cactusManager.restart();
+                        birdManager.restart();
                         gameState = Gameplay; // Przejście do Gameplay
                     }
                     if (optionsButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -264,7 +274,8 @@ int main() {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                         distance = 0.0f;
                         coinCount = 0.0f;
-                        obstacleManager.restart();
+   			cactusManager.restart();
+                        birdManager.restart();
                         gameState = Gameplay; // Restart gry
                     }
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -275,8 +286,9 @@ int main() {
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                         distance = 0.0f;
-                        coinCount = 0.0f;
-                        obstacleManager.restart();
+    			cactusManager.restart();
+                        birdManager.restart();   
+			coinCount = 0.0f;
                         gameState = Gameplay; // Restart gry
                     }
                     if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -309,7 +321,9 @@ int main() {
                 }
                 if (event.key.code == sf::Keyboard::R) {
                     player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
-                    obstacleManager.restart();
+
+                    cactusManager.restart();
+                    birdManager.restart();
                     distance = 0.0f;
                     gameState = Gameplay; // Restart gry
                 }
@@ -321,18 +335,42 @@ int main() {
 
         // Logika w zależności od stanu gry
         if (gameState == Gameplay) {
+
             player.handleInput(deltaTime);
             player.update(deltaTime);
-	        obstacleManager.update(deltaTime);  // Aktualizacja przeszkód
-            coinManager.update(deltaTime, player.getGlobalBounds(), coinCount, obstacleManager.getObstacleBounds()); // Aktualizacja monet
 
-            distance += 0.05f;
-          
-            distanceText.setString(L"Odleglosc: " + std::to_wstring(static_cast<int>(distance)));
+	    cactusManager.update(deltaTime);
+	    birdManager.update(deltaTime);
+
+	    std::vector<sf::FloatRect> allObstacles;
+	    auto cactusBounds = cactusManager.getObstacleBounds();
+	    auto birdBounds = birdManager.getObstacleBounds();
+	    allObstacles.insert(allObstacles.end(), cactusBounds.begin(), cactusBounds.end());
+            allObstacles.insert(allObstacles.end(), birdBounds.begin(), birdBounds.end());
+	    coinManager.update(deltaTime, player.getGlobalBounds(), coinCount, allObstacles);
+
+            // Obliczanie odległości
+            float cactusSpeed = cactusManager.getSpeed();
+	    float birdSpeed = birdManager.getSpeed();
+            float obstacleInitialSpeed = cactusManager.getInitialSpeed();
+            float playerVelocity = player.getVelocity().x;
+            distance += (deltaTime * (cactusSpeed + playerVelocity)) / obstacleInitialSpeed;
+            
+            // Zmiana prędkości co 50 jednostek
+            int distanceInt = static_cast<int>(distance);
+            if(distanceInt % 50 == 0 && if_changed_speed == false){
+                cactusManager.setSpeed(cactusSpeed + 25);
+		birdManager.setSpeed(birdSpeed + 25);
+                if_changed_speed = true;
+            } else if(distanceInt % 50 != 0) {
+                if_changed_speed = false;
+            }
+
+            distanceText.setString(L"Odleglosc: " + std::to_wstring(distanceInt));
             coinCountText.setString(L"Monety: " + std::to_wstring(coinCount));
           
         // Sprawdzenie kolizji i koniec gry lub restart
-            if (obstacleManager.checkCollisions(player.getGlobalBounds())) {
+            if ((cactusManager.checkCollisions(player.getGlobalBounds())) || (birdManager.checkCollisions(player.getGlobalBounds()))) {
                 gameState = GameOver;
             }
         }
@@ -389,7 +427,8 @@ int main() {
         } else if (gameState == Gameplay) {
             window.draw(storyBackgroundSprite); // Rysowanie tła trybu fabularnego
             player.draw(window); // Rysowanie gracza
-	        obstacleManager.draw(window);  // Rysowanie przeszkód
+	    cactusManager.draw(window);  // Rysowanie przeszkód
+	    birdManager.draw(window);
             coinManager.draw(window);
             window.draw(gameplayText);
             pauseButton.draw(window);
