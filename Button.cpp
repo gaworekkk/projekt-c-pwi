@@ -1,6 +1,7 @@
 #include "Button.h"
+#include <stdexcept>
 
-Button::Button(const sf::Vector2f& size, const sf::Vector2f& position, const sf::String& text, const sf::Font& font) {
+Button::Button(const sf::Vector2f& size, const sf::Vector2f& position, const sf::String& text, const sf::Font& font) : isHovered(true) {
     button.setSize(size);
     button.setPosition(position);
     buttonText.setFont(font);
@@ -27,9 +28,15 @@ void Button::draw(sf::RenderWindow& window) {
 
 void Button::update(const sf::Vector2i& mousePos) {
     if (button.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
-        button.setFillColor(hoverColor); // Zmiana koloru na hover
+        if (!isHovered) {
+            buttonSprite.setTexture(hoverTexture); // Ustaw teksturę hover
+            isHovered = true;
+        }
     } else {
-        button.setFillColor(normalColor); // Powrót do normalnego koloru
+        if (isHovered) {
+            buttonSprite.setTexture(buttonTexture); // Ustaw normalną teksturę
+            isHovered = false;
+        }
     }
 }
 
@@ -42,13 +49,17 @@ std::string Button::getText() const {
     return buttonText.getString(); // Zwraca tekst przycisku jako std::string
 }
 
-void Button::setTexture(const std::string& textureFile) {
-    if (buttonTexture.loadFromFile(textureFile)) {
-        buttonSprite.setTexture(buttonTexture);
-        buttonSprite.setPosition(button.getPosition());
-        buttonSprite.setScale(
-            button.getSize().x / buttonTexture.getSize().x,
-            button.getSize().y / buttonTexture.getSize().y
-        );
+void Button::setTexture(const std::string& textureFile, const std::string& hoverTextureFile) {
+    if (!buttonTexture.loadFromFile(textureFile)) {
+        throw std::runtime_error("Nie udało się załadować tekstury: " + textureFile);
     }
-};
+    if (!hoverTexture.loadFromFile(hoverTextureFile)) {
+        throw std::runtime_error("Nie udało się załadować tekstury hover: " + hoverTextureFile);
+    }
+    buttonSprite.setTexture(buttonTexture);
+    buttonSprite.setPosition(button.getPosition());
+    buttonSprite.setScale(
+        button.getSize().x / buttonTexture.getSize().x,
+        button.getSize().y / buttonTexture.getSize().y
+    );
+}

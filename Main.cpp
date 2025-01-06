@@ -22,7 +22,7 @@ int main() {
         std::cerr << L"Nie udało się załadować tekstury tła!" << std::endl;
         return -1;
     }
-
+    
     // Utwórz sprite z tekstury tła
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(backgroundTexture);
@@ -58,18 +58,18 @@ int main() {
 
     // Tworzenie przycisków
     Button storyButton(sf::Vector2f(324, 54), sf::Vector2f(250, 372), " ", font);
-    storyButton.setTexture("Tekstury/przyciskSTART.png");
+    storyButton.setTexture("Tekstury/przyciskSTART.png", "Tekstury/przyciskENDLESS.png");
     Button endlessButton(sf::Vector2f(324, 54), sf::Vector2f(626, 372), " ", font);
-    endlessButton.setTexture("Tekstury/przyciskENDLESS.png");
+    endlessButton.setTexture("Tekstury/przyciskENDLESS.png", "Tekstury/przyciskSTART.png");
     Button optionsButton(sf::Vector2f(54, 54), sf::Vector2f(300, 486), " ", font);
-    optionsButton.setTexture("Tekstury/settings.png");
+    optionsButton.setTexture("Tekstury/settings.png", "Tekstury/statistic.png");
     Button achievementsButton(sf::Vector2f(54, 54), sf::Vector2f(482, 486), " ", font);
-    achievementsButton.setTexture("Tekstury/archievment.png");
+    achievementsButton.setTexture("Tekstury/archievment.png", "Tekstury/statistic.png");
     Button statisticsButton(sf::Vector2f(54, 54), sf::Vector2f(664, 486), " ", font);
-    statisticsButton.setTexture("Tekstury/statistic.png");
+    statisticsButton.setTexture("Tekstury/statistic.png", "Tekstury/settings.png");
     Button backButton(sf::Vector2f(200, 50), sf::Vector2f(500, 400), L"Powrót", font);
     Button exitButton(sf::Vector2f(54, 54), sf::Vector2f(846, 486), " ", font);
-    exitButton.setTexture("Tekstury/exit.png");
+    exitButton.setTexture("Tekstury/exit.png", "Tekstury/statistic.png");
     Button pauseButton(sf::Vector2f(200, 50), sf::Vector2f(10, 10), "Pause", font);
     //pauseButton.setTexture("Tekstury/.png");
     Button resumeButton(sf::Vector2f(200, 50), sf::Vector2f(10, 10), L"Wznów", font);
@@ -263,6 +263,8 @@ int main() {
             storyButton.update(sf::Mouse::getPosition(window));
             endlessButton.update(sf::Mouse::getPosition(window));
             optionsButton.update(sf::Mouse::getPosition(window));
+            achievementsButton.update(sf::Mouse::getPosition(window));
+            statisticsButton.update(sf::Mouse::getPosition(window));
             exitButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == OptionsMenu) {
             backButton.update(sf::Mouse::getPosition(window));
