@@ -84,4 +84,10 @@ void CoinManager::draw(sf::RenderWindow& window) {
     }
 }
 
+void CoinManager::restart() {
+    coins.clear(); 
+    spawnTimer = 0;  
+}
+
+
 

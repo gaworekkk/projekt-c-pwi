@@ -19,6 +19,7 @@ public:
     void draw(sf::RenderWindow& window); 
     void setObstacleSpawnSpeed(float speed);
     void setSpeed(float speed);
+    void restart();
 };
 
 #endif

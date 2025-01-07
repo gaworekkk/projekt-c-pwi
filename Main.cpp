@@ -152,6 +152,7 @@ int main() {
                         currentCoinCount = 0.0f;
                         cactusManager.restart();
 			            birdManager.restart();
+                        coinManager.restart();
                         gameState = Gameplay; // Przejście do Gameplay
                     }
                     if (endlessButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -159,6 +160,7 @@ int main() {
                         currentCoinCount = 0.0f;
 			            cactusManager.restart();
                         birdManager.restart();
+                        coinManager.restart();
                         gameState = Gameplay; // Przejście do Gameplay
                     }
                     if (optionsButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -205,6 +207,7 @@ int main() {
                         coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
    			            cactusManager.restart();
                         birdManager.restart();
+                        coinManager.restart();
                         gameState = Gameplay; // Restart gry
                     }
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -216,7 +219,8 @@ int main() {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                         distance = 0.0f;
     			        cactusManager.restart();
-                        birdManager.restart();   
+                        birdManager.restart(); 
+                        coinManager.restart();  
 			            currentCoinCount = 0.0f;
                         coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
                         gameState = Gameplay; // Restart gry
@@ -251,7 +255,7 @@ int main() {
                 }
                 if (event.key.code == sf::Keyboard::R) {
                     player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
-
+                    coinManager.restart();
                     cactusManager.restart();
                     birdManager.restart();
                     distance = 0.0f;
