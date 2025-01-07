@@ -31,8 +31,11 @@ void CoinManager::update(float deltaTime, sf::FloatRect playerBounds, int& coinC
             spawnTimer = 0;
             int maxAttempts = 5; // Mamy 5 prob na wstawienie nowej monety tak aby nie kolidowala z przeszkoda
             for (int i = 0; i < maxAttempts; ++i) {
-                float randomY = static_cast<float>(rand() % 200 + 350);
-                sf::Vector2f position(1200, randomY);
+                int rows = 4; 
+                float rowHeight = 50.0f; 
+                int randomRow = rand() % rows; 
+                float rowY = 350.0f + randomRow * rowHeight;
+                sf::Vector2f position(1200, rowY);
                 bool isColliding = false;
                 for (const auto& bounds : obstacleBounds) {
                     if (sf::FloatRect(position.x - 30, position.y, 60, 30).intersects(bounds)) { 
@@ -59,12 +62,9 @@ void CoinManager::update(float deltaTime, sf::FloatRect playerBounds, int& coinC
                 break;
             }
         }
-        // Usuwamy jesli koliduje z przeszkoda
-        if (isCollidingWithObstacle) {
-            it = coins.erase(it);
-        }
+     
         // Usuwamy jesli wyszla poza ekran
-        else if (it->getPosition().x + it->getBounds().width < 0) {
+        if (it->getPosition().x + it->getBounds().width < 0) {
             it = coins.erase(it);
         }
         // Usuwamy jesli zostala zebrana

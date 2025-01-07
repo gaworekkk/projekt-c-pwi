@@ -360,9 +360,9 @@ int main() {
         } else if (gameState == Gameplay) {
             window.draw(storyBackgroundSprite); // Rysowanie tła trybu fabularnego
             player.draw(window); // Rysowanie gracza
-	    cactusManager.draw(window);  // Rysowanie przeszkód
-	    birdManager.draw(window);
+	        cactusManager.draw(window);  // Rysowanie przeszkód
             coinManager.draw(window);
+            birdManager.draw(window);
             window.draw(gameplayText);
             pauseButton.draw(window);
             window.draw(distanceText);
