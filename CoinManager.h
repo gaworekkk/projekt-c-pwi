@@ -3,29 +3,24 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "Coin.h"
 
 class CoinManager {
 private:
-    struct Coin {
-        sf::CircleShape shape;
-        sf::Texture texture;
-        Coin(sf::Vector2f position, float radius, const sf::Texture& texture) {
-            shape.setRadius(radius);
-            shape.setFillColor(sf::Color::Yellow);
-            shape.setPosition(position);
-            shape.setTexture(&texture);
-        }
-    };
     std::vector<Coin> coins;  
-    float spawnTimer; // Czas od ostatniego wygenerowania monety
-    float spawnInterval; // Czas miedzy generowaniem monet
-    float speed;             
+    float spawnTimer;         // Czas od ostatniego wygenerowania monety
+    float spawnInterval;      // Czas miedzy generowaniem monet
+    float speed;              // Prędkość przesuwania monet
+    float obstacleSpawnSpeed; // Prędkość generowania przeszkod
     sf::Texture coinTexture; // Tekstura dla monet
 
 public:
-    CoinManager(float spawnInterval, float speed); 
+    CoinManager(float spawnInterval, float speed, float obstacleSpeed); 
     void update(float deltaTime, sf::FloatRect playerBounds, int& coinCount, const std::vector<sf::FloatRect>& obstacleBounds);
     void draw(sf::RenderWindow& window); 
+    void setObstacleSpawnSpeed(float speed);
+    void setSpeed(float speed);
+    void restart();
 };
 
 #endif
