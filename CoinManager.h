@@ -12,6 +12,7 @@ private:
     float spawnInterval;      // Czas miedzy generowaniem monet
     float speed;              // Prędkość przesuwania monet
     float obstacleSpawnSpeed; // Prędkość generowania przeszkod
+    sf::Texture coinTexture; // Tekstura dla monet
 
 public:
     CoinManager(float spawnInterval, float speed, float obstacleSpeed); 

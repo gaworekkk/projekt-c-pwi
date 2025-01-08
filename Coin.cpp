@@ -1,9 +1,10 @@
 #include "Coin.h"
 
-Coin::Coin(sf::Vector2f position, float radius) {
+Coin::Coin(sf::Vector2f position, float radius, const sf::Texture& texture) {
     shape.setRadius(radius);
     shape.setFillColor(sf::Color::Yellow);
     shape.setPosition(position);
+    shape.setTexture(&texture);
 }
 
 void Coin::move(float offsetX, float offsetY) {
