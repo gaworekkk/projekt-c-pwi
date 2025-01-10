@@ -8,7 +8,7 @@ enum GameState { MainMenu, OptionsMenu, Gameplay, Pause, GameOver };
 extern GameState gameState;
 
 ObstacleManager::ObstacleManager(float windowWidth, float windowHeight, std::string Type)
-    : screenWidth(windowWidth), screenHeight(windowHeight), obstacleType(Type), obstacleSpawnTimer(0.f) {
+    : screenWidth(windowWidth), birdCounter(0), screenHeight(windowHeight), obstacleType(Type), obstacleSpawnTimer(0.f) {
     std::srand(static_cast<unsigned int>(std::time(nullptr))); // Inicjalizacja generatora losowego
     if(obstacleType == "cactus"){
 	    speed = initialCactusSpeed;
@@ -56,7 +56,14 @@ void ObstacleManager::generateObstacle() {
     }else if(obstacleType == "bird"){
 	    obstacleHeight = birdHeight;
 	    obstacleWidth = birdWidth;
-	    obstacleY = skyHeight - birdHeight;
+	    birdCounter++;
+	    int skyLaneNum = rand()%skyLanesCount;
+	    if(birdCounter == 8){
+		    birdCounter = 0;
+		    obstacleY = veryHighSkyHeight -skyLaneHeight*skyLaneNum;
+	    }else{
+		    obstacleY = skyMinHeight - birdHeight - skyLaneHeight*skyLaneNum;		
+	    }
     }
 
     // Tworzenie przeszkody po prawej stronie ekranu

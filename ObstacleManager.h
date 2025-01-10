@@ -25,17 +25,21 @@ private:
     float screenWidth;
     float screenHeight;
     const float groundHeight = 589.0f;
-    const float skyHeight = 525.0f;
+    const float veryHighSkyHeight = 200.0f; 
+    const int   skyLanesCount = 5;
+    const float skyLaneHeight = 15.0f;
+    const float skyMinHeight = 535.0f;
     const float cactusHeight = 80.0f;
     const float cactusWidth = 50.0f;
     const float birdHeight = 30.0f;
     const float birdWidth = 30.0f;
     std::vector<Obstacle> obstacles;
+    int birdCounter;
     float obstacleSpawnTimer;
     float spawnInterval;
     float speed;
     float initialCactusSpeed = 250.0f;
-    float initialBirdSpeed = 300.0f;
+    float initialBirdSpeed = 400.0f;
     float defaultInitialSpeed = 250.0f;
 };
 
