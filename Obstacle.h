@@ -5,7 +5,7 @@
 
 class Obstacle {
 public:
-    Obstacle(float x, float y, float width, float height);
+    Obstacle(float x, float y, float width, float height, const sf::Texture& texture);
     void update(float deltaTime, float speed);
     void draw(sf::RenderWindow& window);
     sf::FloatRect getBounds() const;
