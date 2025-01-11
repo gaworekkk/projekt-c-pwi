@@ -375,7 +375,7 @@ int main() {
             int distanceInt = static_cast<int>(distance);
             if(distanceInt % 50 == 0 && distanceInt <= 1000 && if_changed_speed == false){
                 cactusManager.setSpeed(cactusSpeed + 20);
-		        birdManager.setSpeed(0);
+		        birdManager.setSpeed(birdSpeed + 20);
                 coinManager.setObstacleSpawnSpeed(cactusSpeed + 20);
                 coinManager.setSpeed(cactusSpeed + 20);
                 if_changed_speed = true;
