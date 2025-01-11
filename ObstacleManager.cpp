@@ -89,6 +89,7 @@ void ObstacleManager::removeOffscreenObstacles() {
 }
 void ObstacleManager::restart() {
     obstacles.clear();  // Usuwamy wszystkie przeszkody
+    setSpeed(getInitialSpeed());  // Resetujemy prędkość
     obstacleSpawnTimer = 0.f;   // Resetujemy timer spawnu
 }
 

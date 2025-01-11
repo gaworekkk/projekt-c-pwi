@@ -1,8 +1,8 @@
 #include "CoinManager.h"
 #include <cstdlib> 
 
-CoinManager::CoinManager(float spawnInterval, float speed, float obstacleSpeed)
-    : spawnInterval(spawnInterval), speed(speed), obstacleSpawnSpeed(obstacleSpeed) {
+CoinManager::CoinManager(float spawnInterval, float speed, float initialSpeed, float obstacleSpeed)
+    : spawnInterval(spawnInterval), speed(speed), initialSpeed(initialSpeed), obstacleSpawnSpeed(obstacleSpeed) {
     if (!coinTexture.loadFromFile("Tekstury/coin.png")) {
         // Obsłuż błąd ładowania tekstury
     }  
@@ -89,6 +89,7 @@ void CoinManager::draw(sf::RenderWindow& window) {
 
 void CoinManager::restart() {
     coins.clear(); 
+    setSpeed(initialSpeed);
     spawnTimer = 0;  
 }
 
