@@ -6,7 +6,10 @@ Player::Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf:
     player.setSize(size);
     player.setPosition(position);
     player.setFillColor(color);
-
+    if(!playerTexture.loadFromFile("Tekstury/skórki dino/dino4(run).gif")){
+	    //błąd
+    }
+    player.setTexture(&playerTexture);
     velocity = sf::Vector2f(0.f, 0.f);
     isCrouching = false;
     originalSize = size;
@@ -24,6 +27,8 @@ Player& Player::operator=(const Player& other) {
         isJumping = other.isJumping;
         isHoldingJump = other.isHoldingJump;
         jumpHoldTime = other.jumpHoldTime;
+	playerTexture = other.playerTexture;
+	player.setTexture(&playerTexture);
     }
     return *this;
 }
