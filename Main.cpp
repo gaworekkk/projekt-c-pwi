@@ -226,7 +226,6 @@ int main() {
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (gameState == MainMenu) {
                     if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
                         distance = 0.0f;
                         currentCoinCount = 0.0f;
                         cactusManager.restart();
@@ -282,6 +281,7 @@ int main() {
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                         distance = 0.0f;
+                        coinCount += currentCoinCount;
                         currentCoinCount = 0.0f;
                         coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
    			            cactusManager.restart();
@@ -290,6 +290,9 @@ int main() {
                         gameState = Gameplay; // Restart gry
                     }
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        coinCount += currentCoinCount;
+                        coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
+                        StatisticsManager::saveStatistics(coinCount);
                         gameState = MainMenu; // Powrót do MainMenu
                     }
 
