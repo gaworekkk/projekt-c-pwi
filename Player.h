@@ -5,7 +5,7 @@
 
 class Player {
 public:
-    Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color);
+    Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color, const std::string& textureFile, int frameCount, float frameDuration);
     Player& operator=(const Player& other);
     void handleInput(float deltaTime);
     void update(float deltaTime);
@@ -15,6 +15,12 @@ public:
 private:
     sf::RectangleShape player;
     sf::Texture playerTexture;
+    sf::IntRect frameRect;
+    int frameCount;
+    float frameDuration;
+    float currentFrameTime;
+    int currentFrame;
+    
     sf::Vector2f velocity;
     bool isJumping;
     bool isHoldingJump;
