@@ -5,12 +5,15 @@
 #include "Utils.h"
 #include "CoinManager.h"
 #include "StatisticsManager.h"
+#include "Difficulty.h"
 #include <iostream>
 
 enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Pause, GameOver };
 
 // Ustawienie domyślnego stanu gry
 GameState gameState = MainMenu;
+// Ustawienie domyślnej trudności
+Difficulty difficulty = Difficulty::Normal;
 
 int main() {
     // Ustawienia okna
@@ -160,6 +163,12 @@ int main() {
     //resumeButton.setTexture("Tekstury/.png");
     Button restartButton(sf::Vector2f(200, 50), sf::Vector2f(500, 370), "Restart", font);
     Button mainMenuButton(sf::Vector2f(200, 50), sf::Vector2f(500, 440), L"Menu Główne", font);
+    Button easyButton(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
+    easyButton.setTexture("Tekstury/przyciskLatwy.png", "Tekstury/przyciskTRUDNY.png");
+    Button normalButton(sf::Vector2f(324, 54), sf::Vector2f(450, 180), " ", font);
+    normalButton.setTexture("Tekstury/przyciskSREDNI.png", "Tekstury/przyciskTRUDNY.png");
+    Button hardButton(sf::Vector2f(324, 54), sf::Vector2f(450, 240), " ", font);
+    hardButton.setTexture("Tekstury/przyciskTRUDNY.png", "Tekstury/przyciskLatwy.png");
 
     // Tworzenie gracza
     Player player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
@@ -167,9 +176,10 @@ int main() {
     // Tworzenie generatora przeszkód
     ObstacleManager cactusManager(window.getSize().x, window.getSize().y, "cactus");
     ObstacleManager birdManager(window.getSize().x, window.getSize().y, "bird");
+    cactusManager.setDifficulty(difficulty);
+    birdManager.setDifficulty(difficulty);
     // Tworzenie menedzera monet
-    float obstacleInitialSpeed = cactusManager.getInitialSpeed();
-    CoinManager coinManager(2.0f, obstacleInitialSpeed, obstacleInitialSpeed, obstacleInitialSpeed);
+    CoinManager coinManager(2.0f, cactusManager.getInitialSpeed());
     int coinCount = 0, currentCoinCount;
 
     // Zaladowanie statystyk
@@ -255,7 +265,18 @@ int main() {
                     }
 
                 } else if (gameState == OptionsMenu) {
+                    if (easyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        difficulty = Difficulty::Easy;
+                    }
+                    if (normalButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        difficulty = Difficulty::Normal;
+                    }
+                    if (hardButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        difficulty = Difficulty::Hard;
+                    }
                     if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        cactusManager.setDifficulty(difficulty);
+                        birdManager.setDifficulty(difficulty);
                         gameState = MainMenu; // Powrót do MainMenu
                     }
 
@@ -317,6 +338,8 @@ int main() {
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Escape) {
                     if (gameState == OptionsMenu) {
+                        cactusManager.setDifficulty(difficulty);
+                        birdManager.setDifficulty(difficulty);
                         gameState = MainMenu; // Powrót do MainMenu
                     }
                     if (gameState == Achievements) {
@@ -367,7 +390,7 @@ int main() {
             // Obliczanie odległości
             float cactusSpeed = cactusManager.getSpeed();
 	        float birdSpeed = birdManager.getSpeed();
-            // float obstacleInitialSpeed = cactusManager.getInitialSpeed();
+            float obstacleInitialSpeed = cactusManager.getInitialSpeed();
             float playerVelocity = player.getVelocity().x;
             distance += (deltaTime * (cactusSpeed + playerVelocity)) / obstacleInitialSpeed;
             
@@ -435,6 +458,9 @@ int main() {
         } else if (gameState == OptionsMenu) {
             window.draw(optionsMenuText);
             window.draw(optionsMenuBackgroundSprite); // Rysowanie tła trybu OptionsMenu
+            easyButton.draw(window);
+            normalButton.draw(window);
+            hardButton.draw(window);
             backButton.draw(window);
         } else if (gameState == Achievements) {
             drawScrollableList(window, achievements, font);
