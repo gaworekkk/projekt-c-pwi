@@ -2,11 +2,11 @@
 #include <cstdlib> 
 #include <math.h>
 
-CoinManager::CoinManager(float spawnInterval, float speed, float initialSpeed, float obstacleSpeed)
-    : spawnInterval(spawnInterval), speed(speed), initialSpeed(initialSpeed), obstacleSpawnSpeed(obstacleSpeed) {
+CoinManager::CoinManager(float spawnInterval, float obstacleSpeed)
+    : spawnInterval(spawnInterval), obstacleSpawnSpeed(obstacleSpeed) {
     if (!coinTexture.loadFromFile("Tekstury/coin.png")) {
         // Obsłuż błąd ładowania tekstury
-    }  
+    } 
     spawnTimer = 0;
 }
 

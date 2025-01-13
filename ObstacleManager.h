@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 #include "Obstacle.h"
+#include "Difficulty.h"
+
 class ObstacleManager {
 public:
     ObstacleManager(float windowWidth, float windowHeight, std::string Type);
@@ -15,12 +17,13 @@ public:
     bool checkCollisions(const sf::FloatRect& playerBounds);
     void removeOffscreenObstacles();
     std::vector<sf::FloatRect> getObstacleBounds() const; 
-    float getRandomSpawnInterval() const;
+    float getRandomSpawnInterval(float baseInterval) const;
     void setSpeed(float speed);
     float getSpeed() const;
-    void setInitialSpeed(float speed);
     float getInitialSpeed() const;
+    void setDifficulty(Difficulty difficulty);
 private:
+    Difficulty difficulty;
     std::string obstacleType;
     float screenWidth;
     float screenHeight;
@@ -43,6 +46,7 @@ private:
     float initialCactusSpeed = 250.0f;
     float initialBirdSpeed = 400.0f;
     float defaultInitialSpeed = 250.0f;
+    float baseInterval = 1.5f;
 };
 
 #endif // OBSTACLEMANAGER_H

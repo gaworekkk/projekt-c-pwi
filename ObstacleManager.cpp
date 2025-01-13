@@ -4,7 +4,6 @@
 #include <string>
 
 enum GameState { MainMenu, OptionsMenu, Gameplay, Pause, GameOver }; 
-
 extern GameState gameState;
 
 ObstacleManager::ObstacleManager(float windowWidth, float windowHeight, std::string Type)
@@ -20,7 +19,7 @@ ObstacleManager::ObstacleManager(float windowWidth, float windowHeight, std::str
     }else{
 	    speed = defaultInitialSpeed;
     }
-    spawnInterval = getRandomSpawnInterval();
+    spawnInterval = getRandomSpawnInterval(baseInterval);
 }
 
 void ObstacleManager::update(float deltaTime) {
@@ -30,7 +29,7 @@ void ObstacleManager::update(float deltaTime) {
     if (obstacleSpawnTimer >= spawnInterval) {
         generateObstacle();
         obstacleSpawnTimer = 0.f;
-        spawnInterval = getRandomSpawnInterval();
+        spawnInterval = getRandomSpawnInterval(baseInterval);
     }
 
     // Aktualizacja przeszkód
@@ -101,9 +100,9 @@ std::vector<sf::FloatRect> ObstacleManager::getObstacleBounds() const {
     return bounds;
 }
 
-float ObstacleManager::getRandomSpawnInterval() const {
-    return 1.5f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 2.5f)); 
-    // Losowe generowanie czasu spawnu przeszkód od 1.5 do 4 sekund
+float ObstacleManager::getRandomSpawnInterval(float baseInterval) const {
+    return baseInterval + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 2.0f)); 
+    // Losowe generowanie czasu spawnu przeszkód (od baseInterval do baseInterval + 2)
 }
 
 float ObstacleManager::getSpeed() const {
@@ -122,4 +121,34 @@ float ObstacleManager::getInitialSpeed() const {
 	}else{
 		return defaultInitialSpeed;
 	}
+}
+
+void ObstacleManager::setDifficulty(Difficulty newDifficulty) {
+    difficulty = newDifficulty;
+    switch (difficulty) {
+        case Easy:
+            if(obstacleType == "cactus"){
+                initialCactusSpeed = 180.0f;
+            } else if(obstacleType == "bird"){
+                initialBirdSpeed = 280.0f;
+            }
+            baseInterval = 6.0f;
+            break;
+        case Normal:
+            if(obstacleType == "cactus"){
+                initialCactusSpeed = 250.0f;
+            } else if(obstacleType == "bird"){
+                initialBirdSpeed = 400.0f;
+            }
+            baseInterval = 1.5f;
+            break;
+        case Hard:
+            if(obstacleType == "cactus"){
+                initialCactusSpeed = 400.0f;
+            } else if(obstacleType == "bird"){
+                initialBirdSpeed = 550.0f;
+            }
+            baseInterval = 0.5f;
+            break;
+    }
 }
