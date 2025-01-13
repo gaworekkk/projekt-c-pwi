@@ -1,9 +1,9 @@
 #include "Obstacle.h"
 
-Obstacle::Obstacle(float x, float y, float width, float height) {
+Obstacle::Obstacle(float x, float y, float width, float height, const sf::Texture& texture) {
     obstacleShape.setSize(sf::Vector2f(width, height));
     obstacleShape.setPosition(x, y);
-    obstacleShape.setFillColor(sf::Color::Green);  // Można zmienić na odpowiednią teksturę
+    obstacleShape.setTexture(&texture);
 }
 
 void Obstacle::update(float deltaTime, float speed) {

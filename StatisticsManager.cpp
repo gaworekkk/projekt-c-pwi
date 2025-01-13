@@ -1,22 +1,23 @@
 #include "StatisticsManager.h"
 #include <fstream>
-#include <iostream>
 
 void StatisticsManager::saveStatistics(int coinCount) {
-    std::ofstream file("stats.txt"); 
+    json statsJson = { {"coin_count", coinCount} };
+    std::ofstream file("stats.json");
     if (file.is_open()) {
-        file << coinCount << "\n"; 
+        file << statsJson.dump();
         file.close();
     }
 }
 
 void StatisticsManager::loadStatistics(int& coinCount) {
-    std::ifstream file("stats.txt"); 
+    std::ifstream file("stats.json");
     if (file.is_open()) {
-        file >> coinCount; 
+        json statsJson;
+        file >> statsJson;
+        coinCount = statsJson.value("coin_count", 0);
         file.close();
     } else {
-        // Jeśli plik nie istnieje ustawiamy domyslne wartosci
-        coinCount = 0;
+        coinCount = 0; 
     }
 }

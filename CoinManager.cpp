@@ -1,5 +1,6 @@
 #include "CoinManager.h"
 #include <cstdlib> 
+#include <math.h>
 
 CoinManager::CoinManager(float spawnInterval, float speed, float obstacleSpeed)
     : spawnInterval(spawnInterval), speed(speed), obstacleSpawnSpeed(obstacleSpeed) {
@@ -21,9 +22,9 @@ void CoinManager::update(float deltaTime, sf::FloatRect playerBounds, int& coinC
     spawnTimer += deltaTime;
 
     // Dostosowanie spawnInterval na podstawie obstacleSpawnSpeed
-    float adjustedSpawnInterval = spawnInterval - (obstacleSpawnSpeed * 0.02f); 
-    if (adjustedSpawnInterval < 0.5f) { // Minimalny czas miedzy monetami
-        adjustedSpawnInterval = 0.5f;
+    float adjustedSpawnInterval = spawnInterval - (obstacleSpawnSpeed * 0.05f); 
+    if (adjustedSpawnInterval < 1.0f) { // Minimalny czas miedzy monetami
+        adjustedSpawnInterval = 1.0f;
     }
 
     // Generowanie nowej monety
@@ -32,16 +33,22 @@ void CoinManager::update(float deltaTime, sf::FloatRect playerBounds, int& coinC
         if (generate) 
         { 
             spawnTimer = 0;
-            int maxAttempts = 5; // Mamy 5 prob na wstawienie nowej monety tak aby nie kolidowala z przeszkoda
+            int maxAttempts = 10; // Mamy 10 prob na wstawienie nowej monety tak aby nie kolidowala z przeszkoda
+            int rows = 4; 
+            float rowHeight = 50.0f; // Odleglosc miedzy wierszami
+            float startY = 375.0f;
             for (int i = 0; i < maxAttempts; ++i) {
-                int rows = 4; 
-                float rowHeight = 50.0f; 
-                int randomRow = rand() % rows; 
-                float rowY = 350.0f + randomRow * rowHeight;
-                sf::Vector2f position(1200, rowY);
                 bool isColliding = false;
+                int randomRow = rand() % rows;
+                float rowY = startY + randomRow * rowHeight;
+                sf::Vector2f position(1200, rowY);
                 for (const auto& bounds : obstacleBounds) {
-                    if (sf::FloatRect(position.x - 30, position.y, 60, 30).intersects(bounds)) { 
+                    // Sprawdzenie dystansu między srodkiem monety a przeszkoda
+                    sf::Vector2f obstacleCenter(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
+                    float dx = position.x - obstacleCenter.x;
+                    float dy = position.y - obstacleCenter.y;
+                    float distance = std::sqrt(dx * dx + dy * dy);
+                    if (distance < 15 + std::max(bounds.width, bounds.height) / 2) {
                         isColliding = true;
                         break;
                     }
@@ -89,6 +96,7 @@ void CoinManager::draw(sf::RenderWindow& window) {
 
 void CoinManager::restart() {
     coins.clear(); 
+    setSpeed(initialSpeed);
     spawnTimer = 0;  
 }
 

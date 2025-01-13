@@ -7,7 +7,6 @@ class Player {
 public:
     Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color);
     Player& operator=(const Player& other);
-
     void handleInput(float deltaTime);
     void update(float deltaTime);
     void draw(sf::RenderWindow& window);
@@ -15,6 +14,7 @@ public:
    sf::Vector2f getVelocity() const;
 private:
     sf::RectangleShape player;
+    sf::Texture playerTexture;
     sf::Vector2f velocity;
     bool isJumping;
     bool isHoldingJump;
@@ -23,7 +23,7 @@ private:
     sf::Vector2f originalSize;       
     sf::Vector2f crouchSize;          
 
-    const float crouchSpeedFactor = 0.75f;
+    const float crouchSpeedFactor = 5.f;
     const float moveSpeed = 200.f;
     const float baseJumpSpeed = 250.f;
     const float maxJumpSpeed = 500.f;

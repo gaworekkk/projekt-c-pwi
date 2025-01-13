@@ -169,7 +169,7 @@ int main() {
     ObstacleManager birdManager(window.getSize().x, window.getSize().y, "bird");
     // Tworzenie menedzera monet
     float obstacleInitialSpeed = cactusManager.getInitialSpeed();
-    CoinManager coinManager(2.0f, obstacleInitialSpeed, obstacleInitialSpeed);
+    CoinManager coinManager(2.0f, obstacleInitialSpeed, obstacleInitialSpeed, obstacleInitialSpeed);
     int coinCount = 0, currentCoinCount;
 
     // Zaladowanie statystyk
@@ -226,7 +226,6 @@ int main() {
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (gameState == MainMenu) {
                     if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
                         distance = 0.0f;
                         currentCoinCount = 0.0f;
                         cactusManager.restart();
@@ -282,6 +281,7 @@ int main() {
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                         distance = 0.0f;
+                        coinCount += currentCoinCount;
                         currentCoinCount = 0.0f;
                         coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
    			            cactusManager.restart();
@@ -290,6 +290,9 @@ int main() {
                         gameState = Gameplay; // Restart gry
                     }
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        coinCount += currentCoinCount;
+                        coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
+                        StatisticsManager::saveStatistics(coinCount);
                         gameState = MainMenu; // Powrót do MainMenu
                     }
 
@@ -370,11 +373,11 @@ int main() {
             
             // Zmiana prędkości co 50 jednostek
             int distanceInt = static_cast<int>(distance);
-            if(distanceInt % 50 == 0 && if_changed_speed == false){
-                cactusManager.setSpeed(cactusSpeed + 25);
-		        birdManager.setSpeed(birdSpeed + 25);
-                coinManager.setObstacleSpawnSpeed(cactusSpeed + 25);
-                coinManager.setSpeed(cactusSpeed + 25);
+            if(distanceInt % 50 == 0 && distanceInt <= 1000 && if_changed_speed == false){
+                cactusManager.setSpeed(cactusSpeed + 20);
+		        birdManager.setSpeed(birdSpeed + 20);
+                coinManager.setObstacleSpawnSpeed(cactusSpeed + 20);
+                coinManager.setSpeed(cactusSpeed + 20);
                 if_changed_speed = true;
             } else if(distanceInt % 50 != 0) {
                 if_changed_speed = false;
