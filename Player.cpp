@@ -7,7 +7,7 @@ Player::Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf:
     player.setSize(size);
     player.setPosition(position);
     player.setFillColor(color);
-    if(!playerTexture.loadFromFile("Tekstury/skórki dino/dino4(run).gif")){
+    if(!playerTexture.loadFromFile("Tekstury/skórki dino/dino 4 (klatki)/dino_sprite_sheet.png")){
 	    //błąd
     }
     player.setTexture(&playerTexture);
