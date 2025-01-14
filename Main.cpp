@@ -7,6 +7,7 @@
 #include "CoinManager.h"
 #include "StatisticsManager.h"
 #include "Difficulty.h"
+#include "Slider.h"
 #include <iostream>
 
 enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Pause, GameOver };
@@ -156,6 +157,10 @@ int main() {
         std::cerr << L"Nie udało się załadować czcionki!" << std::endl;
         return -1;
     }
+
+    // Tworzenie sliderów głośności
+    Slider musicSlider(545, 313, 110, 20, font, "Tekstury/slider.png");
+    Slider soundSlider(545, 351, 110, 20, font, "Tekstury/slider.png");
 
     // Załaduj muzykę tła dla menu
     sf::Music menuMusic;
@@ -544,7 +549,7 @@ int main() {
             }
         }
 
-        // Aktualizacja przycisków zależnie od stanu
+        // Aktualizacja przycisków i sliderów zależnie od stanu
         if (gameState == MainMenu) {
             if (menuMusic.getStatus() != sf::Music::Playing) {
                 menuMusic.play(); // Odtwarzanie muzyki tła dla menu
@@ -556,6 +561,20 @@ int main() {
             statisticsButton.update(sf::Mouse::getPosition(window));
             exitButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == OptionsMenu) {
+            // Ustawienia muzyki i dźwięku
+            musicSlider.update(event, window);
+            soundSlider.update(event, window);
+            float musicVolume = musicSlider.getValue();
+            float soundVolume = soundSlider.getValue();
+            menuMusic.setVolume(musicVolume);
+            backgroundMusic.setVolume(musicVolume);
+            buttonSound.setVolume(soundVolume);
+            jumpSound.setVolume(soundVolume);
+            deathSound.setVolume(soundVolume);
+
+            easyButton.update(sf::Mouse::getPosition(window));
+            normalButton.update(sf::Mouse::getPosition(window));
+            hardButton.update(sf::Mouse::getPosition(window));
             backButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == Achievements) {
             backButton.update(sf::Mouse::getPosition(window));
@@ -592,6 +611,8 @@ int main() {
             easyButton.draw(window);
             normalButton.draw(window);
             hardButton.draw(window);
+            musicSlider.draw(window);
+            soundSlider.draw(window);
             backButton.draw(window);
         } else if (gameState == Achievements) {
             drawScrollableList(window, achievements, font);
