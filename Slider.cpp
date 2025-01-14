@@ -3,20 +3,24 @@
 
 bool Slider:: isAnySliderDragging = false;
 
-Slider::Slider(float x, float y, float width, float height, sf::Font& font){
+Slider::Slider(float x, float y, float width, float height, sf::Font& font, const std::string& thumbTexturePath){
     track.setPosition(x, y);
     track.setSize(sf::Vector2f(width, height));
-    track.setFillColor(sf::Color::White);
+    track.setFillColor(sf::Color::Transparent);
 
     thumb.setSize(sf::Vector2f(height, height));
-    thumb.setFillColor(sf::Color::Red);
+    if (!thumbTexture.loadFromFile(thumbTexturePath)) {
+        std::cerr << "Nie udało się załadować tekstury dla thumb!" << std::endl;
+    } else {
+        thumb.setTexture(&thumbTexture);
+    }
     thumb.setPosition(x + (initialValue - minValue) / (maxValue - minValue) * width - height / 2, y);
 
     valueText.setFont(font);
     valueText.setCharacterSize(20);
     valueText.setFillColor(sf::Color::Black);
     valueText.setString(std::to_string(static_cast<int>(value)));
-    valueText.setPosition(x + width + 10, y);
+    valueText.setPosition(x + width + 10, y - 3);
 }
 
 void Slider::draw(sf::RenderWindow& window) {

@@ -146,8 +146,8 @@ int main() {
     }
 
     // Tworzenie sliderów głośności
-    Slider musicSlider(490, 315, 200, 20, font);
-    Slider soundSlider(490, 350, 200, 20, font);
+    Slider musicSlider(545, 313, 110, 20, font, "Tekstury/slider.png");
+    Slider soundSlider(545, 351, 110, 20, font, "Tekstury/slider.png");
 
     // Załaduj muzykę tła dla menu
     sf::Music menuMusic;

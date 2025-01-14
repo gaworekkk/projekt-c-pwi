@@ -5,7 +5,7 @@
 
 class Slider {
 public:
-    Slider(float x, float y, float width, float height, sf::Font& font);
+    Slider(float x, float y, float width, float height, sf::Font& font, const std::string& thumbTexturePath);
     void draw(sf::RenderWindow& window);
     void update(const sf::Event& event, const sf::RenderWindow& window);
     float getValue() const;
@@ -13,6 +13,7 @@ public:
 private:
     sf::RectangleShape track;
     sf::RectangleShape thumb;
+    sf::Texture thumbTexture;
     float minValue = 0;
     float maxValue = 100;
     float value = 100;
