@@ -165,7 +165,7 @@ int main() {
     mainMenuButton.setTexture("Tekstury/przyciskMenuGlowne.png", "Tekstury/kliknięte przyciski/clicked-przyciskMenuGlowne.png");
 
     // Tworzenie gracza
-    Player player(sf::Vector2f(50, 100), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/player.png", 3, 0.1f); // 4 klatki animacji, 0.1 sekundy na klatkę
+    Player player(sf::Vector2f(40, 40), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
 
     // Tworzenie generatora przeszkód
     ObstacleManager cactusManager(window.getSize().x, window.getSize().y, "cactus");
