@@ -530,6 +530,8 @@ int main() {
                         coinCount = 0.0f;
                         currentCoinCount = 0.0f; // Reset coin counter
                         gameState = Gameplay; // Restart gry
+                        backgroundMusic.stop(); // Zatrzymanie muzyki tła
+                        backgroundMusic.play(); // Odtwarzanie muzyki tła od nowa
                         // Reset dino icon position
                         dinoSprite.setPosition(20, 104);
                         // Reset coin icon position
