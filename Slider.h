@@ -9,6 +9,7 @@ public:
     void draw(sf::RenderWindow& window);
     void update(const sf::Event& event, const sf::RenderWindow& window);
     float getValue() const;
+    void reset();
 
 private:
     sf::RectangleShape track;

@@ -52,3 +52,8 @@ void Slider::update(const sf::Event& event, const sf::RenderWindow& window) {
 float Slider::getValue() const {
     return value;
 }
+
+void Slider::reset() {
+    isDragging = false;
+    isAnySliderDragging = false;
+}

@@ -377,6 +377,8 @@ int main() {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         cactusManager.setDifficulty(difficulty);
                         birdManager.setDifficulty(difficulty);
+                        musicSlider.reset();
+                        soundSlider.reset();
                         gameState = MainMenu; // Powrót do MainMenu
                     }
 
@@ -454,6 +456,8 @@ int main() {
                     if (gameState == OptionsMenu) {
                         cactusManager.setDifficulty(difficulty);
                         birdManager.setDifficulty(difficulty);
+                        musicSlider.reset();
+                        soundSlider.reset();
                         gameState = MainMenu; // Powrót do MainMenu
                     }
                     if (gameState == Achievements) {
@@ -500,6 +504,19 @@ int main() {
                 if (event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Up) {
                     isJumping = false;
                 }
+            }
+
+            // Obsługa przesuwania sliderów
+            if (gameState == OptionsMenu) {
+                musicSlider.update(event, window);
+                soundSlider.update(event, window);
+                float musicVolume = musicSlider.getValue();
+                float soundVolume = soundSlider.getValue();
+                menuMusic.setVolume(musicVolume);
+                backgroundMusic.setVolume(musicVolume);
+                buttonSound.setVolume(soundVolume);
+                jumpSound.setVolume(soundVolume);
+                deathSound.setVolume(soundVolume);
             }
         }
 
@@ -561,17 +578,6 @@ int main() {
             statisticsButton.update(sf::Mouse::getPosition(window));
             exitButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == OptionsMenu) {
-            // Ustawienia muzyki i dźwięku
-            musicSlider.update(event, window);
-            soundSlider.update(event, window);
-            float musicVolume = musicSlider.getValue();
-            float soundVolume = soundSlider.getValue();
-            menuMusic.setVolume(musicVolume);
-            backgroundMusic.setVolume(musicVolume);
-            buttonSound.setVolume(soundVolume);
-            jumpSound.setVolume(soundVolume);
-            deathSound.setVolume(soundVolume);
-
             easyButton.update(sf::Mouse::getPosition(window));
             normalButton.update(sf::Mouse::getPosition(window));
             hardButton.update(sf::Mouse::getPosition(window));
