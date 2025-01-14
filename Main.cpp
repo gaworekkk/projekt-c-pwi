@@ -507,23 +507,38 @@ int main() {
                     else if (gameState == Pause) {
                         gameState = Gameplay; // Powrót do Gameplay
                         backgroundMusic.play(); // Wznowienie muzyki tła dla gry
+                        // Reset dino icon position
+                        dinoSprite.setPosition(20, 104);
+                        // Reset coin icon position
+                        coinSprite.setPosition(20, 104 + dinoSprite.getGlobalBounds().height + 20);
+                        // Reset coin counter position
+                        coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
+                        // Reset distance counter position
+                        distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
                     }
                 }
                 if (event.key.code == sf::Keyboard::Q) {
                     window.close(); // Zamknięcie okna
                 }
-                if (event.key.code == sf::Keyboard::R) {
-                    player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
-                    coinManager.restart();
-                    cactusManager.restart();
-                    birdManager.restart();
-                    distance = 0.0f;
-                    coinCount = 0.0f;
-                    gameState = Gameplay; // Restart gry
-                }
-                if (event.key.code == sf::Keyboard::P) {
-                    gameState = Pause; // Przejście do Pause
-                    backgroundMusic.pause(); // Zatrzymanie muzyki tła dla gry
+                if (gameState != MainMenu) { // Block 'P' key in MainMenu
+                    if (event.key.code == sf::Keyboard::R) {
+                        player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                        coinManager.restart();
+                        cactusManager.restart();
+                        birdManager.restart();
+                        distance = 0.0f;
+                        coinCount = 0.0f;
+                        currentCoinCount = 0.0f; // Reset coin counter
+                        gameState = Gameplay; // Restart gry
+                        // Reset dino icon position
+                        dinoSprite.setPosition(20, 104);
+                        // Reset coin icon position
+                        coinSprite.setPosition(20, 104 + dinoSprite.getGlobalBounds().height + 20);
+                        // Reset coin counter position
+                        coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
+                        // Reset distance counter position
+                        distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
+                    }
                 }
                 if (event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Up) {
                     if (!isJumping && player.getGlobalBounds().top >= standardLevel && gameState == Gameplay) {
