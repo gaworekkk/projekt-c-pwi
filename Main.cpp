@@ -234,9 +234,11 @@ int main() {
     pauseButton.setTexture("Tekstury/PAUSE.png", "Tekstury/kliknięte przyciski/clicked-PAUSE.png" );
     Button resumeButton(sf::Vector2f(150, 142), sf::Vector2f(530, 252), " ", font);
     resumeButton.setTexture("Tekstury/PAUSE.png", "Tekstury/kliknięte przyciski/clicked-PAUSE.png");
-    Button restartButton(sf::Vector2f(200, 40), sf::Vector2f(375, 440), " ", font);
+    Button restartButton(sf::Vector2f(200, 40), sf::Vector2f(375, 490), " ", font); // Adjusted position for GameOver
     restartButton.setTexture("Tekstury/przyciskRESTART.png", "Tekstury/kliknięte przyciski/clicked-przyciskRESTART.png");
-    Button mainMenuButton(sf::Vector2f(200, 40), sf::Vector2f(625, 440), " ", font);
+    Button restartButtonPause(sf::Vector2f(200, 40), sf::Vector2f(375, 480), " ", font); // Adjusted position for Pause
+    restartButtonPause.setTexture("Tekstury/przyciskRESTART.png", "Tekstury/kliknięte przyciski/clicked-przyciskRESTART.png");
+    Button mainMenuButton(sf::Vector2f(200, 40), sf::Vector2f(625, 480), " ", font); // Adjusted position for Pause
     mainMenuButton.setTexture("Tekstury/przyciskMenuGlowne.png", "Tekstury/kliknięte przyciski/clicked-przyciskMenuGlowne.png");
     Button easyButton(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
     easyButton.setTexture("Tekstury/przyciskLatwy.png", "Tekstury/przyciskTRUDNY.png");
@@ -295,6 +297,21 @@ int main() {
     sf::Sprite coinIconMainMenu = coinSprite;
     coinIconMainMenu.setScale(coinSprite.getScale().x * 1.5, coinSprite.getScale().y * 1.5); // Reduce the size by 1.5 times
     coinIconMainMenu.setPosition(20, 20); // Set distance from the top edge to 20 pixels and from the left edge to 20 pixels
+
+    sf::Text gameOverText("Game Over", font, 70);
+    centerText(gameOverText, 1200, 640, 100);
+
+    sf::Text distanceText2 = distanceText; // Create a copy of distanceText and name it distanceText2
+    distanceText2.setFillColor(sf::Color::Black); // Set the color of distanceText2 to black
+
+    sf::Text bestScoreText("NAJLEPSZY WYNIK:", font, 70);
+    bestScoreText.setFillColor(sf::Color::White); // Set the text color to white
+
+    sf::Text yourScoreText(L"TWÓJ WYNIK:", font, 70); // Create the text "TWÓJ WYNIK:" with font size 70
+    yourScoreText.setFillColor(sf::Color::White); // Set the text color to white
+
+    sf::Text coinsText(L"MONETY:", font, 70); // Create the text "MONETY:" with font size 70
+    coinsText.setFillColor(sf::Color::White); // Set the text color to white
 
     float deltaTime;
     sf::Clock clock;
@@ -399,8 +416,16 @@ int main() {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = Gameplay; // Powrót do Gameplay
                         backgroundMusic.play(); // Wznowienie muzyki tła dla gry
+                        // Reset dino icon position
+                        dinoSprite.setPosition(20, 104);
+                        // Reset coin icon position
+                        coinSprite.setPosition(20, 104 + dinoSprite.getGlobalBounds().height + 20);
+                        // Reset coin counter position
+                        coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
+                        // Reset distance counter position
+                        distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
                     }
-                    if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                    if (restartButtonPause.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
                         distance = 0.0f;
@@ -410,17 +435,32 @@ int main() {
    			            cactusManager.restart();
                         birdManager.restart();
                         coinManager.restart();
+                        distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
+                        coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
                         gameState = Gameplay; // Restart gry
                         backgroundMusic.play(); // Odtwarzanie muzyki tła od nowa
+                        // Reset dino icon position
+                        dinoSprite.setPosition(20, 104);
+                        // Reset coin icon position
+                        coinSprite.setPosition(20, 104 + dinoSprite.getGlobalBounds().height + 20);
+                        // Reset coin counter position
+                        coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
+                        // Reset distance counter position
+                        distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
                     }
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
-                        coinCount += currentCoinCount;
-                        coinCountMainMenuText.setString(std::to_string(coinCount));
-                        StatisticsManager::saveStatistics(coinCount);
                         gameState = MainMenu; // Powrót do MainMenu
                         backgroundMusic.stop(); // Zatrzymanie muzyki tła dla gry
                         menuMusic.play(); // Odtwarzanie muzyki tła dla menu
+                        // Reset dino icon position
+                        dinoSprite.setPosition(20, 104);
+                        // Reset coin icon position
+                        coinSprite.setPosition(20, 104 + dinoSprite.getGlobalBounds().height + 20);
+                        // Reset coin counter position
+                        coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
+                        // Reset distance counter position
+                        distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
                     }
 
                 } else if (gameState == GameOver) {
@@ -433,13 +473,16 @@ int main() {
                         coinManager.restart();  
 			            currentCoinCount = 0.0f;
                         coinCountMainMenuText.setString(std::to_string(coinCount));
+                        distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
+                        coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
                         gameState = Gameplay; // Restart gry
                         backgroundMusic.play(); // Odtwarzanie muzyki tła od nowa
                     }
-                    if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
-                        window.close(); // Zamknięcie gry
-                    }
+                    // Remove the exit button functionality from the GameOver screen
+                    // if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                    //     buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                    //     window.close(); // Zamknięcie okna
+                    // }
                 }
             }
 
@@ -565,11 +608,12 @@ int main() {
             pauseButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == Pause) {
             resumeButton.update(sf::Mouse::getPosition(window));
-            restartButton.update(sf::Mouse::getPosition(window));
+            restartButtonPause.update(sf::Mouse::getPosition(window));
             mainMenuButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == GameOver) {
             restartButton.update(sf::Mouse::getPosition(window));
-            exitButton.update(sf::Mouse::getPosition(window));
+            // Remove the exit button from the GameOver screen
+            // exitButton.update(sf::Mouse::getPosition(window));
         }
 
         // Rysowanie
@@ -617,17 +661,50 @@ int main() {
             window.draw(pauseText);
             window.draw(pauseBackgroundSprite); // Rysowanie tła trybu Pause
             resumeButton.draw(window);
-            restartButton.draw(window);
-            mainMenuButton.draw(window);
+            restartButtonPause.draw(window); // Draw the restart button for Pause
+            mainMenuButton.draw(window); // Draw the main menu button for Pause
+
+            // Move the dino icon to coordinates (375, 400) on the pause screen
+            dinoSprite.setPosition(375, 400);
+
+            // Move the distance counter to coordinates (445, 385) on the pause screen
+            distanceText.setPosition(445, 385);
+
+            // Move the coin icon to coordinates (625, 409) on the pause screen
+            coinSprite.setPosition(625, 409);
+
+            // Move the coin counter to coordinates (695, 385) on the pause screen
+            coinCountText.setPosition(695, 385);
+
             window.draw(dinoSprite); // Draw the dino icon
-            window.draw(coinSprite); // Draw the coin icon
             window.draw(distanceText); // Draw the distance counter
+            window.draw(coinSprite); // Draw the coin icon
             window.draw(coinCountText); // Draw the coin counter
         } else if (gameState == GameOver) {
             window.clear(sf::Color::Black);
             window.draw(gameOverBackgroundSprite); // Rysowanie tła trybu GameOver
-            restartButton.draw(window);
-            exitButton.draw(window);
+            restartButton.draw(window); // Draw the restart button for GameOver
+            // Remove the exit button from the GameOver screen
+            // exitButton.draw(window);
+
+            // Center the distance and coin counters under the "Game Over" text
+            bestScoreText.setPosition((window.getSize().x - bestScoreText.getGlobalBounds().width) / 2 - 45, gameOverText.getPosition().y + gameOverText.getGlobalBounds().height + 150);
+            distanceText2.setPosition(bestScoreText.getPosition().x + bestScoreText.getGlobalBounds().width + 20, bestScoreText.getPosition().y);
+            yourScoreText.setPosition((window.getSize().x - yourScoreText.getGlobalBounds().width) / 2 - 45, distanceText2.getPosition().y + distanceText2.getGlobalBounds().height + 10);
+            distanceText.setPosition(yourScoreText.getPosition().x + yourScoreText.getGlobalBounds().width + 20, yourScoreText.getPosition().y);
+            coinsText.setPosition((window.getSize().x - coinsText.getGlobalBounds().width) / 2 - 45, distanceText.getPosition().y + distanceText.getGlobalBounds().height + 10);
+            coinCountText.setPosition(coinsText.getPosition().x + coinsText.getGlobalBounds().width + 20, coinsText.getPosition().y);
+
+            distanceText.setFillColor(sf::Color::White); // Set the color of distanceText to white
+            coinCountText.setFillColor(sf::Color::White); // Set the color of coinCountText to white
+            distanceText2.setFillColor(sf::Color::White); // Set the color of distanceText2 to white
+
+            window.draw(distanceText2); // Draw the second distance counter
+            window.draw(yourScoreText); // Draw the "TWÓJ WYNIK:" text
+            window.draw(distanceText); // Draw the distance counter
+            window.draw(coinsText); // Draw the "MONETY:" text
+            window.draw(coinCountText); // Draw the coin counter
+            window.draw(bestScoreText); // Draw the best score text
         }
         window.display();
     }
