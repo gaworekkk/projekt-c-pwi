@@ -137,9 +137,22 @@ int main() {
     float pauseScaleY = static_cast<float>(window.getSize().y) / pauseBackgroundTexture.getSize().y;
     pauseBackgroundSprite.setScale(pauseScaleX, pauseScaleY);
 
+    // Załaduj teksturę dino2
+    sf::Texture dinoTexture;
+    if (!dinoTexture.loadFromFile("Tekstury/skórki dino/dino2.png")) {
+        std::cerr << L"Nie udało się załadować tekstury dino2!" << std::endl;
+        return -1;
+    }
+
+    // Utwórz sprite z tekstury dino2
+    sf::Sprite dinoSprite;
+    dinoSprite.setTexture(dinoTexture);
+    dinoSprite.setPosition(20, 104); // Przeniesienie dino2 do lewej krawędzi na wysokość 104 pikseli
+    dinoSprite.setScale(1.4f, 1.4f); // Powiększenie grafiki 1.256-krotnie
+
     // Sprawdzenie czy udało się załadować czcionkę
     sf::Font font;
-    if (!font.loadFromFile("arial.ttf")) {
+    if (!font.loadFromFile("Pi.ttf")) {
         std::cerr << L"Nie udało się załadować czcionki!" << std::endl;
         return -1;
     }
@@ -187,6 +200,19 @@ int main() {
     sf::Sound buttonSound;
     buttonSound.setBuffer(buttonBuffer);
 
+    // Załaduj teksturę monety
+    sf::Texture coinTexture;
+    if (!coinTexture.loadFromFile("Tekstury/coin.png")) {
+        std::cerr << L"Nie udało się załadować tekstury monety!" << std::endl;
+        return -1;
+    }
+
+    // Utwórz sprite z tekstury monety
+    sf::Sprite coinSprite;
+    coinSprite.setTexture(coinTexture);
+    coinSprite.setPosition(20, 104 + dinoSprite.getGlobalBounds().height + 20); // Przeniesienie monety poniżej dino2
+    coinSprite.setScale(3.15f, 3.15f); // Zmniejszenie grafiki o 10 procent
+
     // Odtwarzanie muzyki tła dla menu
     menuMusic.play();
 
@@ -204,12 +230,14 @@ int main() {
     Button backButton(sf::Vector2f(200, 50), sf::Vector2f(500, 400), L"Powrót", font);
     Button exitButton(sf::Vector2f(54, 54), sf::Vector2f(846, 486), " ", font);
     exitButton.setTexture("Tekstury/exit.png", "Tekstury/statistic.png");
-    Button pauseButton(sf::Vector2f(200, 50), sf::Vector2f(10, 10), "Pause", font);
-    //pauseButton.setTexture("Tekstury/.png");
-    Button resumeButton(sf::Vector2f(200, 50), sf::Vector2f(10, 10), L"Wznów", font);
-    //resumeButton.setTexture("Tekstury/.png");
-    Button restartButton(sf::Vector2f(200, 50), sf::Vector2f(500, 370), "Restart", font);
-    Button mainMenuButton(sf::Vector2f(200, 50), sf::Vector2f(500, 440), L"Menu Główne", font);
+    Button pauseButton(sf::Vector2f(54, 54), sf::Vector2f(80, 40), " ", font);
+    pauseButton.setTexture("Tekstury/PAUSE.png", "Tekstury/kliknięte przyciski/clicked-PAUSE.png" );
+    Button resumeButton(sf::Vector2f(150, 142), sf::Vector2f(530, 252), " ", font);
+    resumeButton.setTexture("Tekstury/PAUSE.png", "Tekstury/kliknięte przyciski/clicked-PAUSE.png");
+    Button restartButton(sf::Vector2f(200, 40), sf::Vector2f(375, 440), " ", font);
+    restartButton.setTexture("Tekstury/przyciskRESTART.png", "Tekstury/kliknięte przyciski/clicked-przyciskRESTART.png");
+    Button mainMenuButton(sf::Vector2f(200, 40), sf::Vector2f(625, 440), " ", font);
+    mainMenuButton.setTexture("Tekstury/przyciskMenuGlowne.png", "Tekstury/kliknięte przyciski/clicked-przyciskMenuGlowne.png");
     Button easyButton(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
     easyButton.setTexture("Tekstury/przyciskLatwy.png", "Tekstury/przyciskTRUDNY.png");
     Button normalButton(sf::Vector2f(324, 54), sf::Vector2f(450, 180), " ", font);
@@ -245,21 +273,28 @@ int main() {
     sf::Text optionsMenuText("Menu Opcji", font, 50);
     centerText(optionsMenuText, 1200, 640, 100);
 
-    sf::Text gameplayText("Gejmplej!", font, 50);
-    centerText(gameplayText, 1200, 640, 200);
-
     sf::Text pauseText("Pause", font, 50);
     centerText(pauseText, 1200, 640, 200);
     
-    sf::Text distanceText("Odleglosc:", font, 50);
-    distanceText.setPosition(820, 10); //Zmienić setPosition na cos innego (moze centerText?)
+    sf::Text distanceText("0", font, 50);
+    distanceText.setFillColor(sf::Color::White); // Ustawienie koloru tekstu na biały
+    distanceText.setCharacterSize(distanceText.getCharacterSize() + 20); // Zwiększenie wysokości tekstu odległości o 20 pikseli
+    distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20); // Przeniesienie licznika odległości obok dino2 na tej samej wysokości co ikona dino, podniesienie o 20 pikseli
 
-    sf::Text coinCountText("Monety: 0", font, 50);
-    coinCountText.setPosition(820, 80); 
+    sf::Text coinCountText("0", font, 50);
+    coinCountText.setFillColor(sf::Color::White); // Ustawienie koloru tekstu na biały
+    coinCountText.setCharacterSize(distanceText.getCharacterSize()); // Ustawienie wysokości tekstu licznika monet na taką samą wartość liczbową jak licznik odległości
+    coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20); // Ustawienie środka licznika monet na tej samej wysokości co środek ikony monety, podniesienie o 20 pikseli
 
-    sf::Text coinCountMainMenuText("Zebrane monety: 0", font, 50);
-    coinCountMainMenuText.setPosition(20, 20);
-    coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
+    sf::Text coinCountMainMenuText("0", font, 80);
+    coinCountMainMenuText.setCharacterSize(coinCountMainMenuText.getCharacterSize() ); // Double the size
+    coinCountMainMenuText.setPosition(110, 0); // Move 20 pixels to the right
+    coinCountMainMenuText.setString(std::to_string(coinCount));
+
+    // Adjust the position and size of the coin icon in the menu
+    sf::Sprite coinIconMainMenu = coinSprite;
+    coinIconMainMenu.setScale(coinSprite.getScale().x * 1.5, coinSprite.getScale().y * 1.5); // Reduce the size by 1.5 times
+    coinIconMainMenu.setPosition(20, 20); // Set distance from the top edge to 20 pixels and from the left edge to 20 pixels
 
     float deltaTime;
     sf::Clock clock;
@@ -371,7 +406,7 @@ int main() {
                         distance = 0.0f;
                         coinCount += currentCoinCount;
                         currentCoinCount = 0.0f;
-                        coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
+                        coinCountMainMenuText.setString(std::to_string(coinCount));
    			            cactusManager.restart();
                         birdManager.restart();
                         coinManager.restart();
@@ -381,7 +416,7 @@ int main() {
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         coinCount += currentCoinCount;
-                        coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
+                        coinCountMainMenuText.setString(std::to_string(coinCount));
                         StatisticsManager::saveStatistics(coinCount);
                         gameState = MainMenu; // Powrót do MainMenu
                         backgroundMusic.stop(); // Zatrzymanie muzyki tła dla gry
@@ -397,7 +432,7 @@ int main() {
                         birdManager.restart(); 
                         coinManager.restart();  
 			            currentCoinCount = 0.0f;
-                        coinCountMainMenuText.setString("Zebrane monety: " + std::to_string(coinCount));
+                        coinCountMainMenuText.setString(std::to_string(coinCount));
                         gameState = Gameplay; // Restart gry
                         backgroundMusic.play(); // Odtwarzanie muzyki tła od nowa
                     }
@@ -496,9 +531,9 @@ int main() {
                 if_changed_speed = false;
             }
 
-            distanceText.setString(L"Odleglosc: " + std::to_wstring(distanceInt));
-            coinCountText.setString(L"Monety: " + std::to_wstring(currentCoinCount));
-          
+            distanceText.setString(L"" + std::to_wstring(distanceInt)); // Ustawienie tekstu odległości
+            coinCountText.setString(L"" + std::to_wstring(currentCoinCount)); // Usunięcie napisu "Monety:"
+
             // Sprawdzenie kolizji i koniec gry lub restart
             if ((cactusManager.checkCollisions(player.getGlobalBounds())) || (birdManager.checkCollisions(player.getGlobalBounds()))) {
                 coinCount += currentCoinCount;
@@ -549,7 +584,8 @@ int main() {
             statisticsButton.draw(window);
             exitButton.draw(window);
             window.draw(nameText);
-            window.draw(coinCountMainMenuText);
+            window.draw(coinIconMainMenu); // Draw the coin icon
+            window.draw(coinCountMainMenuText); // Draw the coin count text
         } else if (gameState == OptionsMenu) {
             window.draw(optionsMenuText);
             window.draw(optionsMenuBackgroundSprite); // Rysowanie tła trybu OptionsMenu
@@ -571,16 +607,22 @@ int main() {
 	        cactusManager.draw(window);  // Rysowanie przeszkód
             coinManager.draw(window);
             birdManager.draw(window);
-            window.draw(gameplayText);
+            // window.draw(gameplayText); // Usunięcie napisu "Gejmplej!"
             pauseButton.draw(window);
-            window.draw(distanceText);
-            window.draw(coinCountText);
+            window.draw(dinoSprite); // Rysowanie dino2
+            window.draw(distanceText); // Rysowanie tekstu odległości
+            window.draw(coinSprite); // Rysowanie monety
+            window.draw(coinCountText); // Rysowanie tekstu obok monety
         } else if (gameState == Pause) {
             window.draw(pauseText);
             window.draw(pauseBackgroundSprite); // Rysowanie tła trybu Pause
             resumeButton.draw(window);
             restartButton.draw(window);
             mainMenuButton.draw(window);
+            window.draw(dinoSprite); // Draw the dino icon
+            window.draw(coinSprite); // Draw the coin icon
+            window.draw(distanceText); // Draw the distance counter
+            window.draw(coinCountText); // Draw the coin counter
         } else if (gameState == GameOver) {
             window.clear(sf::Color::Black);
             window.draw(gameOverBackgroundSprite); // Rysowanie tła trybu GameOver
