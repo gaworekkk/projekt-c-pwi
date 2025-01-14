@@ -10,6 +10,7 @@ public:
     void handleInput(float deltaTime);
     void update(float deltaTime);
     void draw(sf::RenderWindow& window);
+    void resetPosition(); // Nowa metoda
    sf::FloatRect getGlobalBounds();
    sf::Vector2f getVelocity() const;
 private:
@@ -38,6 +39,7 @@ private:
     const float screenWidth = 1200;
     const float maxHoldTime = 1.0f;
     const float jumpBoost = 800.f;
+    sf::Vector2f initialPosition; // Nowa zmienna
 };
 
 #endif

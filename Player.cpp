@@ -3,7 +3,7 @@
 
 // Konstruktor
 Player::Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color, const std::string& textureFile, int frameCount, float frameDuration)
-: frameCount(frameCount), frameDuration(frameDuration), currentFrameTime(0), currentFrame(0) {
+: frameCount(frameCount), frameDuration(frameDuration), currentFrameTime(0), currentFrame(0), initialPosition(position) {
     player.setSize(size);
     player.setPosition(position);
     player.setFillColor(color);
@@ -128,4 +128,9 @@ void Player::draw(sf::RenderWindow& window) {
 
 sf::Vector2f Player::getVelocity() const {
     return velocity;
+}
+
+void Player::resetPosition() {
+    player.setPosition(initialPosition);
+    velocity = sf::Vector2f(0.f, 0.f);
 }

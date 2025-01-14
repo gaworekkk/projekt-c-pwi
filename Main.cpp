@@ -282,6 +282,7 @@ int main() {
                         gameState = Gameplay; // Powrót do Gameplay
                     }
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        player.resetPosition();
                         Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
                         distance = 0.0f;
                         coinCount += currentCoinCount;
@@ -301,6 +302,7 @@ int main() {
 
                 } else if (gameState == GameOver) {
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        player.resetPosition();
                         Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
                         distance = 0.0f;
     			        cactusManager.restart();
@@ -339,6 +341,7 @@ int main() {
                     window.close(); // Zamknięcie okna
                 }
                 if (event.key.code == sf::Keyboard::R) {
+                    player.resetPosition();
                     Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
                     coinManager.restart();
                     cactusManager.restart();
