@@ -246,11 +246,11 @@ int main() {
     Button mainMenuButton(sf::Vector2f(200, 40), sf::Vector2f(625, 480), " ", font); // Adjusted position for Pause
     mainMenuButton.setTexture("Tekstury/przyciskMenuGlowne.png", "Tekstury/kliknięte przyciski/clicked-przyciskMenuGlowne.png");
     Button easyButton(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
-    easyButton.setTexture("Tekstury/przyciskLatwy.png", "Tekstury/przyciskTRUDNY.png");
+    easyButton.setTexture("Tekstury/przyciskLatwy.png", "Tekstury/kliknięte przyciski/clicked-przyciskLatwy.png");
     Button normalButton(sf::Vector2f(324, 54), sf::Vector2f(450, 180), " ", font);
-    normalButton.setTexture("Tekstury/przyciskSREDNI.png", "Tekstury/przyciskTRUDNY.png");
+    normalButton.setTexture("Tekstury/przyciskSREDNI.png", "Tekstury/kliknięte przyciski/clicked-przyciskSREDNI.png");
     Button hardButton(sf::Vector2f(324, 54), sf::Vector2f(450, 240), " ", font);
-    hardButton.setTexture("Tekstury/przyciskTRUDNY.png", "Tekstury/przyciskLatwy.png");
+    hardButton.setTexture("Tekstury/przyciskTRUDNY.png", "Tekstury/kliknięte przyciski/clicked-przyciskTRUDNY.png");
 
     // Tworzenie gracza
     Player player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
