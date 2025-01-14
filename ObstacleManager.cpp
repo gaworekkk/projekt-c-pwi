@@ -8,8 +8,11 @@ enum GameState { MainMenu, OptionsMenu, Gameplay, Pause, GameOver };
 extern GameState gameState;
 
 ObstacleManager::ObstacleManager(float windowWidth, float windowHeight, std::string Type)
-    : screenWidth(windowWidth), screenHeight(windowHeight), obstacleType(Type), obstacleSpawnTimer(0.f) {
+    : screenWidth(windowWidth), birdCounter(0), screenHeight(windowHeight), obstacleType(Type), obstacleSpawnTimer(0.f) {
     std::srand(static_cast<unsigned int>(std::time(nullptr))); // Inicjalizacja generatora losowego
+    if(!cactusTexture.loadFromFile("Tekstury/kaktusy/kaktus(50x84).png") || !birdTexture.loadFromFile("Tekstury/crow.gif")){
+	    //obsluz blad
+    }
     if(obstacleType == "cactus"){
 	    speed = initialCactusSpeed;
     }else if(obstacleType == "bird"){
@@ -49,18 +52,24 @@ void ObstacleManager::generateObstacle() {
     float obstacleHeight;
     float obstacleWidth;
     float obstacleY;
+    sf::Texture obstacleTexture;
     if(obstacleType == "cactus"){
-	    obstacleHeight = cactusHeight;
-            obstacleWidth = cactusWidth;
 	    obstacleY = groundHeight - cactusHeight;
+	    obstacles.push_back(Obstacle(screenWidth, groundHeight - cactusHeight, cactusWidth, cactusHeight, cactusTexture));    
     }else if(obstacleType == "bird"){
-	    obstacleHeight = birdHeight;
-	    obstacleWidth = birdWidth;
-	    obstacleY = skyHeight - birdHeight;
+	    birdCounter++;
+	    int skyLaneNum = rand()%skyLanesCount;
+	    if(birdCounter == 8){
+		    birdCounter = 0;
+		    obstacleY = veryHighSkyHeight - skyLaneHeight*skyLaneNum;
+	    }else{
+		    obstacleY = skyMinHeight - birdHeight - skyLaneHeight*skyLaneNum;		
+	    }
+	    obstacles.push_back(Obstacle(screenWidth, obstacleY, birdWidth, birdHeight, birdTexture));
+
     }
 
     // Tworzenie przeszkody po prawej stronie ekranu
-    obstacles.push_back(Obstacle(screenWidth, obstacleY, obstacleWidth, obstacleHeight));
 }
 
 bool ObstacleManager::checkCollisions(const sf::FloatRect& playerBounds) {
@@ -80,6 +89,7 @@ void ObstacleManager::removeOffscreenObstacles() {
 }
 void ObstacleManager::restart() {
     obstacles.clear();  // Usuwamy wszystkie przeszkody
+    setSpeed(getInitialSpeed());  // Resetujemy prędkość
     obstacleSpawnTimer = 0.f;   // Resetujemy timer spawnu
 }
 
@@ -104,13 +114,6 @@ void ObstacleManager::setSpeed(float newSpeed) {
     // Zmiana prędkości przeszkody
     speed = newSpeed;
 }
-
-/*void ObstacleManager::setInitialSpeed(float newSpeed) {
-    // Zmiana początkowej prędkości przeszkody
-    initialSpeed = newSpeed;
-}
-
-*/
 float ObstacleManager::getInitialSpeed() const {
 	if(obstacleType == "cactus"){
 		return initialCactusSpeed;
