@@ -4,6 +4,7 @@
 // Konstruktor
 Player::Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color) {
     player.setSize(size);
+	isSkyLevelOn = false;
     player.setPosition(position);
     player.setFillColor(color);
     if(!playerTexture.loadFromFile("Tekstury/skórki dino/dino4(run).gif")){
@@ -18,7 +19,12 @@ Player::Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf:
     isHoldingJump = false;
     jumpHoldTime = 0.f;
 }
-
+void Player::turnSkyLevelOn(){
+	isSkyLevelOn = true;
+}
+void Player::turnSkyLevelOff(){
+	isSkyLevelOn = false;
+}
 // Operator przypisania
 Player& Player::operator=(const Player& other) {
     if (this != &other) {
@@ -27,8 +33,10 @@ Player& Player::operator=(const Player& other) {
         isJumping = other.isJumping;
         isHoldingJump = other.isHoldingJump;
         jumpHoldTime = other.jumpHoldTime;
-	playerTexture = other.playerTexture;
-	player.setTexture(&playerTexture);
+		playerTexture = other.playerTexture;
+		player.setTexture(&playerTexture);
+		isSkyLevelOn = other.isSkyLevelOn;
+	
     }
     return *this;
 }
@@ -60,20 +68,27 @@ void Player::handleInput(float deltaTime) {
         isCrouching = false;
     }
 
-    // Skakanie (tylko jeśli gracz nie kuca)
-    if (!isCrouching && (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))) {
-        if (!isJumping) {
-            velocity.y = -baseJumpSpeed;
-            isJumping = true;
-            isHoldingJump = true;
-            jumpHoldTime = 0.f;
-        } else if (isHoldingJump && jumpHoldTime < maxHoldTime) {
-            jumpHoldTime += deltaTime;
-            velocity.y = std::max(velocity.y - jumpBoost * deltaTime, -maxJumpSpeed);
-        }
-    } else {
-        isHoldingJump = false;
-    }
+    // Skakanie obsługa poziomu zwykłego i powietrznego
+	if(!isSkyLevelOn){
+    	if(!isCrouching && (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))) {
+        	if(!isJumping) {
+            	velocity.y = -baseJumpSpeed;
+            	isJumping = true;
+            	isHoldingJump = true;
+            	jumpHoldTime = 0.f;
+        	}else if (isHoldingJump && jumpHoldTime < maxHoldTime) {
+        	    jumpHoldTime += deltaTime;
+        	    velocity.y = std::max(velocity.y - jumpBoost * deltaTime, -maxJumpSpeed);
+        	}
+    	}else{
+    	    isHoldingJump = false;
+   	 	}
+	}else{
+		if(!isCrouching && (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))){
+			velocity.y = -baseJumpSpeed;
+			isJumping = true;
+		}
+	}
 }
 
 // Aktualizacja pozycji gracza
@@ -102,6 +117,10 @@ void Player::update(float deltaTime) {
         player.setPosition(screenWidth - player.getSize().x, player.getPosition().y);
         velocity.x = 0.f;
     }
+	// Górna krawędź (potrzebne w poziomie powietrznym)
+	if(player.getPosition().y <= skyHeight){
+		player.setPosition(player.getPosition().x, skyHeight);
+	}
 }
 
 // Rysowanie gracza

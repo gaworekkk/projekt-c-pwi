@@ -10,9 +10,12 @@ public:
     void handleInput(float deltaTime);
     void update(float deltaTime);
     void draw(sf::RenderWindow& window);
+	void turnSkyLevelOn();
+	void turnSkyLevelOff();
    sf::FloatRect getGlobalBounds();
    sf::Vector2f getVelocity() const;
 private:
+    bool isSkyLevelOn;
     sf::RectangleShape player;
     sf::Texture playerTexture;
     sf::Vector2f velocity;
@@ -29,6 +32,7 @@ private:
     const float maxJumpSpeed = 500.f;
     const float gravity = 981.f;
     const float groundHeight = 589.f;
+	const float skyHeight = 0.f;
     const float screenWidth = 1200;
     const float maxHoldTime = 1.0f;
     const float jumpBoost = 800.f;
