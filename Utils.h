@@ -6,6 +6,6 @@
 // Deklaracja funkcji do wyśrodkowania tekstu
 void centerText(sf::Text& text, float windowWidth, float windowHeight, float verticalPosition);
 // Funkcja do listy przewijanej
-void drawScrollableList(sf::RenderWindow& window, const std::vector<std::string>& items, sf::Font& font);
+void drawScrollableList(sf::RenderWindow& window, const std::vector<std::wstring>& items, sf::Font& font);
 
 #endif // UTILS_H
