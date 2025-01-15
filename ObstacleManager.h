@@ -11,6 +11,8 @@ class ObstacleManager {
 public:
     ObstacleManager(float windowWidth, float windowHeight, std::string Type);
     void update(float deltaTime);
+	void turnSkyLevelOn();
+	void turnSkyLevelOff();
     void restart();
     void draw(sf::RenderWindow& window);
     void generateObstacle();
@@ -27,13 +29,18 @@ private:
     std::string obstacleType;
     float screenWidth;
     float screenHeight;
+	bool isSkyLevelOn;
+	float skyLevelBirdSpawnInterval = 0.8f;
+	float skyLevelCactusSpawnInterval = 0.5f;
     sf::Texture cactusTexture;
     sf::Texture birdTexture;
+	float skyLevelPause = 5.0f;
     float groundHeight = 589.0f;
     float veryHighSkyHeight = 200.0f; 
     int   skyLanesCount = 5;
+	int   skyLevelSkyLanesCount = 35;
     float skyLaneHeight = 15.0f;
-    float skyMinHeight = 535.0f;
+    float skyMinHeight = 525.0f;
     float cactusHeight = 80.0f; //to też
     float cactusWidth = 50.0f; //to też
     float birdHeight = 30.0f; //to chyba staje się nieistotne po załadowaniu tekstury

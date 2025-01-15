@@ -8,8 +8,8 @@ enum GameState { MainMenu, OptionsMenu, Gameplay, Pause, GameOver };
 extern GameState gameState;
 
 ObstacleManager::ObstacleManager(float windowWidth, float windowHeight, std::string Type)
-    : screenWidth(windowWidth), birdCounter(0), screenHeight(windowHeight), obstacleType(Type), obstacleSpawnTimer(0.f) {
-    std::srand(static_cast<unsigned int>(std::time(nullptr))); // Inicjalizacja generatora losowego
+    : screenWidth(windowWidth), birdCounter(0), screenHeight(windowHeight), isSkyLevelOn(false), obstacleType(Type), obstacleSpawnTimer(0.f) {
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
     if(!cactusTexture.loadFromFile("Tekstury/kaktusy/kaktus(50x84).png") || !birdTexture.loadFromFile("Tekstury/crow.gif")){
 	    throw std::runtime_error("Nie udało się załadować tekstury przeszkody!");
     }
@@ -22,15 +22,32 @@ ObstacleManager::ObstacleManager(float windowWidth, float windowHeight, std::str
     }
     spawnInterval = getRandomSpawnInterval(baseInterval);
 }
-
+void ObstacleManager::turnSkyLevelOn() {
+	isSkyLevelOn = true;
+	spawnInterval = skyLevelPause;
+}
+void ObstacleManager::turnSkyLevelOff() {
+	isSkyLevelOn = false;
+}
 void ObstacleManager::update(float deltaTime) {
     obstacleSpawnTimer += deltaTime;
-
+		
     // Generowanie przeszkód co pewien czas
     if (obstacleSpawnTimer >= spawnInterval) {
-        generateObstacle();
-        obstacleSpawnTimer = 0.f;
-        spawnInterval = getRandomSpawnInterval(baseInterval);
+		if(isSkyLevelOn){
+
+			generateObstacle();
+			obstacleSpawnTimer = 0.f;
+			if(obstacleType == "bird"){
+				spawnInterval = skyLevelBirdSpawnInterval;
+			}else if(obstacleType == "cactus"){
+				spawnInterval = skyLevelCactusSpawnInterval;
+			}
+		}else{
+        	generateObstacle();
+        	obstacleSpawnTimer = 0.f;
+        	spawnInterval = getRandomSpawnInterval(baseInterval);
+		}
     }
 
     // Aktualizacja przeszkód
@@ -57,14 +74,20 @@ void ObstacleManager::generateObstacle() {
 	    obstacleY = groundHeight - cactusHeight;
 	    obstacles.push_back(Obstacle(screenWidth, groundHeight - cactusHeight, cactusWidth, cactusHeight, cactusTexture));    
     }else if(obstacleType == "bird"){
-	    birdCounter++;
-	    int skyLaneNum = rand()%skyLanesCount;
-	    if(birdCounter == 8){
-		    birdCounter = 0;
-		    obstacleY = veryHighSkyHeight - skyLaneHeight*skyLaneNum;
-	    }else{
-		    obstacleY = skyMinHeight - birdHeight - skyLaneHeight*skyLaneNum;		
-	    }
+		int skyLaneNum;
+		if(isSkyLevelOn){
+			skyLaneNum = rand()%skyLevelSkyLanesCount;
+			obstacleY = skyMinHeight - birdHeight - skyLaneHeight*skyLaneNum;
+		}else{
+	    	birdCounter++;
+	    	skyLaneNum = rand()%skyLanesCount;
+	    	if(birdCounter == 8){
+		    	birdCounter = 0;
+		    	obstacleY = veryHighSkyHeight - skyLaneHeight*skyLaneNum;
+	    	}else{
+			    obstacleY = skyMinHeight - birdHeight - skyLaneHeight*skyLaneNum;		
+		}
+		}
 	    obstacles.push_back(Obstacle(screenWidth, obstacleY, birdWidth, birdHeight, birdTexture));
 
     }
@@ -88,6 +111,7 @@ void ObstacleManager::removeOffscreenObstacles() {
     }), obstacles.end());
 }
 void ObstacleManager::restart() {
+	turnSkyLevelOff(); //Wyłączamy poziom powietrzny
     obstacles.clear();  // Usuwamy wszystkie przeszkody
     setSpeed(getInitialSpeed());  // Resetujemy prędkość
     obstacleSpawnTimer = 0.f;   // Resetujemy timer spawnu

@@ -17,7 +17,8 @@ Button::Button(const sf::Vector2f& size, const sf::Vector2f& position, const sf:
 
     normalColor = sf::Color::Blue;
     hoverColor = sf::Color::Red;
-    button.setFillColor(normalColor);
+    transparentColor = sf::Color(0, 0, 0, 0); // Niebieski z 50% przezroczystością
+    button.setFillColor(transparentColor);
 }
 
 void Button::draw(sf::RenderWindow& window) {

@@ -162,7 +162,8 @@ int main() {
                     }
                     if (restartButtonPause.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
-                        player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                        player.resetPosition();
+                        Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
                         distance = 0.0f;
                         coinCount += currentCoinCount;
                         currentCoinCount = 0.0f;
@@ -201,7 +202,8 @@ int main() {
                 } else if (gameState == GameOver) {
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
-                        player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                        player.resetPosition();
+                        Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
                         distance = 0.0f;
     			        cactusManager.restart();
                         birdManager.restart(); 
@@ -257,9 +259,11 @@ int main() {
                 if (event.key.code == sf::Keyboard::Q) {
                     window.close(); // Zamknięcie okna
                 }
+
                 if (gameState != MainMenu) { // Block 'P' key in MainMenu
                     if (event.key.code == sf::Keyboard::R) {
-                        player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                      player.resetPosition();
+                      Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f);
                         coinManager.restart();
                         cactusManager.restart();
                         birdManager.restart();
@@ -340,6 +344,24 @@ int main() {
             } else if(distanceInt % 50 != 0) {
                 if_changed_speed = false;
             }
+			// Zmiana rodzaju poziomu ze zwykłego na powietrzny i odwrotnie
+			if(distanceInt % 100 == 0 && distanceInt != 0){
+				if(distanceInt % 200 != 0){
+					cactusManager.turnSkyLevelOn();
+					birdManager.turnSkyLevelOn();
+					coinManager.turnSkyLevelOn();
+					player.turnSkyLevelOn();
+				}else{
+					cactusManager.turnSkyLevelOff();
+					birdManager.turnSkyLevelOff();
+					coinManager.turnSkyLevelOff();
+				}
+			}
+			int playerFallDelay = 4; //do wyczucia
+			if(((distanceInt-playerFallDelay) % 100 == 0) && ((distanceInt - playerFallDelay)% 200 == 0) && ((distanceInt- playerFallDelay)!=0)){
+				player.turnSkyLevelOff();
+			}
+
 
             distanceText.setString(L"" + std::to_wstring(distanceInt)); // Ustawienie tekstu odległości
             coinCountText.setString(L"" + std::to_wstring(currentCoinCount)); // Usunięcie napisu "Monety:"
