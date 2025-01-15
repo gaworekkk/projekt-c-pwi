@@ -2,15 +2,18 @@
 #include <algorithm> // Do użycia std::max
 
 // Konstruktor
-Player::Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color) {
+Player::Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color, const std::string& textureFile, int frameCount, float frameDuration)
+: frameCount(frameCount), frameDuration(frameDuration), currentFrameTime(0), currentFrame(0), initialPosition(position) {
     player.setSize(size);
 	isSkyLevelOn = false;
     player.setPosition(position);
     player.setFillColor(color);
-    if(!playerTexture.loadFromFile("Tekstury/skórki dino/dino4(run).gif")){
+    if(!playerTexture.loadFromFile("Tekstury/skórki dino/dino 4 (klatki)/dino_sprite_sheet.png")){
 	    //błąd
     }
     player.setTexture(&playerTexture);
+    frameRect = sf::IntRect(0, 0, playerTexture.getSize().x / frameCount, playerTexture.getSize().y);
+    player.setTextureRect(frameRect);
     velocity = sf::Vector2f(0.f, 0.f);
     isCrouching = false;
     originalSize = size;
@@ -35,6 +38,11 @@ Player& Player::operator=(const Player& other) {
         jumpHoldTime = other.jumpHoldTime;
 		playerTexture = other.playerTexture;
 		player.setTexture(&playerTexture);
+        frameRect = other.frameRect;
+        frameCount = other.frameCount;
+        frameDuration = other.frameDuration;
+        currentFrameTime = other.currentFrameTime;
+        currentFrame = other.currentFrame;
 		isSkyLevelOn = other.isSkyLevelOn;
 	
     }
@@ -93,6 +101,15 @@ void Player::handleInput(float deltaTime) {
 
 // Aktualizacja pozycji gracza
 void Player::update(float deltaTime) {
+
+    currentFrameTime += deltaTime;
+    if (currentFrameTime >= frameDuration) {
+        currentFrameTime = 0;
+        currentFrame = (currentFrame + 1) % frameCount;
+        frameRect.left = currentFrame * frameRect.width;
+        player.setTextureRect(frameRect);
+    }
+    
     // Grawitacja
     velocity.y += gravity * deltaTime;
 
@@ -130,4 +147,9 @@ void Player::draw(sf::RenderWindow& window) {
 
 sf::Vector2f Player::getVelocity() const {
     return velocity;
+}
+
+void Player::resetPosition() {
+    player.setPosition(initialPosition);
+    velocity = sf::Vector2f(0.f, 0.f);
 }

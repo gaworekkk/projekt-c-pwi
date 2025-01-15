@@ -118,4 +118,3 @@ void CoinManager::restart() {
 }
 
 
-

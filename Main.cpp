@@ -223,18 +223,19 @@ int main() {
 
     // Tworzenie przycisków
     Button storyButton(sf::Vector2f(324, 54), sf::Vector2f(250, 372), " ", font);
-    storyButton.setTexture("Tekstury/przyciskSTART.png", "Tekstury/przyciskENDLESS.png");
+    storyButton.setTexture("Tekstury/przyciskSTART.png", "Tekstury/kliknięte przyciski/clicked-przyciskSTART.png");
     Button endlessButton(sf::Vector2f(324, 54), sf::Vector2f(626, 372), " ", font);
-    endlessButton.setTexture("Tekstury/przyciskENDLESS.png", "Tekstury/przyciskSTART.png");
+    endlessButton.setTexture("Tekstury/przyciskENDLESS.png", "Tekstury/kliknięte przyciski/clicked-przyciskENDLESS.png");
     Button optionsButton(sf::Vector2f(54, 54), sf::Vector2f(300, 486), " ", font);
-    optionsButton.setTexture("Tekstury/settings.png", "Tekstury/statistic.png");
+    optionsButton.setTexture("Tekstury/settings.png", "Tekstury/kliknięte przyciski/clicked-settings.png");
     Button achievementsButton(sf::Vector2f(54, 54), sf::Vector2f(482, 486), " ", font);
-    achievementsButton.setTexture("Tekstury/archievment.png", "Tekstury/statistic.png");
+    achievementsButton.setTexture("Tekstury/archievment.png", "Tekstury/kliknięte przyciski/clicked-archievment.png");
     Button statisticsButton(sf::Vector2f(54, 54), sf::Vector2f(664, 486), " ", font);
-    statisticsButton.setTexture("Tekstury/statistic.png", "Tekstury/settings.png");
-    Button backButton(sf::Vector2f(200, 50), sf::Vector2f(500, 400), L"Powrót", font);
+    statisticsButton.setTexture("Tekstury/statistic.png", "Tekstury/kliknięte przyciski/clicked-statistic.png");
+    Button backButton(sf::Vector2f(200, 40), sf::Vector2f(500, 400), " ", font);
+    backButton.setTexture("Tekstury/przyciskPowrot.png", "Tekstury/kliknięte przyciski/clicked-przyciskPowrot.png");
     Button exitButton(sf::Vector2f(54, 54), sf::Vector2f(846, 486), " ", font);
-    exitButton.setTexture("Tekstury/exit.png", "Tekstury/statistic.png");
+    exitButton.setTexture("Tekstury/exit.png", "Tekstury/kliknięte przyciski/clicked-exit.png");
     Button pauseButton(sf::Vector2f(54, 54), sf::Vector2f(80, 40), " ", font);
     pauseButton.setTexture("Tekstury/PAUSE.png", "Tekstury/kliknięte przyciski/clicked-PAUSE.png" );
     Button resumeButton(sf::Vector2f(150, 142), sf::Vector2f(530, 252), " ", font);
@@ -253,7 +254,7 @@ int main() {
     hardButton.setTexture("Tekstury/przyciskTRUDNY.png", "Tekstury/kliknięte przyciski/clicked-przyciskTRUDNY.png");
 
     // Tworzenie gracza
-    Player player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+    Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
 
     // Tworzenie generatora przeszkód
     ObstacleManager cactusManager(window.getSize().x, window.getSize().y, "cactus");
@@ -434,7 +435,8 @@ int main() {
                     }
                     if (restartButtonPause.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
-                        player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                        player.resetPosition();
+                        Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
                         distance = 0.0f;
                         coinCount += currentCoinCount;
                         currentCoinCount = 0.0f;
@@ -473,7 +475,8 @@ int main() {
                 } else if (gameState == GameOver) {
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
-                        player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                        player.resetPosition();
+                        Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
                         distance = 0.0f;
     			        cactusManager.restart();
                         birdManager.restart(); 
@@ -529,9 +532,11 @@ int main() {
                 if (event.key.code == sf::Keyboard::Q) {
                     window.close(); // Zamknięcie okna
                 }
+
                 if (gameState != MainMenu) { // Block 'P' key in MainMenu
                     if (event.key.code == sf::Keyboard::R) {
-                        player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+                      player.resetPosition();
+                      Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f);
                         coinManager.restart();
                         cactusManager.restart();
                         birdManager.restart();
