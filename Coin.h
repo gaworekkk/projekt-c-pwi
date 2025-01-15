@@ -6,6 +6,7 @@
 class Coin {
 private:
     sf::CircleShape shape;
+    sf::Texture coinTexture;
 
 public:
     Coin(sf::Vector2f position, float radius, const sf::Texture& texture);
