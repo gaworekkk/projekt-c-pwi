@@ -267,9 +267,9 @@ int main() {
     int coinCount = 0, currentCoinCount;
 
     // Zaladowanie statystyk
-    float bestDistance = 0.0f;
-    int jumpCount = 0;
-    StatisticsManager::loadStatistics(coinCount, bestDistance, jumpCount);
+    float bestDistance = 0.0f, totalDistance = 0.0f;
+    int jumpCount = 0, deathCount = 0, gamesPlayed = 0;
+    StatisticsManager::loadStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed);
 
     // Teksty do wyświetlania
     std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
@@ -280,7 +280,10 @@ int main() {
     std::vector<std::wstring> statistics = {};
     statistics.push_back(L"Zdobyte monety: " + std::to_wstring(coinCount));
     statistics.push_back(L"Najlepszy wynik: " + std::to_wstring(bestDistance));
+    statistics.push_back(L"Całkowity dystans: " + std::to_wstring(totalDistance));
     statistics.push_back(L"Liczba skoków: " + std::to_wstring(jumpCount));
+    statistics.push_back(L"Liczba śmierci: " + std::to_wstring(deathCount));
+    statistics.push_back(L"Liczba gier: " + std::to_wstring(gamesPlayed));
 
     // Tworzenie tekstu
     sf::Text nameText(L" ", font, 70);
@@ -355,7 +358,10 @@ int main() {
                     //Aktualizacja statystyk
                     statistics[0] = L"Zdobyte monety: " + std::to_wstring(coinCount);
                     statistics[1] = L"Najlepszy wynik: " + std::to_wstring(bestDistance);
-                    statistics[2] = L"Liczba skoków: " + std::to_wstring(jumpCount);
+                    statistics[2] = L"Całkowity wynik: " + std::to_wstring(totalDistance);
+                    statistics[3] = L"Liczba skoków: " + std::to_wstring(jumpCount);
+                    statistics[4] = L"Liczba śmierci: " + std::to_wstring(deathCount);
+                    statistics[5] = L"Liczba gier: " + std::to_wstring(gamesPlayed);
                     if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         // buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         distance = 0.0f;
@@ -363,6 +369,7 @@ int main() {
                         cactusManager.restart();
 			            birdManager.restart();
                         coinManager.restart();
+                        gamesPlayed++;
                         gameState = Gameplay; // Przejście do Gameplay
                         // menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
                         // backgroundMusic.play(); // Odtwarzanie muzyki tła dla gry
@@ -374,6 +381,7 @@ int main() {
 			            cactusManager.restart();
                         birdManager.restart();
                         coinManager.restart();
+                        gamesPlayed++;
                         gameState = Gameplay; // Przejście do Gameplay
                         // menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
                         // backgroundMusic.play(); // Odtwarzanie muzyki tła dla gry
@@ -436,6 +444,8 @@ int main() {
                 } else if (gameState == Pause) {
                     bestDistance = std::max(bestDistance, distance);
                     coinCount += currentCoinCount;
+                    totalDistance += distance;
+                    StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed);
                     coinCountMainMenuText.setString(std::to_wstring(coinCount));
                     if (resumeButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         // buttonSound.play(); // Odtwarzanie dźwięku przycisku
@@ -487,6 +497,8 @@ int main() {
                     }
 
                 } else if (gameState == GameOver) {
+                    deathCount++;
+                    StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed);
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         // buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         player = Player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
@@ -599,7 +611,6 @@ int main() {
 
         // Logika w zależności od stanu gry
         if (gameState == Gameplay) {
-
             player.handleInput(deltaTime);
             player.update(deltaTime);
 	        cactusManager.update(deltaTime);
@@ -637,7 +648,8 @@ int main() {
             if ((cactusManager.checkCollisions(player.getGlobalBounds())) || (birdManager.checkCollisions(player.getGlobalBounds()))) {
                 coinCount += currentCoinCount;
                 bestDistance = std::max(bestDistance, distance);
-                StatisticsManager::saveStatistics(coinCount, bestDistance, jumpCount);
+                deathCount++;
+                StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed);
                 gameState = GameOver;
                 // backgroundMusic.stop(); // Zatrzymanie muzyki tła dla gry
                 // deathSound.play(); // Odtwarzanie dźwięku śmierci
