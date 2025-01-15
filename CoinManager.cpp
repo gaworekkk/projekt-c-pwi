@@ -3,7 +3,7 @@
 #include <math.h>
 
 CoinManager::CoinManager(float spawnInterval, float obstacleSpeed)
-    : spawnInterval(spawnInterval), obstacleSpawnSpeed(obstacleSpeed) {
+    : spawnInterval(spawnInterval), isSkyLevelOn(false), obstacleSpawnSpeed(obstacleSpeed) {
     if (!coinTexture.loadFromFile("Tekstury/coin.png")) {
         // Obsłuż błąd ładowania tekstury
     } 
@@ -17,7 +17,12 @@ void CoinManager::setObstacleSpawnSpeed(float speed) {
 void CoinManager::setSpeed(float newSpeed) {
     speed = newSpeed; // Aktualizacja predkosci przesuwania monet
 }
-
+void CoinManager::turnSkyLevelOn(){
+	isSkyLevelOn = true;
+}
+void CoinManager::turnSkyLevelOff(){
+	isSkyLevelOn = false;
+}
 void CoinManager::update(float deltaTime, sf::FloatRect playerBounds, int& coinCount, const std::vector<sf::FloatRect>& obstacleBounds) {
     spawnTimer += deltaTime;
 
@@ -26,6 +31,9 @@ void CoinManager::update(float deltaTime, sf::FloatRect playerBounds, int& coinC
     if (adjustedSpawnInterval < 1.0f) { // Minimalny czas miedzy monetami
         adjustedSpawnInterval = 1.0f;
     }
+	if(isSkyLevelOn){
+		adjustedSpawnInterval /= 3;
+	}
 
     // Generowanie nowej monety
     if (spawnTimer >= adjustedSpawnInterval) {
@@ -34,9 +42,18 @@ void CoinManager::update(float deltaTime, sf::FloatRect playerBounds, int& coinC
         { 
             spawnTimer = 0;
             int maxAttempts = 10; // Mamy 10 prob na wstawienie nowej monety tak aby nie kolidowala z przeszkoda
-            int rows = 4; 
-            float rowHeight = 50.0f; // Odleglosc miedzy wierszami
-            float startY = 375.0f;
+			int rows;
+			float rowHeight;
+			float startY;
+			if(!isSkyLevelOn){
+            	rows = 4; 
+            	rowHeight = 50.0f; // Odleglosc miedzy wierszami
+            	startY = 375.0f;
+			}else{
+				rows = 10;
+				rowHeight = 50.0f;
+				startY = 0.0f;
+			}
             for (int i = 0; i < maxAttempts; ++i) {
                 bool isColliding = false;
                 int randomRow = rand() % rows;

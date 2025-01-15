@@ -617,6 +617,24 @@ int main() {
             } else if(distanceInt % 50 != 0) {
                 if_changed_speed = false;
             }
+			// Zmiana rodzaju poziomu ze zwykłego na powietrzny i odwrotnie
+			if(distanceInt % 100 == 0 && distanceInt != 0){
+				if(distanceInt % 200 != 0){
+					cactusManager.turnSkyLevelOn();
+					birdManager.turnSkyLevelOn();
+					coinManager.turnSkyLevelOn();
+					player.turnSkyLevelOn();
+				}else{
+					cactusManager.turnSkyLevelOff();
+					birdManager.turnSkyLevelOff();
+					coinManager.turnSkyLevelOff();
+				}
+			}
+			int playerFallDelay = 4; //do wyczucia
+			if(((distanceInt-playerFallDelay) % 100 == 0) && ((distanceInt - playerFallDelay)% 200 == 0) && ((distanceInt- playerFallDelay)!=0)){
+				player.turnSkyLevelOff();
+			}
+
 
             distanceText.setString(L"" + std::to_wstring(distanceInt)); // Ustawienie tekstu odległości
             coinCountText.setString(L"" + std::to_wstring(currentCoinCount)); // Usunięcie napisu "Monety:"
