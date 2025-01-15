@@ -1,11 +1,12 @@
 #include "CoinManager.h"
 #include <cstdlib> 
 #include <math.h>
+#include <stdexcept>
 
 CoinManager::CoinManager(float spawnInterval, float obstacleSpeed)
     : spawnInterval(spawnInterval), obstacleSpawnSpeed(obstacleSpeed) {
     if (!coinTexture.loadFromFile("Tekstury/coin.png")) {
-        // Obsłuż błąd ładowania tekstury
+        throw std::runtime_error("Nie udało się załadować tekstury monety!");
     } 
     spawnTimer = 0;
 }
