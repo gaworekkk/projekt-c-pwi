@@ -20,6 +20,7 @@ private:
     sf::Text buttonText;       // Tekst wyświetlany na przycisku
     sf::Color normalColor;     // Kolor przycisku w normalnym stanie
     sf::Color hoverColor;      // Kolor przycisku w stanie "hover"
+    sf::Color transparentColor; // Kolor przycisku w stanie "transparent"
     sf::Texture buttonTexture; // Pole tekstury
     sf::Sprite buttonSprite; // Pole sprite
     sf::Texture hoverTexture;
