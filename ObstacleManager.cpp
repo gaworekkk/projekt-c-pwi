@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
+#include <stdexcept>
 
 enum GameState { MainMenu, OptionsMenu, Gameplay, Pause, GameOver }; 
 extern GameState gameState;
@@ -10,7 +11,7 @@ ObstacleManager::ObstacleManager(float windowWidth, float windowHeight, std::str
     : screenWidth(windowWidth), birdCounter(0), screenHeight(windowHeight), isSkyLevelOn(false), obstacleType(Type), obstacleSpawnTimer(0.f) {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     if(!cactusTexture.loadFromFile("Tekstury/kaktusy/kaktus(50x84).png") || !birdTexture.loadFromFile("Tekstury/crow.gif")){
-	    //obsluz blad
+	    throw std::runtime_error("Nie udało się załadować tekstury przeszkody!");
     }
     if(obstacleType == "cactus"){
 	    speed = initialCactusSpeed;
@@ -116,7 +117,7 @@ void ObstacleManager::restart() {
     obstacleSpawnTimer = 0.f;   // Resetujemy timer spawnu
 }
 
-std::vector<sf::FloatRect> ObstacleManager::getObstacleBounds() const {
+std::vector<sf::FloatRect> ObstacleManager::getObstacleBounds() {
     std::vector<sf::FloatRect> bounds;
     for (const auto& obstacle : obstacles) {
         bounds.push_back(obstacle.getBounds());
@@ -124,12 +125,12 @@ std::vector<sf::FloatRect> ObstacleManager::getObstacleBounds() const {
     return bounds;
 }
 
-float ObstacleManager::getRandomSpawnInterval(float baseInterval) const {
+float ObstacleManager::getRandomSpawnInterval(float baseInterval) {
     return baseInterval + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 2.0f)); 
     // Losowe generowanie czasu spawnu przeszkód (od baseInterval do baseInterval + 2)
 }
 
-float ObstacleManager::getSpeed() const {
+float ObstacleManager::getSpeed() {
     return speed;
 }
 
@@ -137,7 +138,7 @@ void ObstacleManager::setSpeed(float newSpeed) {
     // Zmiana prędkości przeszkody
     speed = newSpeed;
 }
-float ObstacleManager::getInitialSpeed() const {
+float ObstacleManager::getInitialSpeed() {
 	if(obstacleType == "cactus"){
 		return initialCactusSpeed;
 	}else if(obstacleType == "bird"){
