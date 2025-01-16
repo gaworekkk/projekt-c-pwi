@@ -5,7 +5,7 @@
 
 class Slider {
 public:
-    Slider(float x, float y, float width, float height, sf::Font& font, const std::string& thumbTexturePath);
+    Slider(float x, float y, float width, float height, sf::Font& font);
     void draw(sf::RenderWindow& window);
     void update(const sf::Event& event, const sf::RenderWindow& window);
     float getValue() const;

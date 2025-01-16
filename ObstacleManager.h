@@ -18,11 +18,11 @@ public:
     void generateObstacle();
     bool checkCollisions(const sf::FloatRect& playerBounds);
     void removeOffscreenObstacles();
-    std::vector<sf::FloatRect> getObstacleBounds() const; 
-    float getRandomSpawnInterval(float baseInterval) const;
+    std::vector<sf::FloatRect> getObstacleBounds();
+    float getRandomSpawnInterval(float baseInterval);
     void setSpeed(float speed);
-    float getSpeed() const;
-    float getInitialSpeed() const;
+    float getSpeed();
+    float getInitialSpeed();
     void setDifficulty(Difficulty difficulty);
 private:
     Difficulty difficulty;
@@ -30,21 +30,21 @@ private:
     float screenWidth;
     float screenHeight;
 	bool isSkyLevelOn;
-	const float skyLevelBirdSpawnInterval = 0.8f;
-	const float skyLevelCactusSpawnInterval = 0.5f;
+	float skyLevelBirdSpawnInterval = 0.8f;
+	float skyLevelCactusSpawnInterval = 0.5f;
     sf::Texture cactusTexture;
     sf::Texture birdTexture;
-	const float skyLevelPause = 5.0f;
-    const float groundHeight = 589.0f;
-    const float veryHighSkyHeight = 200.0f; 
-    const int   skyLanesCount = 5;
-	const int   skyLevelSkyLanesCount = 35;
-    const float skyLaneHeight = 15.0f;
-    const float skyMinHeight = 525.0f;
-    const float cactusHeight = 80.0f; //to też
-    const float cactusWidth = 50.0f; //to też
-    const float birdHeight = 30.0f; //to chyba staje się nieistotne po załadowaniu tekstury
-    const float birdWidth = 30.0f; //to też
+	float skyLevelPause = 5.0f;
+    float groundHeight = 589.0f;
+    float veryHighSkyHeight = 200.0f; 
+    int   skyLanesCount = 5;
+	int   skyLevelSkyLanesCount = 35;
+    float skyLaneHeight = 15.0f;
+    float skyMinHeight = 525.0f;
+    float cactusHeight = 80.0f; //to też
+    float cactusWidth = 50.0f; //to też
+    float birdHeight = 30.0f; //to chyba staje się nieistotne po załadowaniu tekstury
+    float birdWidth = 30.0f; //to też
     std::vector<Obstacle> obstacles;
     int birdCounter;
     float obstacleSpawnTimer;
