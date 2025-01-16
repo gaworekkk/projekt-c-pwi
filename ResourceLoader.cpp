@@ -60,7 +60,7 @@ sf::Sprite coinSprite;
 sf::Sprite coinIconMainMenu;
 
 // Gracz
-Player player(sf::Vector2f(50.f, 80.f), sf::Vector2f(100.f, 500.f), sf::Color::Cyan);
+Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
 
 // Generatory
 ObstacleManager cactusManager(1, 1, "cactus");
@@ -161,24 +161,25 @@ void loadBuffers(){
 void loadButtons(){
     // Ustawienia przycisków
     storyButton = Button(sf::Vector2f(324, 54), sf::Vector2f(250, 372), " ", font);
-    storyButton.setTexture("Tekstury/przyciskSTART.png", "Tekstury/przyciskENDLESS.png");
+    storyButton.setTexture("Tekstury/przyciskSTART.png", "Tekstury/kliknięte przyciski/clicked-przyciskSTART.png");
     
     endlessButton = Button(sf::Vector2f(324, 54), sf::Vector2f(626, 372), " ", font);
-    endlessButton.setTexture("Tekstury/przyciskENDLESS.png", "Tekstury/przyciskSTART.png");
+    endlessButton.setTexture("Tekstury/przyciskENDLESS.png", "Tekstury/kliknięte przyciski/clicked-przyciskENDLESS.png");
     
     optionsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(300, 486), " ", font);
-    optionsButton.setTexture("Tekstury/settings.png", "Tekstury/statistic.png");
+    optionsButton.setTexture("Tekstury/settings.png", "Tekstury/kliknięte przyciski/clicked-settings.png");
     
     achievementsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(482, 486), " ", font);
-    achievementsButton.setTexture("Tekstury/archievment.png", "Tekstury/statistic.png");
+    achievementsButton.setTexture("Tekstury/archievment.png", "Tekstury/kliknięte przyciski/clicked-archievment.png");
     
     statisticsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(664, 486), " ", font);
-    statisticsButton.setTexture("Tekstury/statistic.png", "Tekstury/settings.png");
+    statisticsButton.setTexture("Tekstury/statistic.png", "Tekstury/kliknięte przyciski/clicked-statistic.png");
     
-    backButton = Button(sf::Vector2f(200, 50), sf::Vector2f(500, 400), L"Powrót", font);
+    backButton = Button(sf::Vector2f(200, 40), sf::Vector2f(500, 400), " ", font);
+    backButton.setTexture("Tekstury/przyciskPowrot.png", "Tekstury/kliknięte przyciski/clicked-przyciskPowrot.png");
     
     exitButton = Button(sf::Vector2f(54, 54), sf::Vector2f(846, 486), " ", font);
-    exitButton.setTexture("Tekstury/exit.png", "Tekstury/statistic.png");
+    exitButton.setTexture("Tekstury/exit.png", "Tekstury/kliknięte przyciski/clicked-exit.png");
     
     pauseButton = Button(sf::Vector2f(54, 54), sf::Vector2f(80, 40), " ", font);
     pauseButton.setTexture("Tekstury/PAUSE.png", "Tekstury/kliknięte przyciski/clicked-PAUSE.png" );
@@ -235,39 +236,39 @@ void loadGenerators(sf::RenderWindow& window){
 
 void loadTexts(int coinCount){
     // Ustawienia tekstu
-    nameText = sf::Text(" ", font, 70);
+    nameText = sf::Text(L" ", font, 70);
 
     // Wyśrodkowanie tekstu
     centerText(nameText, 1200, 640, 60);  // Wyśrodkowanie w poziomie, wysokość 60
 
-    optionsMenuText = sf::Text("Menu Opcji", font, 50);
+    optionsMenuText = sf::Text(L"Menu Opcji", font, 50);
     centerText(optionsMenuText, 1200, 640, 100);
 
-    pauseText = sf::Text("Pause", font, 50);
+    pauseText = sf::Text(L"Pause", font, 50);
     centerText(pauseText, 1200, 640, 200);
     
-    distanceText = sf::Text("0", font, 50);
+    distanceText = sf::Text(L"0", font, 50);
     distanceText.setFillColor(sf::Color::White);
     distanceText.setCharacterSize(distanceText.getCharacterSize() + 20);
     distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
 
-    coinCountText = sf::Text("0", font, 50);
+    coinCountText = sf::Text(L"0", font, 50);
     coinCountText.setFillColor(sf::Color::White);
     coinCountText.setCharacterSize(distanceText.getCharacterSize());
     coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
 
-    coinCountMainMenuText = sf::Text("0", font, 80);
+    coinCountMainMenuText = sf::Text(L"0", font, 80);
     coinCountMainMenuText.setCharacterSize(coinCountMainMenuText.getCharacterSize() );
     coinCountMainMenuText.setPosition(110, 0);
-    coinCountMainMenuText.setString(std::to_string(coinCount));
+    coinCountMainMenuText.setString(std::to_wstring(coinCount));
 
-    gameOverText = sf::Text("Game Over", font, 70);
+    gameOverText = sf::Text(L"Game Over", font, 70);
     centerText(gameOverText, 1200, 640, 100);
 
     distanceText2 = distanceText;
     distanceText2.setFillColor(sf::Color::Black);
 
-    bestScoreText = sf::Text("NAJLEPSZY WYNIK:", font, 70);
+    bestScoreText = sf::Text(L"NAJLEPSZY WYNIK:", font, 70);
     bestScoreText.setFillColor(sf::Color::White);
 
     yourScoreText = sf::Text(L"TWÓJ WYNIK:", font, 70);

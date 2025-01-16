@@ -11,6 +11,7 @@
 #include "ResourceLoader.h"
 #include <stdexcept>
 #include <iostream>
+#include <algorithm> 
 
 enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Pause, GameOver };
 
@@ -33,7 +34,9 @@ int main() {
     float distance;
 
     // Zaladowanie statystyk
-    StatisticsManager::loadStatistics(coinCount);
+    float bestDistance = 0.0f, totalDistance = 0.0f;
+    int jumpCount = 0, deathCount = 0, gamesPlayed = 0;
+    StatisticsManager::loadStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed);
 
     // Załaduj wszystkie zasoby
     try {
@@ -46,8 +49,18 @@ int main() {
 
     // Teksty do wyświetlania
     std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
-    std::vector<std::string> statistics = {"Statistic 1", "Statistic 2", "Statistic 3"};
-
+    std::vector<std::wstring> wAchievements;
+    for (const auto& achievement : achievements) {
+        wAchievements.push_back(std::wstring(achievement.begin(), achievement.end()));
+    }
+    std::vector<std::wstring> statistics = {};
+    statistics.push_back(L"Zdobyte monety: " + std::to_wstring(coinCount));
+    statistics.push_back(L"Najlepszy wynik: " + std::to_wstring(bestDistance));
+    statistics.push_back(L"Całkowity dystans: " + std::to_wstring(totalDistance));
+    statistics.push_back(L"Liczba skoków: " + std::to_wstring(jumpCount));
+    statistics.push_back(L"Liczba śmierci: " + std::to_wstring(deathCount));
+    statistics.push_back(L"Liczba gier: " + std::to_wstring(gamesPlayed));
+    
     float deltaTime;
     sf::Clock clock;
 
@@ -69,6 +82,13 @@ int main() {
             // Obsługa kliknięć w różnych stanach
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (gameState == MainMenu) {
+                    //Aktualizacja statystyk
+                    statistics[0] = L"Zdobyte monety: " + std::to_wstring(coinCount);
+                    statistics[1] = L"Najlepszy wynik: " + std::to_wstring(bestDistance);
+                    statistics[2] = L"Całkowity wynik: " + std::to_wstring(totalDistance);
+                    statistics[3] = L"Liczba skoków: " + std::to_wstring(jumpCount);
+                    statistics[4] = L"Liczba śmierci: " + std::to_wstring(deathCount);
+                    statistics[5] = L"Liczba gier: " + std::to_wstring(gamesPlayed);
                     if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         distance = 0.0f;
@@ -76,6 +96,7 @@ int main() {
                         cactusManager.restart();
 			            birdManager.restart();
                         coinManager.restart();
+                        gamesPlayed++;
                         gameState = Gameplay; // Przejście do Gameplay
                         menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
                         backgroundMusic.play(); // Odtwarzanie muzyki tła dla gry
@@ -87,6 +108,7 @@ int main() {
 			            cactusManager.restart();
                         birdManager.restart();
                         coinManager.restart();
+                        gamesPlayed++;
                         gameState = Gameplay; // Przejście do Gameplay
                         menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
                         backgroundMusic.play(); // Odtwarzanie muzyki tła dla gry
@@ -147,6 +169,11 @@ int main() {
                     }
 
                 } else if (gameState == Pause) {
+                    bestDistance = std::max(bestDistance, distance);
+                    coinCount += currentCoinCount;
+                    totalDistance += distance;
+                    StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed);
+                    coinCountMainMenuText.setString(std::to_wstring(coinCount));
                     if (resumeButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = Gameplay; // Powrót do Gameplay
@@ -165,9 +192,7 @@ int main() {
                         player.resetPosition();
                         Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
                         distance = 0.0f;
-                        coinCount += currentCoinCount;
                         currentCoinCount = 0.0f;
-                        coinCountMainMenuText.setString(std::to_string(coinCount));
    			            cactusManager.restart();
                         birdManager.restart();
                         coinManager.restart();
@@ -200,6 +225,8 @@ int main() {
                     }
 
                 } else if (gameState == GameOver) {
+                    deathCount++;
+                    StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed);
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         player.resetPosition();
@@ -209,7 +236,7 @@ int main() {
                         birdManager.restart(); 
                         coinManager.restart();  
 			            currentCoinCount = 0.0f;
-                        coinCountMainMenuText.setString(std::to_string(coinCount));
+                        coinCountMainMenuText.setString(std::to_wstring(coinCount));
                         distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
                         coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
                         gameState = Gameplay; // Restart gry
@@ -286,6 +313,7 @@ int main() {
                 if (event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Up) {
                     if (!isJumping && player.getGlobalBounds().top >= standardLevel && gameState == Gameplay) {
                         jumpSound.play(); // Odtwarzanie dźwięku skoku
+                        jumpCount++;
                         isJumping = true;
                     }
                 }
@@ -314,7 +342,6 @@ int main() {
 
         // Logika w zależności od stanu gry
         if (gameState == Gameplay) {
-
             player.handleInput(deltaTime);
             player.update(deltaTime);
 	        cactusManager.update(deltaTime);
@@ -369,7 +396,9 @@ int main() {
             // Sprawdzenie kolizji i koniec gry lub restart
             if ((cactusManager.checkCollisions(player.getGlobalBounds())) || (birdManager.checkCollisions(player.getGlobalBounds()))) {
                 coinCount += currentCoinCount;
-                StatisticsManager::saveStatistics(coinCount);
+                bestDistance = std::max(bestDistance, distance);
+                deathCount++;
+                StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed);
                 gameState = GameOver;
                 backgroundMusic.stop(); // Zatrzymanie muzyki tła dla gry
                 deathSound.play(); // Odtwarzanie dźwięku śmierci
@@ -432,12 +461,12 @@ int main() {
             soundSlider->draw(window);
             backButton.draw(window);
         } else if (gameState == Achievements) {
-            drawScrollableList(window, achievements, font);
             window.draw(achievementsBackgroundSprite); // Rysowanie tła trybu Achievements
+            drawScrollableList(window, wAchievements, font);
             backButton.draw(window);
         } else if (gameState == Statistics) {
-            drawScrollableList(window, statistics, font);
             window.draw(statisticsBackgroundSprite); // Rysowanie tła trybu Statistics
+            drawScrollableList(window, statistics, font);
             backButton.draw(window);
         } else if (gameState == Gameplay) {
             window.draw(storyBackgroundSprite); // Rysowanie tła trybu fabularnego

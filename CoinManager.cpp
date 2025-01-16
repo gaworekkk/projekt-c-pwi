@@ -116,6 +116,7 @@ void CoinManager::restart() {
     coins.clear(); 
     setSpeed(initialSpeed);
     spawnTimer = 0;  
+	turnSkyLevelOff();
 }
 
 

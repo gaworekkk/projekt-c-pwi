@@ -8,8 +8,8 @@ using json = nlohmann::json;
 
 class StatisticsManager {
 public:
-    static void saveStatistics(int coinCount); 
-    static void loadStatistics(int& coinCount);
+    static void saveStatistics(int coinCount, float bestDistance, float totalDistance, int jumpCount, int deathCount, int gamesPlayed);
+    static void loadStatistics(int& coinCount, float& bestDistance, float& totalDistance, int& jumpCount, int& deathCount, int& gamesPlayed);
 };
 
 #endif
