@@ -1,16 +1,17 @@
 #include "Slider.h"
 #include <iostream>
+#include <stdexcept>
 
 bool Slider:: isAnySliderDragging = false;
 
-Slider::Slider(float x, float y, float width, float height, sf::Font& font, const std::string& thumbTexturePath){
+Slider::Slider(float x, float y, float width, float height, sf::Font& font){
     track.setPosition(x, y);
     track.setSize(sf::Vector2f(width, height));
     track.setFillColor(sf::Color::Transparent);
 
     thumb.setSize(sf::Vector2f(height, height));
-    if (!thumbTexture.loadFromFile(thumbTexturePath)) {
-        std::cerr << "Nie udało się załadować tekstury dla thumb!" << std::endl;
+    if (!thumbTexture.loadFromFile("Tekstury/slider.png")) {
+        throw std::runtime_error("Nie udało się załadować tekstury suwaka!");
     } else {
         thumb.setTexture(&thumbTexture);
     }
