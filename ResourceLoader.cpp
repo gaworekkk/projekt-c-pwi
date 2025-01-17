@@ -15,10 +15,13 @@ sf::Texture optionsMenuBackgroundTexture;
 sf::Sprite optionsMenuBackgroundSprite;
 sf::Texture pauseBackgroundTexture;
 sf::Sprite pauseBackgroundSprite;
+sf::Texture shopBackgroundTexture;
+sf::Sprite shopBackgroundSprite;
 
 // Dino
 sf::Texture dinoTexture;
 sf::Sprite dinoSprite;
+std::string dinoTexturePath[6] = {"Tekstury/skórki dino/dino2(run).gif", "Tekstury/skórki dino/dino 4 (klatki)/dino_sprite_sheet.png", "Tekstury/skórki dino/dino5(run).gif", "Tekstury/skórki dino/dino6(run).gif", "Tekstury/skórki dino/dino7(run).gif", "Tekstury/skórki dino/dino8(run).gif"};
 
 // Czcionka
 sf::Font font;
@@ -40,9 +43,9 @@ sf::Sound buttonSound;
 // Przyciski
 Button storyButton(sf::Vector2f(324, 54), sf::Vector2f(250, 372), " ", font);
 Button endlessButton(sf::Vector2f(324, 54), sf::Vector2f(626, 372), " ", font);
-Button optionsButton(sf::Vector2f(54, 54), sf::Vector2f(300, 486), " ", font);
-Button achievementsButton(sf::Vector2f(54, 54), sf::Vector2f(482, 486), " ", font);
-Button statisticsButton(sf::Vector2f(54, 54), sf::Vector2f(664, 486), " ", font);
+Button optionsButton(sf::Vector2f(54, 54), sf::Vector2f(209, 486), " ", font);
+Button achievementsButton(sf::Vector2f(54, 54), sf::Vector2f(391, 486), " ", font);
+Button statisticsButton(sf::Vector2f(54, 54), sf::Vector2f(573, 486), " ", font);
 Button backButton(sf::Vector2f(200, 50), sf::Vector2f(500, 400), L"Powrót", font);
 Button exitButton(sf::Vector2f(54, 54), sf::Vector2f(846, 486), " ", font);
 Button pauseButton(sf::Vector2f(54, 54), sf::Vector2f(80, 40), " ", font);
@@ -53,6 +56,8 @@ Button mainMenuButton(sf::Vector2f(200, 40), sf::Vector2f(625, 480), " ", font);
 Button easyButton(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
 Button normalButton(sf::Vector2f(324, 54), sf::Vector2f(450, 180), " ", font);
 Button hardButton(sf::Vector2f(324, 54), sf::Vector2f(450, 240), " ", font);
+Button shopButton(sf::Vector2f(54, 54), sf::Vector2f(755, 486), " ", font);
+Button buyButtonSkin(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "Kup", font);
 
 // Moneta
 sf::Texture coinTexture;
@@ -104,6 +109,7 @@ void loadBackgrounds(sf::RenderWindow& window){
     loadOneBackground(achievementsBackgroundTexture, achievementsBackgroundSprite, "Tekstury/archivment-menu.png", window);
     loadOneBackground(optionsMenuBackgroundTexture, optionsMenuBackgroundSprite, "Tekstury/settings-menu.png", window);
     loadOneBackground(pauseBackgroundTexture, pauseBackgroundSprite, "Tekstury/pause-background.png", window);
+    loadOneBackground(shopBackgroundTexture, shopBackgroundSprite, "Tekstury/shop-menu.png", window);
 }
 
 void loadDino(){
@@ -158,6 +164,8 @@ void loadBuffers(){
     loadOneBuffer(buttonBuffer, buttonSound, "muzyka/przycisk2.ogg");
 }
 
+Button* buyButton[6];
+
 void loadButtons(){
     // Ustawienia przycisków
     storyButton = Button(sf::Vector2f(324, 54), sf::Vector2f(250, 372), " ", font);
@@ -166,19 +174,19 @@ void loadButtons(){
     endlessButton = Button(sf::Vector2f(324, 54), sf::Vector2f(626, 372), " ", font);
     endlessButton.setTexture("Tekstury/przyciskENDLESS.png", "Tekstury/kliknięte przyciski/clicked-przyciskENDLESS.png");
     
-    optionsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(300, 486), " ", font);
+    optionsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(209, 486), " ", font);
     optionsButton.setTexture("Tekstury/settings.png", "Tekstury/kliknięte przyciski/clicked-settings.png");
     
-    achievementsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(482, 486), " ", font);
+    achievementsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(391, 486), " ", font);
     achievementsButton.setTexture("Tekstury/archievment.png", "Tekstury/kliknięte przyciski/clicked-archievment.png");
     
-    statisticsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(664, 486), " ", font);
+    statisticsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(573, 486), " ", font);
     statisticsButton.setTexture("Tekstury/statistic.png", "Tekstury/kliknięte przyciski/clicked-statistic.png");
     
     backButton = Button(sf::Vector2f(200, 40), sf::Vector2f(500, 400), " ", font);
     backButton.setTexture("Tekstury/przyciskPowrot.png", "Tekstury/kliknięte przyciski/clicked-przyciskPowrot.png");
     
-    exitButton = Button(sf::Vector2f(54, 54), sf::Vector2f(846, 486), " ", font);
+    exitButton = Button(sf::Vector2f(54, 54), sf::Vector2f(937, 486), " ", font);
     exitButton.setTexture("Tekstury/exit.png", "Tekstury/kliknięte przyciski/clicked-exit.png");
     
     pauseButton = Button(sf::Vector2f(54, 54), sf::Vector2f(80, 40), " ", font);
@@ -204,6 +212,26 @@ void loadButtons(){
     
     hardButton = Button(sf::Vector2f(324, 54), sf::Vector2f(450, 240), " ", font);
     hardButton.setTexture("Tekstury/przyciskTRUDNY.png", "Tekstury/kliknięte przyciski/clicked-przyciskTRUDNY.png");
+
+    shopButton = Button(sf::Vector2f(54, 54), sf::Vector2f(755, 486), " ", font);
+    shopButton.setTexture("Tekstury/shop.png", "Tekstury/kliknięte przyciski/clicked-shop.png");
+
+    buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "Kup", font);
+
+    sf::Vector2f sizes[6] = {
+        {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}
+    };
+    sf::Vector2f positions[6] = {
+        {200, 120}, {200, 220}, {200, 320}, {500, 120}, {500, 220}, {500, 320}
+    };
+
+    std::wstring labels[6] = {
+        L"Skin1", L"Skin2", L"Skin3", L"Skin4", L"Skin5", L"Skin6"
+    };
+
+    for (int i = 0; i < 6; ++i) {
+        buyButton[i] =new Button(sizes[i], positions[i], labels[i], font);
+    }
 }
 
 void loadCoins(){

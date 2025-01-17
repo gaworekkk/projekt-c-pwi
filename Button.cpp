@@ -41,6 +41,15 @@ void Button::update(const sf::Vector2i& mousePos) {
     }
 }
 
+void Button::setText(const std::string text) {
+    buttonText.setString(text);
+    sf::FloatRect textBounds = buttonText.getLocalBounds();
+    buttonText.setPosition(
+        button.getPosition().x + (button.getSize().x - textBounds.width) / 2,
+        button.getPosition().y + (button.getSize().y - textBounds.height) / 2 - textBounds.top
+    );
+}
+
 bool Button::isClicked(const sf::Vector2i& mousePos, const sf::Event::MouseButtonEvent& mouseEvent) const {
     return button.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) &&
            mouseEvent.button == sf::Mouse::Left;
