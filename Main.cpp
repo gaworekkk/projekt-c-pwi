@@ -276,6 +276,13 @@ int main() {
                         player.setFrameDuration(0.1f);
                         player.setTexture(aktualna);
                         StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+                        for (int i = 0;i<6;i++){
+                            if (skinState[i] == 0){
+                                buyButton[i]->setText("Wybrano");
+                            } else {
+                                buyButton[i]->setText("Skin" + std::to_string(i+1));
+                            }
+                        }
                     }
                     
                     for (int i=0;i<6;i++){
@@ -358,6 +365,21 @@ int main() {
                         coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
                         // Reset distance counter position
                         distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
+                    }
+                    else if (gameState == Shop) {
+                        gameState = MainMenu; // Powrót do MainMenu
+                        player.resetPosition();
+                        player.resetSize();
+                        player.setFrameDuration(0.1f);
+                        player.setTexture(aktualna);
+                        StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+                        for (int i = 0;i<6;i++){
+                            if (skinState[i] == 0){
+                                buyButton[i]->setText("Wybrano");
+                            } else {
+                                buyButton[i]->setText("Skin" + std::to_string(i+1));
+                            }
+                        }
                     }
                 }
                 if (event.key.code == sf::Keyboard::Q) {
@@ -482,7 +504,7 @@ int main() {
             }
         } else if (gameState==Shop){
             player.updateAnimation(deltaTime);
-            player.setFrameDuration(0.3f);
+            player.setFrameDuration(0.5f);
         }
         // Aktualizacja przycisków i sliderów zależnie od stanu
         if (gameState == MainMenu) {
