@@ -25,8 +25,41 @@ Player::Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf:
 void Player::turnSkyLevelOn(){
 	isSkyLevelOn = true;
 }
+
+sf::Texture Player::getTexture(){
+    return playerTexture;
+}
+
+void Player::setTexture(const std::string& textureFile) {
+    if (!playerTexture.loadFromFile(textureFile)) {
+        throw std::runtime_error("Nie udało się załadować tekstury gracza: " + textureFile);
+    }
+    player.setTexture(&playerTexture);
+    frameRect = sf::IntRect(0, 0, playerTexture.getSize().x / frameCount, playerTexture.getSize().y);
+    player.setTextureRect(frameRect);
+}
+void Player::setTexture(sf::Texture texture){
+    playerTexture = texture;
+    player.setTexture(&playerTexture);
+    frameRect = sf::IntRect(0, 0, playerTexture.getSize().x / frameCount, playerTexture.getSize().y);
+    player.setTextureRect(frameRect);
+}
+
 void Player::turnSkyLevelOff(){
 	isSkyLevelOn = false;
+}
+void Player::setFrameDuration(float newFrameDuration) {
+    frameDuration = newFrameDuration;
+}
+
+void Player::setPosition(const sf::Vector2f& position){
+    player.setPosition(position);
+}
+void Player::setSize(const sf::Vector2f& size){
+    player.setSize(size);
+}
+void Player::resetSize(){
+    player.setSize(originalSize);
 }
 // Operator przypisania
 Player& Player::operator=(const Player& other) {
@@ -143,6 +176,17 @@ void Player::update(float deltaTime) {
 // Rysowanie gracza
 void Player::draw(sf::RenderWindow& window) {
     window.draw(player);
+}
+
+void Player::updateAnimation(float deltaTime) {
+    // Aktualizacja czasu trwania animacji
+    currentFrameTime += deltaTime;
+    if (currentFrameTime >= frameDuration) {
+        currentFrameTime = 0;
+        currentFrame = (currentFrame + 1) % frameCount;
+        frameRect.left = currentFrame * frameRect.width;
+        player.setTextureRect(frameRect);
+    }
 }
 
 sf::Vector2f Player::getVelocity() const {

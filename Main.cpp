@@ -13,7 +13,7 @@
 #include <iostream>
 #include <algorithm> 
 
-enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Pause, GameOver };
+enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Pause, GameOver, Shop };
 
 // Ustawienie domyślnego stanu gry
 GameState gameState = MainMenu;
@@ -36,8 +36,8 @@ int main() {
     // Zaladowanie statystyk
     float bestDistance = 0.0f, totalDistance = 0.0f;
     int jumpCount = 0, deathCount = 0, gamesPlayed = 0;
-    StatisticsManager::loadStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed);
-
+    int skinState[6];
+    StatisticsManager::loadStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
     // Załaduj wszystkie zasoby
     try {
         loadAllResources(window, coinCount);
@@ -69,15 +69,27 @@ int main() {
     bool if_changed_speed = false;
     bool isJumping = false;
     const float standardLevel = 500.0f; // Standardowy poziom gracza
-
+    sf::Texture aktualna;
+    int pressed;
+    for(int i=0;i<6;i++){
+        if (skinState[i]==0){
+            pressed=i;
+            buyButton[i]->setText("Wybrano");
+            player.setTexture(dinoTexturePath[i]);
+            buyButtonSkin.setText("Wybrano");
+        }
+    }
     // Główna pętla gry
     while (window.isOpen()) {
         deltaTime = clock.restart().asSeconds();
 
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close(); 
+            if (event.type == sf::Event::Closed){
+                StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+                window.close();
+            }
+                 
 
             // Obsługa kliknięć w różnych stanach
             if (event.type == sf::Event::MouseButtonPressed) {
@@ -129,6 +141,14 @@ int main() {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         window.close(); // Zamknięcie okna
                     }
+                    if (shopButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        gameState = Shop; // Przejście do Shop
+                        aktualna=player.getTexture();
+                        player.setPosition(sf::Vector2f(800, 100));
+                        player.setSize(sf::Vector2f(200, 200));
+                        StatisticsManager::loadStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+                    }
 
                 } else if (gameState == OptionsMenu) {
                     if (easyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -172,7 +192,7 @@ int main() {
                     bestDistance = std::max(bestDistance, distance);
                     coinCount += currentCoinCount;
                     totalDistance += distance;
-                    StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed);
+                    StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
                     coinCountMainMenuText.setString(std::to_wstring(coinCount));
                     if (resumeButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
@@ -226,7 +246,7 @@ int main() {
 
                 } else if (gameState == GameOver) {
                     deathCount++;
-                    StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed);
+                    StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         player.resetPosition();
@@ -247,6 +267,63 @@ int main() {
                     //     buttonSound.play(); // Odtwarzanie dźwięku przycisku
                     //     window.close(); // Zamknięcie okna
                     // }
+                } else if (gameState == Shop) {
+                    if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        gameState = MainMenu; // Powrót do MainMenu
+                        player.resetPosition();
+                        player.resetSize();
+                        player.setFrameDuration(0.1f);
+                        player.setTexture(aktualna);
+                        StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+                    }
+                    
+                    for (int i=0;i<6;i++){
+                        if (buyButton[i]->isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                            buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                            player.setTexture(dinoTexturePath[i]); 
+                            pressed = i;
+                            buyButton[i]->setText("Wybrano");
+                            for (int j=0;j<6;j++){
+                                if (j!=i){
+                                    buyButton[j]->setText("Skin" + std::to_string(j+1));
+                                }
+                            }
+                            if (skinState[i] == 0){
+                                buyButtonSkin.setText("Wybrano");
+                            } else if (skinState[i] == 2){
+                                buyButtonSkin.setText("Kup");
+                            } else {
+                                buyButtonSkin.setText("Wybierz");
+                            }
+                        }
+                    }
+                    if (buyButtonSkin.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        if (skinState[pressed] == 2){
+                            if (coinCount >= 1){
+                                coinCount -= 1;
+                                coinCountMainMenuText.setString(std::to_wstring(coinCount));
+                                skinState[pressed] = 0;
+                                aktualna=player.getTexture();
+                                buyButtonSkin.setText("Wybrano");
+                                for (int j=0;j<6;j++){
+                                    if (j!=pressed && skinState[j] == 0){
+                                        skinState[j] = 1;
+                                    }
+                                }
+                            }
+                        } else if (skinState[pressed] == 1){
+                            skinState[pressed] = 0;
+                            buyButtonSkin.setText("Wybrano");
+                            aktualna=player.getTexture();
+                            for (int j=0;j<6;j++){
+                                if (j!=pressed && skinState[j] != 2){
+                                    skinState[j] = 1;
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -398,13 +475,15 @@ int main() {
                 coinCount += currentCoinCount;
                 bestDistance = std::max(bestDistance, distance);
                 deathCount++;
-                StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed);
+                StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
                 gameState = GameOver;
                 backgroundMusic.stop(); // Zatrzymanie muzyki tła dla gry
                 deathSound.play(); // Odtwarzanie dźwięku śmierci
             }
+        } else if (gameState==Shop){
+            player.updateAnimation(deltaTime);
+            player.setFrameDuration(0.3f);
         }
-
         // Aktualizacja przycisków i sliderów zależnie od stanu
         if (gameState == MainMenu) {
             if (menuMusic.getStatus() != sf::Music::Playing) {
@@ -416,6 +495,7 @@ int main() {
             achievementsButton.update(sf::Mouse::getPosition(window));
             statisticsButton.update(sf::Mouse::getPosition(window));
             exitButton.update(sf::Mouse::getPosition(window));
+            shopButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == OptionsMenu) {
             easyButton.update(sf::Mouse::getPosition(window));
             normalButton.update(sf::Mouse::getPosition(window));
@@ -435,6 +515,8 @@ int main() {
             restartButton.update(sf::Mouse::getPosition(window));
             // Remove the exit button from the GameOver screen
             // exitButton.update(sf::Mouse::getPosition(window));
+        } else if (gameState == Shop) {
+            backButton.update(sf::Mouse::getPosition(window));
         }
 
         // Rysowanie
@@ -448,6 +530,7 @@ int main() {
             achievementsButton.draw(window);
             statisticsButton.draw(window);
             exitButton.draw(window);
+            shopButton.draw(window);
             window.draw(nameText);
             window.draw(coinIconMainMenu); // Draw the coin icon
             window.draw(coinCountMainMenuText); // Draw the coin count text
@@ -528,8 +611,21 @@ int main() {
             window.draw(coinsText); // Draw the "MONETY:" text
             window.draw(coinCountText); // Draw the coin counter
             window.draw(bestScoreText); // Draw the best score text
+        } else if (gameState == Shop) {
+            window.draw(shopBackgroundSprite); // Rysowanie tła trybu Shop
+            window.draw(coinIconMainMenu); // Draw the coin icon
+            window.draw(coinCountMainMenuText); // Draw the coin count text
+            backButton.draw(window);
+            buyButtonSkin.draw(window);
+            for (int i = 0; i < 6; i++) {
+                buyButton[i]->draw(window);
+            }
+            player.draw(window);
         }
         window.display();
+    }
+    for (int i = 0; i < 6; i++) {
+        delete buyButton[i];
     }
     delete musicSlider;
     delete soundSlider;

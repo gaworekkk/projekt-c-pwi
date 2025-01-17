@@ -11,6 +11,7 @@ public:
     void update(const sf::Vector2i& mousePos);
     void setTexture(const std::string& textureFile, const std::string& hoverTextureFile); // Metoda ustawiania tekstury
     bool isClicked(const sf::Vector2i& mousePos, const sf::Event::MouseButtonEvent& mouseEvent) const;
+    void setText(const std::string text); // Ustawienie tekstu na przycisku
 
     std::string getText() const; // Pobranie tekstu z przycisku
     
