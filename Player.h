@@ -13,6 +13,15 @@ public:
     void resetPosition(); // Nowa metoda
 	void turnSkyLevelOn();
 	void turnSkyLevelOff();
+    void setPosition(const sf::Vector2f& position);
+    void setSize(const sf::Vector2f& size);
+    void resetSize();
+    void updateAnimation(float deltaTime);
+    void setFrameDuration(float newFrameDuration);
+    void setTexture(const std::string& textureFile);
+    void setTexture(sf::Texture texture);
+    sf::Texture getTexture();
+
    sf::FloatRect getGlobalBounds();
    sf::Vector2f getVelocity() const;
 private:

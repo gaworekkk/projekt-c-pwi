@@ -28,10 +28,12 @@ extern sf::Texture optionsMenuBackgroundTexture;
 extern sf::Sprite optionsMenuBackgroundSprite;
 extern sf::Texture pauseBackgroundTexture;
 extern sf::Sprite pauseBackgroundSprite;
+extern sf::Sprite shopBackgroundSprite;
 
 // Dino
 extern sf::Texture dinoTexture;
 extern sf::Sprite dinoSprite;
+extern std::string dinoTexturePath[6];
 
 // Czcionka
 extern sf::Font font;
@@ -66,7 +68,9 @@ extern Button mainMenuButton;
 extern Button easyButton;
 extern Button normalButton;
 extern Button hardButton;
-
+extern Button shopButton;
+extern Button* buyButton[6];
+extern Button buyButtonSkin;
 // Moneta
 extern sf::Texture coinTexture;
 extern sf::Sprite coinSprite;
