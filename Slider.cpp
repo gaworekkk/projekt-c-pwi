@@ -4,7 +4,7 @@
 
 bool Slider:: isAnySliderDragging = false;
 
-Slider::Slider(float x, float y, float width, float height, sf::Font& font){
+Slider::Slider(float x, float y, float width, float height, float volume, sf::Font& font){
     track.setPosition(x, y);
     track.setSize(sf::Vector2f(width, height));
     track.setFillColor(sf::Color::Transparent);
@@ -15,7 +15,8 @@ Slider::Slider(float x, float y, float width, float height, sf::Font& font){
     } else {
         thumb.setTexture(&thumbTexture);
     }
-    thumb.setPosition(x + (initialValue - minValue) / (maxValue - minValue) * width - height / 2, y);
+    thumb.setPosition(x + (volume - minValue) / (maxValue - minValue) * width - height / 2, y);
+    value = volume;
 
     valueText.setFont(font);
     valueText.setCharacterSize(20);
