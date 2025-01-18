@@ -131,10 +131,10 @@ void loadFont(){
     }
 }
 
-void loadSliders(){
+void loadSliders(float musicVolume, float soundVolume){
     // Ustawienia dla sliderów
-    musicSlider = new Slider(545, 313, 110, 20, font);
-    soundSlider = new Slider(545, 351, 110, 20, font);
+    musicSlider = new Slider(545, 313, 110, 20, musicVolume, font);
+    soundSlider = new Slider(545, 351, 110, 20, soundVolume, font);
 }
 
 void loadOneMusic(sf::Music& music, const std::string& filePath){
@@ -306,11 +306,11 @@ void loadTexts(int coinCount){
     coinsText.setFillColor(sf::Color::White);
 }
 
-void loadAllResources(sf::RenderWindow& window, int coinCount) {
+void loadAllResources(sf::RenderWindow& window, int coinCount, float musicVolume, float soundVolume) {
     loadBackgrounds(window);
     loadDino();
     loadFont();
-    loadSliders();
+    loadSliders(musicVolume, soundVolume);
     loadMusic();
     menuMusic.play();
     loadBuffers();
