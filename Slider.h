@@ -5,7 +5,7 @@
 
 class Slider {
 public:
-    Slider(float x, float y, float width, float height, sf::Font& font);
+    Slider(float x, float y, float width, float height, float volume, sf::Font& font);
     void draw(sf::RenderWindow& window);
     void update(const sf::Event& event, const sf::RenderWindow& window);
     float getValue() const;
@@ -18,7 +18,6 @@ private:
     float minValue = 0;
     float maxValue = 100;
     float value = 100;
-    float initialValue = 100;
     sf::Text valueText;
     bool isDragging = false;
     static bool isAnySliderDragging;

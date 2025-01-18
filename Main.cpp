@@ -17,8 +17,8 @@ enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Paus
 
 // Ustawienie domyślnego stanu gry
 GameState gameState = MainMenu;
-// Ustawienie domyślnej trudności
-Difficulty difficulty = Difficulty::Normal;
+// Poziom trudności
+Difficulty difficulty;
 
 int main() {
     // Ustawienia okna
@@ -37,15 +37,23 @@ int main() {
     float bestDistance = 0.0f, totalDistance = 0.0f;
     int jumpCount = 0, deathCount = 0, gamesPlayed = 0;
     int skinState[6];
-    StatisticsManager::loadStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+    float musicVolume, soundVolume;
+    StatisticsManager::loadStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState, musicVolume, soundVolume, difficulty);
     // Załaduj wszystkie zasoby
     try {
-        loadAllResources(window, coinCount);
+        loadAllResources(window, coinCount, musicVolume, soundVolume);
     } catch (const std::runtime_error& e) {
         // W przypadku błędu wyświetl komunikat i zakończ program
         std::cerr << e.what() << std::endl;
         return -1;
     }
+    cactusManager.setDifficulty(difficulty);
+    birdManager.setDifficulty(difficulty);
+    menuMusic.setVolume(musicVolume);
+    backgroundMusic.setVolume(musicVolume);
+    buttonSound.setVolume(soundVolume);
+    jumpSound.setVolume(soundVolume);
+    deathSound.setVolume(soundVolume);
 
     // Teksty do wyświetlania
     std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
@@ -86,7 +94,7 @@ int main() {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed){
-                StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+                StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState, musicVolume, soundVolume, difficulty);
                 window.close();
             }
                  
@@ -147,7 +155,7 @@ int main() {
                         aktualna=player.getTexture();
                         player.setPosition(sf::Vector2f(800, 100));
                         player.setSize(sf::Vector2f(200, 200));
-                        StatisticsManager::loadStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+                        StatisticsManager::loadStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState, musicVolume, soundVolume, difficulty);
                     }
 
                 } else if (gameState == OptionsMenu) {
@@ -166,6 +174,9 @@ int main() {
                         birdManager.setDifficulty(difficulty);
                         musicSlider->reset();
                         soundSlider->reset();
+                        musicVolume = musicSlider->getValue();
+                        soundVolume = soundSlider->getValue();
+                        StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState, musicVolume, soundVolume, difficulty);
                         gameState = MainMenu; // Powrót do MainMenu
                     }
 
@@ -192,7 +203,7 @@ int main() {
                     bestDistance = std::max(bestDistance, distance);
                     coinCount += currentCoinCount;
                     totalDistance += distance;
-                    StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+                    StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState, musicVolume, soundVolume, difficulty);
                     coinCountMainMenuText.setString(std::to_wstring(coinCount));
                     if (resumeButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
@@ -246,7 +257,7 @@ int main() {
 
                 } else if (gameState == GameOver) {
                     deathCount++;
-                    StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+                    StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState, musicVolume, soundVolume, difficulty);
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         player.resetPosition();
@@ -275,7 +286,7 @@ int main() {
                         player.resetSize();
                         player.setFrameDuration(0.1f);
                         player.setTexture(aktualna);
-                        StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+                        StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState, musicVolume, soundVolume, difficulty);
                         for (int i = 0;i<6;i++){
                             if (skinState[i] == 0){
                                 buyButton[i]->setText("Wybrano");
@@ -342,6 +353,9 @@ int main() {
                         birdManager.setDifficulty(difficulty);
                         musicSlider->reset();
                         soundSlider->reset();
+                        musicVolume = musicSlider->getValue();
+                        soundVolume = soundSlider->getValue();
+                        StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState, musicVolume, soundVolume, difficulty);
                         gameState = MainMenu; // Powrót do MainMenu
                     }
                     if (gameState == Achievements) {
@@ -372,7 +386,7 @@ int main() {
                         player.resetSize();
                         player.setFrameDuration(0.1f);
                         player.setTexture(aktualna);
-                        StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+                        StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState, musicVolume, soundVolume, difficulty);
                         for (int i = 0;i<6;i++){
                             if (skinState[i] == 0){
                                 buyButton[i]->setText("Wybrano");
@@ -429,8 +443,8 @@ int main() {
             if (gameState == OptionsMenu) {
                 musicSlider->update(event, window);
                 soundSlider->update(event, window);
-                float musicVolume = musicSlider->getValue();
-                float soundVolume = soundSlider->getValue();
+                musicVolume = musicSlider->getValue();
+                soundVolume = soundSlider->getValue();
                 menuMusic.setVolume(musicVolume);
                 backgroundMusic.setVolume(musicVolume);
                 buttonSound.setVolume(soundVolume);
@@ -497,7 +511,7 @@ int main() {
                 coinCount += currentCoinCount;
                 bestDistance = std::max(bestDistance, distance);
                 deathCount++;
-                StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState);
+                StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, skinState, musicVolume, soundVolume, difficulty);
                 gameState = GameOver;
                 backgroundMusic.stop(); // Zatrzymanie muzyki tła dla gry
                 deathSound.play(); // Odtwarzanie dźwięku śmierci
