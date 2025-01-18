@@ -1,7 +1,7 @@
 #include "StatisticsManager.h"
 #include <fstream>
 
-void StatisticsManager::saveStatistics(int coinCount, float bestDistance, float totalDistance, int jumpCount, int deathCount, int gamesPlayed, int skinState[6]) {
+void StatisticsManager::saveStatistics(int coinCount, int bestDistance, int totalDistance, int jumpCount, int deathCount, int gamesPlayed, int skinState[6]) {
     json statsJson = { 
         {"coin_count", coinCount}, 
         {"best_distance", bestDistance}, 
@@ -24,7 +24,7 @@ void StatisticsManager::saveStatistics(int coinCount, float bestDistance, float 
     }
 }
 
-void StatisticsManager::loadStatistics(int& coinCount, float& bestDistance, float& totalDistance, int& jumpCount, int& deathCount, int& gamesPlayed, int skinState[6]) {
+void StatisticsManager::loadStatistics(int& coinCount, int& bestDistance, int& totalDistance, int& jumpCount, int& deathCount, int& gamesPlayed, int skinState[6]) {
     std::ifstream file("stats.json");
     if (file.is_open()) {
         json statsJson;
