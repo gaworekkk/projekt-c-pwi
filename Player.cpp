@@ -195,5 +195,6 @@ sf::Vector2f Player::getVelocity() const {
 
 void Player::resetPosition() {
     player.setPosition(initialPosition);
+	turnSkyLevelOff();
     velocity = sf::Vector2f(0.f, 0.f);
 }

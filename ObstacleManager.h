@@ -32,8 +32,23 @@ private:
 	bool isSkyLevelOn;
 	float skyLevelBirdSpawnInterval = 0.8f;
 	float skyLevelCactusSpawnInterval = 0.5f;
-    sf::Texture cactusTexture;
+    sf::Texture cactusTexture1;
+	sf::Texture cactusTexture2;
+	sf::Texture cactusTexture3;
+	sf::Texture cactusTexture4;
+	sf::Texture cactusTexture5;
     sf::Texture birdTexture;
+
+	float cactusHeight1 = 100.0f;
+	float cactusHeight2 = 50.0f;
+	float cactusHeight3 = 64.0f;
+	float cactusHeight4 = 74.0f;
+	float cactusHeight5 = 84.0f;
+    float cactusWidth = 50.0f;
+
+	float birdHeight = 30.0f;
+	float birdWidth = 30.0f;
+		
 	float skyLevelPause = 5.0f;
     float groundHeight = 589.0f;
     float veryHighSkyHeight = 200.0f; 
@@ -41,10 +56,6 @@ private:
 	int   skyLevelSkyLanesCount = 35;
     float skyLaneHeight = 15.0f;
     float skyMinHeight = 525.0f;
-    float cactusHeight = 80.0f; //to też
-    float cactusWidth = 50.0f; //to też
-    float birdHeight = 30.0f; //to chyba staje się nieistotne po załadowaniu tekstury
-    float birdWidth = 30.0f; //to też
     std::vector<Obstacle> obstacles;
     int birdCounter;
     float obstacleSpawnTimer;

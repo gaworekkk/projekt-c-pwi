@@ -21,7 +21,7 @@ sf::Sprite shopBackgroundSprite;
 // Dino
 sf::Texture dinoTexture;
 sf::Sprite dinoSprite;
-std::string dinoTexturePath[6] = {"Tekstury/skórki dino/dino2(run).gif", "Tekstury/skórki dino/dino 4 (klatki)/dino_sprite_sheet.png", "Tekstury/skórki dino/dino5(run).gif", "Tekstury/skórki dino/dino6(run).gif", "Tekstury/skórki dino/dino7(run).gif", "Tekstury/skórki dino/dino8(run).gif"};
+std::string dinoTexturePath[6] = {"Tekstury/skórki dino/dino2(run).gif", "Tekstury/skórki dino/dino 4 (klatki)/dino_sprite_sheet.png", "Tekstury/skórki dino/dino6(run).gif", "Tekstury/skórki dino/dino6(run).gif", "Tekstury/skórki dino/dino7(run).gif", "Tekstury/skórki dino/dino8(run).gif"};
 
 // Czcionka
 sf::Font font;

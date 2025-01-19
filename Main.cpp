@@ -485,8 +485,8 @@ int main() {
                 if_changed_speed = false;
             }
 			// Zmiana rodzaju poziomu ze zwykłego na powietrzny i odwrotnie
-			if(distanceInt % 100 == 0 && distanceInt != 0){
-				if(distanceInt % 200 != 0){
+			if(distanceInt % 25 == 0 && distanceInt != 0){
+				if(distanceInt % 50 != 0){
 					cactusManager.turnSkyLevelOn();
 					birdManager.turnSkyLevelOn();
 					coinManager.turnSkyLevelOn();
@@ -498,7 +498,7 @@ int main() {
 				}
 			}
 			int playerFallDelay = 4; //do wyczucia
-			if(((distanceInt-playerFallDelay) % 100 == 0) && ((distanceInt - playerFallDelay)% 200 == 0) && ((distanceInt- playerFallDelay)!=0)){
+			if(((distanceInt-playerFallDelay) % 25 == 0) && ((distanceInt - playerFallDelay)% 50 == 0) && ((distanceInt- playerFallDelay)!=0)){
 				player.turnSkyLevelOff();
 			}
 
