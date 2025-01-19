@@ -1,7 +1,7 @@
 #include "StatisticsManager.h"
 #include <fstream>
 
-void StatisticsManager::saveStatistics(int coinCount, float bestDistance, float totalDistance, int jumpCount, int deathCount, int gamesPlayed, int skinState[6], float musicVolume, float soundVolume, Difficulty difficulty) {
+void StatisticsManager::saveStatistics(int coinCount, int bestDistance, int totalDistance, int jumpCount, int deathCount, int gamesPlayed, int cactusCount, int birdCount, int skinState[6], float musicVolume, float soundVolume, Difficulty difficulty) {
     json statsJson = { 
         {"coin_count", coinCount}, 
         {"best_distance", bestDistance}, 
@@ -9,6 +9,8 @@ void StatisticsManager::saveStatistics(int coinCount, float bestDistance, float 
         {"jump_count", jumpCount},
         {"death_count", deathCount},
         {"games_played", gamesPlayed},
+        {"cactus_count", cactusCount},
+        {"bird_count", birdCount},
         {"Skin1", skinState[0]},
         {"Skin2", skinState[1]},
         {"Skin3", skinState[2]},
@@ -27,7 +29,7 @@ void StatisticsManager::saveStatistics(int coinCount, float bestDistance, float 
     }
 }
 
-void StatisticsManager::loadStatistics(int& coinCount, float& bestDistance, float& totalDistance, int& jumpCount, int& deathCount, int& gamesPlayed, int skinState[6], float& musicVolume, float& soundVolume, Difficulty& difficulty) {
+void StatisticsManager::loadStatistics(int& coinCount, int& bestDistance, int& totalDistance, int& jumpCount, int& deathCount, int& gamesPlayed, int& cactusCount, int& birdCount, int skinState[6], float& musicVolume, float& soundVolume, Difficulty& difficulty) {
     std::ifstream file("stats.json");
     if (file.is_open()) {
         json statsJson;
@@ -38,6 +40,8 @@ void StatisticsManager::loadStatistics(int& coinCount, float& bestDistance, floa
         jumpCount = statsJson.value("jump_count", 0);
         deathCount = statsJson.value("death_count", 0);
         gamesPlayed = statsJson.value("games_played", 0);
+        cactusCount = statsJson.value("cactus_count", 0);
+        birdCount = statsJson.value("bird_count", 0);
         skinState[0] = statsJson.value("Skin1", 0);
         skinState[1] = statsJson.value("Skin2", 2);
         skinState[2] = statsJson.value("Skin3", 2);
@@ -55,6 +59,8 @@ void StatisticsManager::loadStatistics(int& coinCount, float& bestDistance, floa
         jumpCount = 0;
         deathCount = 0;
         gamesPlayed = 0;
+        cactusCount = 0;
+        birdCount = 0;
         skinState[0] = 0;
         musicVolume = 100;
         soundVolume = 100;
