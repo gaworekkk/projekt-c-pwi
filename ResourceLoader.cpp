@@ -46,7 +46,7 @@ Button endlessButton(sf::Vector2f(324, 54), sf::Vector2f(626, 372), " ", font);
 Button optionsButton(sf::Vector2f(54, 54), sf::Vector2f(209, 486), " ", font);
 Button achievementsButton(sf::Vector2f(54, 54), sf::Vector2f(391, 486), " ", font);
 Button statisticsButton(sf::Vector2f(54, 54), sf::Vector2f(573, 486), " ", font);
-Button backButton(sf::Vector2f(200, 50), sf::Vector2f(500, 400), L"Powrót", font);
+Button backButton(sf::Vector2f(200, 50), sf::Vector2f(500, 450), L"Powrót", font); // Adjusted position
 Button exitButton(sf::Vector2f(54, 54), sf::Vector2f(846, 486), " ", font);
 Button pauseButton(sf::Vector2f(54, 54), sf::Vector2f(80, 40), " ", font);
 Button resumeButton(sf::Vector2f(150, 142), sf::Vector2f(530, 252), " ", font);
@@ -183,7 +183,7 @@ void loadButtons(){
     statisticsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(573, 486), " ", font);
     statisticsButton.setTexture("Tekstury/statistic.png", "Tekstury/kliknięte przyciski/clicked-statistic.png");
     
-    backButton = Button(sf::Vector2f(200, 40), sf::Vector2f(500, 400), " ", font);
+    backButton = Button(sf::Vector2f(200, 40), sf::Vector2f(500, 500), " ", font);
     backButton.setTexture("Tekstury/przyciskPowrot.png", "Tekstury/kliknięte przyciski/clicked-przyciskPowrot.png");
     
     exitButton = Button(sf::Vector2f(54, 54), sf::Vector2f(937, 486), " ", font);
