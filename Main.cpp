@@ -365,6 +365,7 @@ int main() {
                     if (gameState == OptionsMenu) {
                         cactusManager.setDifficulty(difficulty);
                         birdManager.setDifficulty(difficulty);
+                        coinManager.setObstacleSpawnSpeed(cactusManager.getInitialSpeed());
                         musicSlider->reset();
                         soundSlider->reset();
                         musicVolume = musicSlider->getValue();
