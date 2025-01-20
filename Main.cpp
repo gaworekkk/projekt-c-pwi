@@ -126,6 +126,7 @@ int main() {
                         cactusManager.restart();
 			            birdManager.restart();
                         coinManager.restart();
+                        player.resetPosition();
                         gameState = Gameplay; // Przejście do Gameplay
                         gamesPlayed++;
                         menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
@@ -138,6 +139,7 @@ int main() {
 			            cactusManager.restart();
                         birdManager.restart();
                         coinManager.restart();
+                        player.resetPosition();
                         gameState = Gameplay; // Przejście do Gameplay
                         gamesPlayed++;
                         menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
