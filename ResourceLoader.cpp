@@ -57,7 +57,7 @@ Button easyButton(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
 Button normalButton(sf::Vector2f(324, 54), sf::Vector2f(450, 180), " ", font);
 Button hardButton(sf::Vector2f(324, 54), sf::Vector2f(450, 240), " ", font);
 Button shopButton(sf::Vector2f(54, 54), sf::Vector2f(755, 486), " ", font);
-Button buyButtonSkin(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "Kup", font);
+Button buyButtonSkin(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "", font);
 
 // Moneta
 sf::Texture coinTexture;
@@ -216,7 +216,7 @@ void loadButtons(){
     shopButton = Button(sf::Vector2f(54, 54), sf::Vector2f(755, 486), " ", font);
     shopButton.setTexture("Tekstury/shop.png", "Tekstury/kliknięte przyciski/clicked-shop.png");
 
-    buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "Kup", font);
+    buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 400), " ", font);
 
     sf::Vector2f sizes[6] = {
         {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}
@@ -226,7 +226,7 @@ void loadButtons(){
     };
 
     std::wstring labels[6] = {
-        L"Skin1", L"Skin2", L"Skin3", L"Skin4", L"Skin5", L"Skin6"
+        L" ", L" ", L" ", L" ", L" ", L" "
     };
 
     for (int i = 0; i < 6; ++i) {
