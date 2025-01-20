@@ -172,12 +172,15 @@ int main() {
 
                 } else if (gameState == OptionsMenu) {
                     if (easyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        buttonSound.play();
                         difficulty = Difficulty::Easy;
                     }
                     if (normalButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        buttonSound.play();
                         difficulty = Difficulty::Normal;
                     }
                     if (hardButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        buttonSound.play();
                         difficulty = Difficulty::Hard;
                     }
                     if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {

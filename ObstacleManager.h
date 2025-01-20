@@ -30,8 +30,8 @@ private:
     float screenWidth;
     float screenHeight;
 	bool isSkyLevelOn;
-	float skyLevelBirdSpawnInterval = 0.8f;
-	float skyLevelCactusSpawnInterval = 0.5f;
+	float skyLevelBirdSpawnInterval;
+	float skyLevelCactusSpawnInterval;
     sf::Texture cactusTexture1;
 	sf::Texture cactusTexture2;
 	sf::Texture cactusTexture3;
