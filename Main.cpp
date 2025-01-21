@@ -61,15 +61,26 @@ int main() {
     for (const auto& achievement : achievements) {
         wAchievements.push_back(std::wstring(achievement.begin(), achievement.end()));
     }
-    std::vector<std::wstring> statistics = {};
-    statistics.push_back(L"Zdobyte monety: " + std::to_wstring(coinCount));
-    statistics.push_back(L"Najlepszy wynik: " + std::to_wstring(bestDistance));
-    statistics.push_back(L"Całkowity dystans: " + std::to_wstring(totalDistance));
-    statistics.push_back(L"Liczba skoków: " + std::to_wstring(jumpCount));
-    statistics.push_back(L"Liczba śmierci: " + std::to_wstring(deathCount));
-    statistics.push_back(L"Liczba gier: " + std::to_wstring(gamesPlayed));
-    statistics.push_back(L"Liczba kaktusów: " + std::to_wstring(cactusCount));
-    statistics.push_back(L"Liczba ptaków: " + std::to_wstring(birdCount));
+    std::vector<std::wstring> statisticsLabels = {
+        L"Zdobyte monety: ",
+        L"Najlepszy wynik: ",
+        L"Całkowity dystans: ",
+        L"Liczba skoków: ",
+        L"Liczba śmierci: ",
+        L"Liczba gier: ",
+        L"Liczba kaktusów: ",
+        L"Liczba ptaków: "
+    };
+    std::vector<std::wstring> statisticsCounters = {
+        std::to_wstring(coinCount),
+        std::to_wstring(bestDistance),
+        std::to_wstring(totalDistance),
+        std::to_wstring(jumpCount),
+        std::to_wstring(deathCount),
+        std::to_wstring(gamesPlayed),
+        std::to_wstring(cactusCount),
+        std::to_wstring(birdCount)
+    };
 
     
     float deltaTime;
@@ -118,14 +129,14 @@ int main() {
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (gameState == MainMenu) {
                     //Aktualizacja statystyk
-                    statistics[0] = L"Zdobyte monety: " + std::to_wstring(coinCount);
-                    statistics[1] = L"Najlepszy wynik: " + std::to_wstring(bestDistance);
-                    statistics[2] = L"Całkowity wynik: " + std::to_wstring(totalDistance);
-                    statistics[3] = L"Liczba skoków: " + std::to_wstring(jumpCount);
-                    statistics[4] = L"Liczba śmierci: " + std::to_wstring(deathCount);
-                    statistics[5] = L"Liczba gier: " + std::to_wstring(gamesPlayed);
-                    statistics[6] = L"Liczba miniętych kaktusów: " + std::to_wstring(cactusCount);
-                    statistics[7] = L"Liczba miniętych ptaków: " + std::to_wstring(birdCount);
+                    statisticsCounters[0] = std::to_wstring(coinCount);
+                    statisticsCounters[1] = std::to_wstring(bestDistance);
+                    statisticsCounters[2] = std::to_wstring(totalDistance);
+                    statisticsCounters[3] = std::to_wstring(jumpCount);
+                    statisticsCounters[4] = std::to_wstring(deathCount);
+                    statisticsCounters[5] = std::to_wstring(gamesPlayed);
+                    statisticsCounters[6] = std::to_wstring(cactusCount);
+                    statisticsCounters[7] = std::to_wstring(birdCount);
                     if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         distance = 0.0f;
@@ -450,7 +461,7 @@ int main() {
                     window.close(); // Zamknięcie okna
                 }
 
-                if (gameState != MainMenu) { // Block 'P' key in MainMenu
+                if (gameState != MainMenu && gameState != OptionsMenu && gameState != Statistics && gameState != Achievements && gameState != Shop) { // Block 'R' key in MainMenu, OptionsMenu, Statistics, Achievements, and Shop
                     if (event.key.code == sf::Keyboard::R) {
                       player.resetPosition();
                       Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f);
@@ -620,7 +631,27 @@ int main() {
         } else if (gameState == Achievements) {
             backButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == Statistics) {
-            backButton.update(sf::Mouse::getPosition(window));
+            window.draw(statisticsBackgroundSprite); // Rysowanie tła trybu Statistics
+            float leftMargin = 160.0f; // Distance from the left edge of the screen
+            float rightMargin = 165.0f; // Distance from the right edge of the screen
+            float yPosition = 100.0f; // Starting y position
+            unsigned int fontSize = 40; // Reduced the font size by 5
+
+            // Draw the statistics labels and counters
+            for (size_t i = 0; i < statisticsLabels.size(); ++i) {
+                sf::Text labelText(statisticsLabels[i], font, fontSize);
+                labelText.setFillColor(sf::Color::Black); // Set the color of labelText to black
+                labelText.setPosition(leftMargin, yPosition);
+                window.draw(labelText);
+
+                sf::Text counterText(statisticsCounters[i], font, fontSize);
+                counterText.setFillColor(sf::Color::Black); // Set the color of counterText to black
+                counterText.setPosition(window.getSize().x - rightMargin - counterText.getGlobalBounds().width, yPosition);
+                window.draw(counterText);
+
+                yPosition += labelText.getGlobalBounds().height + 10.0f; // Move to the next line
+            }
+            backButton.draw(window);
         } else if (gameState == Gameplay) {
             pauseButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == Pause) {
@@ -628,9 +659,37 @@ int main() {
             restartButtonPause.update(sf::Mouse::getPosition(window));
             mainMenuButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == GameOver) {
-            restartButton.update(sf::Mouse::getPosition(window));
+            window.clear(sf::Color::Black);
+            window.draw(gameOverBackgroundSprite); // Rysowanie tła trybu GameOver
+            restartButton.draw(window); // Draw the restart button for GameOver
             // Remove the exit button from the GameOver screen
-            // exitButton.update(sf::Mouse::getPosition(window));
+            // exitButton.draw(window);
+
+            // Center the distance and coin counters under the "Game Over" text
+            bestScoreText.setString(L"Najlepszy wynik: " + std::to_wstring(bestDistance)); // Set the best score text
+            float totalWidthBestScore = bestScoreText.getGlobalBounds().width + distanceText.getGlobalBounds().width + 20;
+            float startXBestScore = (window.getSize().x - totalWidthBestScore) / 2;
+            bestScoreText.setPosition(startXBestScore, gameOverText.getPosition().y + gameOverText.getGlobalBounds().height + 150);
+            distanceText.setPosition(startXBestScore + bestScoreText.getGlobalBounds().width + 20, bestScoreText.getPosition().y);
+
+            yourScoreText.setString(L"Twój wynik:"); // Change text to "Twój wynik:"
+            float totalWidthYourScore = yourScoreText.getGlobalBounds().width + distanceText.getGlobalBounds().width + 20;
+            float startXYourScore = (window.getSize().x - totalWidthYourScore) / 2 - 20; // Shift 20 pixels to the left
+            yourScoreText.setPosition(startXYourScore, bestScoreText.getPosition().y + bestScoreText.getGlobalBounds().height + 10);
+            distanceText.setPosition(startXYourScore + yourScoreText.getGlobalBounds().width + 20, yourScoreText.getPosition().y);
+
+            coinsText.setString(L"Monety:"); // Change text to "Monety:"
+            coinsText.setPosition((window.getSize().x - coinsText.getGlobalBounds().width) / 2 - 45, distanceText.getPosition().y + distanceText.getGlobalBounds().height + 8); // Podniesienie o 2 piksele
+            coinCountText.setPosition(coinsText.getPosition().x + coinsText.getGlobalBounds().width + 20, coinsText.getPosition().y);
+
+            distanceText.setFillColor(sf::Color::White); // Set the color of distanceText to white
+            coinCountText.setFillColor(sf::Color::White); // Set the color of coinCountText to white
+
+            window.draw(yourScoreText); // Draw the "Twój wynik:" text
+            window.draw(distanceText); // Draw the distance counter
+            window.draw(coinsText); // Draw the "Monety:" text
+            window.draw(coinCountText); // Draw the coin counter
+            window.draw(bestScoreText); // Draw the best score text
         } else if (gameState == Shop) {
             backButton.update(sf::Mouse::getPosition(window));
         }
@@ -659,13 +718,34 @@ int main() {
             musicSlider->draw(window);
             soundSlider->draw(window);
             backButton.draw(window);
+            // Move the coin counter 100 pixels to the right
+            coinCountText.setPosition(coinCountText.getPosition().x + 100, coinCountText.getPosition().y);
+            window.draw(coinCountText);
         } else if (gameState == Achievements) {
             window.draw(achievementsBackgroundSprite); // Rysowanie tła trybu Achievements
             drawScrollableList(window, wAchievements, font);
             backButton.draw(window);
         } else if (gameState == Statistics) {
             window.draw(statisticsBackgroundSprite); // Rysowanie tła trybu Statistics
-            drawScrollableList(window, statistics, font);
+            float leftMargin = 160.0f; // Distance from the left edge of the screen
+            float rightMargin = 165.0f; // Distance from the right edge of the screen
+            float yPosition = 100.0f; // Starting y position
+            unsigned int fontSize = 40; // Reduced the font size by 5
+
+            // Draw the statistics labels and counters
+            for (size_t i = 0; i < statisticsLabels.size(); ++i) {
+                sf::Text labelText(statisticsLabels[i], font, fontSize);
+                labelText.setFillColor(sf::Color::Black); // Set the color of labelText to black
+                labelText.setPosition(leftMargin, yPosition);
+                window.draw(labelText);
+
+                sf::Text counterText(statisticsCounters[i], font, fontSize);
+                counterText.setFillColor(sf::Color::Black); // Set the color of counterText to black
+                counterText.setPosition(window.getSize().x - rightMargin - counterText.getGlobalBounds().width, yPosition);
+                window.draw(counterText);
+
+                yPosition += labelText.getGlobalBounds().height + 10.0f; // Move to the next line
+            }
             backButton.draw(window);
         } else if (gameState == Gameplay) {
             window.draw(storyBackgroundSprite); // Rysowanie tła trybu fabularnego
@@ -710,21 +790,28 @@ int main() {
             // exitButton.draw(window);
 
             // Center the distance and coin counters under the "Game Over" text
-            bestScoreText.setPosition((window.getSize().x - bestScoreText.getGlobalBounds().width) / 2 - 45, gameOverText.getPosition().y + gameOverText.getGlobalBounds().height + 150);
-            distanceText2.setPosition(bestScoreText.getPosition().x + bestScoreText.getGlobalBounds().width + 20, bestScoreText.getPosition().y);
-            yourScoreText.setPosition((window.getSize().x - yourScoreText.getGlobalBounds().width) / 2 - 45, distanceText2.getPosition().y + distanceText2.getGlobalBounds().height + 10);
-            distanceText.setPosition(yourScoreText.getPosition().x + yourScoreText.getGlobalBounds().width + 20, yourScoreText.getPosition().y);
-            coinsText.setPosition((window.getSize().x - coinsText.getGlobalBounds().width) / 2 - 45, distanceText.getPosition().y + distanceText.getGlobalBounds().height + 10);
+            bestScoreText.setString(L"Najlepszy wynik: " + std::to_wstring(bestDistance)); // Set the best score text
+            float totalWidthBestScore = bestScoreText.getGlobalBounds().width + distanceText.getGlobalBounds().width + 20;
+            float startXBestScore = (window.getSize().x - totalWidthBestScore) / 2;
+            bestScoreText.setPosition(startXBestScore, gameOverText.getPosition().y + gameOverText.getGlobalBounds().height + 150);
+            distanceText.setPosition(startXBestScore + bestScoreText.getGlobalBounds().width + 20, bestScoreText.getPosition().y);
+
+            yourScoreText.setString(L"Twój wynik:"); // Change text to "Twój wynik:"
+            float totalWidthYourScore = yourScoreText.getGlobalBounds().width + distanceText.getGlobalBounds().width + 20;
+            float startXYourScore = (window.getSize().x - totalWidthYourScore) / 2 - 20; // Shift 20 pixels to the left
+            yourScoreText.setPosition(startXYourScore, bestScoreText.getPosition().y + bestScoreText.getGlobalBounds().height + 10);
+            distanceText.setPosition(startXYourScore + yourScoreText.getGlobalBounds().width + 20, yourScoreText.getPosition().y);
+
+            coinsText.setString(L"Monety:"); // Change text to "Monety:"
+            coinsText.setPosition((window.getSize().x - coinsText.getGlobalBounds().width) / 2 - 45, distanceText.getPosition().y + distanceText.getGlobalBounds().height + 8); // Podniesienie o 2 piksele
             coinCountText.setPosition(coinsText.getPosition().x + coinsText.getGlobalBounds().width + 20, coinsText.getPosition().y);
 
             distanceText.setFillColor(sf::Color::White); // Set the color of distanceText to white
             coinCountText.setFillColor(sf::Color::White); // Set the color of coinCountText to white
-            distanceText2.setFillColor(sf::Color::White); // Set the color of distanceText2 to white
 
-            window.draw(distanceText2); // Draw the second distance counter
-            window.draw(yourScoreText); // Draw the "TWÓJ WYNIK:" text
+            window.draw(yourScoreText); // Draw the "Twój wynik:" text
             window.draw(distanceText); // Draw the distance counter
-            window.draw(coinsText); // Draw the "MONETY:" text
+            window.draw(coinsText); // Draw the "Monety:" text
             window.draw(coinCountText); // Draw the coin counter
             window.draw(bestScoreText); // Draw the best score text
         } else if (gameState == Shop) {
