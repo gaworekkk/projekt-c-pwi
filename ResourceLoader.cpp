@@ -183,7 +183,7 @@ void loadButtons(){
     statisticsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(573, 486), " ", font);
     statisticsButton.setTexture("Tekstury/statistic.png", "Tekstury/kliknięte przyciski/clicked-statistic.png");
     
-    backButton = Button(sf::Vector2f(200, 40), sf::Vector2f(500, 400), " ", font);
+    backButton = Button(sf::Vector2f(200, 40), sf::Vector2f(500, 500), " ", font);
     backButton.setTexture("Tekstury/przyciskPowrot.png", "Tekstury/kliknięte przyciski/clicked-przyciskPowrot.png");
     
     exitButton = Button(sf::Vector2f(54, 54), sf::Vector2f(937, 486), " ", font);
@@ -216,17 +216,17 @@ void loadButtons(){
     shopButton = Button(sf::Vector2f(54, 54), sf::Vector2f(755, 486), " ", font);
     shopButton.setTexture("Tekstury/shop.png", "Tekstury/kliknięte przyciski/clicked-shop.png");
 
-    buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "Kup", font);
+    buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 385), "Kup", font);
 
     sf::Vector2f sizes[6] = {
         {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}
     };
     sf::Vector2f positions[6] = {
-        {200, 120}, {200, 220}, {200, 320}, {500, 120}, {500, 220}, {500, 320}
+        {200, 180}, {200, 280}, {200, 380}, {500, 180}, {500, 280}, {500, 380}
     };
 
     std::wstring labels[6] = {
-        L"Skin1", L"Skin2", L"Skin3", L"Skin4", L"Skin5", L"Skin6"
+        L"Dino", L"Rascal", L"Albino", L"Smurf", L"Shadow", L"Dragon"
     };
 
     for (int i = 0; i < 6; ++i) {
