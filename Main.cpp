@@ -9,6 +9,7 @@
 #include "Difficulty.h"
 #include "Slider.h"
 #include "ResourceLoader.h"
+#include "Achivements.h"
 #include <stdexcept>
 #include <iostream>
 #include <algorithm> 
@@ -56,11 +57,12 @@ int main() {
     deathSound.setVolume(soundVolume);
 
     // Teksty do wyświetlania
-    std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
-    std::vector<std::wstring> wAchievements;
-    for (const auto& achievement : achievements) {
-        wAchievements.push_back(std::wstring(achievement.begin(), achievement.end()));
-    }
+    std::vector<std::wstring> achievements;
+    achievements.push_back(L"Biegacz (" + std::to_wstring(totalDistance) + L"/" + std::to_wstring(range_distance(totalDistance)) + L")");
+    achievements.push_back(L"Jump man (" + std::to_wstring(jumpCount) + L"/" + std::to_wstring(range_jump(jumpCount)) + L")");
+    achievements.push_back(L"Pora umierać (" + std::to_wstring(deathCount) + L"/" + std::to_wstring(range_death(deathCount)) + L")");
+    achievements.push_back(L"Ja to zawsze miałem łeb do interesów (" + std::to_wstring(coinCount) + L"/" + std::to_wstring(range_coins(coinCount)) + L")");
+
     std::vector<std::wstring> statistics = {};
     statistics.push_back(L"Zdobyte monety: " + std::to_wstring(coinCount));
     statistics.push_back(L"Najlepszy wynik: " + std::to_wstring(bestDistance));
@@ -661,7 +663,7 @@ int main() {
             backButton.draw(window);
         } else if (gameState == Achievements) {
             window.draw(achievementsBackgroundSprite); // Rysowanie tła trybu Achievements
-            drawScrollableList(window, wAchievements, font);
+            drawScrollableList(window, achievements, font);
             backButton.draw(window);
         } else if (gameState == Statistics) {
             window.draw(statisticsBackgroundSprite); // Rysowanie tła trybu Statistics
