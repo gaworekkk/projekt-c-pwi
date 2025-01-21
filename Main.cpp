@@ -58,12 +58,12 @@ int main() {
     deathSound.setVolume(soundVolume);
 
     // Teksty do wyświetlania
+    std::vector<std::wstring> achievements;
+    achievements.push_back(L"Biegacz (" + std::to_wstring(totalDistance) + L"/" + std::to_wstring(range_distance(totalDistance)) + L")");
+    achievements.push_back(L"Jump man (" + std::to_wstring(jumpCount) + L"/" + std::to_wstring(range_jump(jumpCount)) + L")");
+    achievements.push_back(L"Pora umierać (" + std::to_wstring(deathCount) + L"/" + std::to_wstring(range_death(deathCount)) + L")");
+    achievements.push_back(L"Ja to zawsze miałem łeb do interesów (" + std::to_wstring(coinCount) + L"/" + std::to_wstring(range_coins(coinCount)) + L")");
 
-    std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
-    std::vector<std::wstring> wAchievements;
-    for (const auto& achievement : achievements) {
-        wAchievements.push_back(std::wstring(achievement.begin(), achievement.end()));
-    }
     std::vector<std::wstring> statisticsLabels = {
         L"Zdobyte monety: ",
         L"Najlepszy wynik: ",
@@ -755,9 +755,6 @@ int main() {
             musicSlider->draw(window);
             soundSlider->draw(window);
             backButton.draw(window);
-            // Move the coin counter 100 pixels to the right
-            coinCountText.setPosition(coinCountText.getPosition().x + 100, coinCountText.getPosition().y);
-            window.draw(coinCountText);
         } else if (gameState == Achievements) {
             window.draw(achievementsBackgroundSprite); // Rysowanie tła trybu Achievements
             drawScrollableList(window, achievements, font);
