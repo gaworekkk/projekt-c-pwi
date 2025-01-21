@@ -41,7 +41,7 @@ sf::SoundBuffer buttonBuffer;
 sf::Sound buttonSound;
 
 // Przyciski
-Button storyButton(sf::Vector2f(324, 54), sf::Vector2f(250, 372), " ", font);
+Button storyButton(sf::Vector2f(324, 54), sf::Vector2f(350, 372), " ", font);
 Button endlessButton(sf::Vector2f(324, 54), sf::Vector2f(626, 372), " ", font);
 Button optionsButton(sf::Vector2f(54, 54), sf::Vector2f(209, 486), " ", font);
 Button achievementsButton(sf::Vector2f(54, 54), sf::Vector2f(391, 486), " ", font);
@@ -53,6 +53,7 @@ Button resumeButton(sf::Vector2f(150, 142), sf::Vector2f(530, 252), " ", font);
 Button restartButton(sf::Vector2f(200, 40), sf::Vector2f(375, 490), " ", font);
 Button restartButtonPause(sf::Vector2f(200, 40), sf::Vector2f(375, 480), " ", font);
 Button mainMenuButton(sf::Vector2f(200, 40), sf::Vector2f(625, 480), " ", font);
+Button mainMenuButtonOver(sf::Vector2f(200, 40), sf::Vector2f(625, 490), " ", font);
 Button easyButton(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
 Button normalButton(sf::Vector2f(324, 54), sf::Vector2f(450, 180), " ", font);
 Button hardButton(sf::Vector2f(324, 54), sf::Vector2f(450, 240), " ", font);
@@ -172,11 +173,11 @@ sf::Sprite dinoFrameSprite;
 
 void loadButtons(){
     // Ustawienia przycisków
-    storyButton = Button(sf::Vector2f(324, 54), sf::Vector2f(250, 372), " ", font);
+    storyButton = Button(sf::Vector2f(324, 54), sf::Vector2f(440, 372), " ", font);
     storyButton.setTexture("Tekstury/przyciskSTART.png", "Tekstury/kliknięte przyciski/clicked-przyciskSTART.png");
     
-    endlessButton = Button(sf::Vector2f(324, 54), sf::Vector2f(626, 372), " ", font);
-    endlessButton.setTexture("Tekstury/przyciskENDLESS.png", "Tekstury/kliknięte przyciski/clicked-przyciskENDLESS.png");
+    //endlessButton = Button(sf::Vector2f(324, 54), sf::Vector2f(626, 372), " ", font);
+    //endlessButton.setTexture("Tekstury/przyciskENDLESS.png", "Tekstury/kliknięte przyciski/clicked-przyciskENDLESS.png");
     
     optionsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(209, 486), " ", font);
     optionsButton.setTexture("Tekstury/settings.png", "Tekstury/kliknięte przyciski/clicked-settings.png");
@@ -207,6 +208,10 @@ void loadButtons(){
     
     mainMenuButton = Button(sf::Vector2f(200, 40), sf::Vector2f(625, 480), " ", font);
     mainMenuButton.setTexture("Tekstury/przyciskMenuGlowne.png", "Tekstury/kliknięte przyciski/clicked-przyciskMenuGlowne.png");
+
+	mainMenuButtonOver = Button(sf::Vector2f(200, 40), sf::Vector2f(625, 490), " ", font);
+	mainMenuButtonOver.setTexture("Tekstury/przyciskMenuGlowne.png", "Tekstury/kliknięte przyciski/clicked-przyciskMenuGlowne.png");
+
     
     easyButton = Button(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
     easyButton.setTexture("Tekstury/przyciskLatwy.png", "Tekstury/kliknięte przyciski/clicked-przyciskLatwy.png");
@@ -222,15 +227,18 @@ void loadButtons(){
 
     buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 400), " ", font);
 
+
     sf::Vector2f sizes[6] = {
         {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}
     };
     sf::Vector2f positions[6] = {
-        {200, 120}, {200, 220}, {200, 320}, {500, 120}, {500, 220}, {500, 320}
+        {200, 180}, {200, 280}, {200, 380}, {500, 180}, {500, 280}, {500, 380}
     };
 
     std::wstring labels[6] = {
+
         L" ", L" ", L" ", L" ", L" ", L" "
+
     };
 
     for (int i = 0; i < 6; ++i) {
