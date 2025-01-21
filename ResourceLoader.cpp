@@ -53,6 +53,7 @@ Button resumeButton(sf::Vector2f(150, 142), sf::Vector2f(530, 252), " ", font);
 Button restartButton(sf::Vector2f(200, 40), sf::Vector2f(375, 490), " ", font);
 Button restartButtonPause(sf::Vector2f(200, 40), sf::Vector2f(375, 480), " ", font);
 Button mainMenuButton(sf::Vector2f(200, 40), sf::Vector2f(625, 480), " ", font);
+Button mainMenuButtonOver(sf::Vector2f(200, 40), sf::Vector2f(625, 490), " ", font);
 Button easyButton(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
 Button normalButton(sf::Vector2f(324, 54), sf::Vector2f(450, 180), " ", font);
 Button hardButton(sf::Vector2f(324, 54), sf::Vector2f(450, 240), " ", font);
@@ -203,6 +204,10 @@ void loadButtons(){
     
     mainMenuButton = Button(sf::Vector2f(200, 40), sf::Vector2f(625, 480), " ", font);
     mainMenuButton.setTexture("Tekstury/przyciskMenuGlowne.png", "Tekstury/kliknięte przyciski/clicked-przyciskMenuGlowne.png");
+
+	mainMenuButtonOver = Button(sf::Vector2f(200, 40), sf::Vector2f(625, 490), " ", font);
+	mainMenuButtonOver.setTexture("Tekstury/przyciskMenuGlowne.png", "Tekstury/kliknięte przyciski/clicked-przyciskMenuGlowne.png");
+
     
     easyButton = Button(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
     easyButton.setTexture("Tekstury/przyciskLatwy.png", "Tekstury/kliknięte przyciski/clicked-przyciskLatwy.png");

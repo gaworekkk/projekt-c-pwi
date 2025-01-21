@@ -270,6 +270,21 @@ int main() {
                     StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, cactusCount, birdCount, skinState, musicVolume, soundVolume, difficulty);
                     currentCoinCount = 0.0f;
                     coinCountMainMenuText.setString(std::to_wstring(coinCount));
+					if (mainMenuButtonOver.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        totalDistance += static_cast<int>(distance);
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        gameState = MainMenu; // Powrót do MainMenu
+                        backgroundMusic.stop(); // Zatrzymanie muzyki tła dla gry
+                        menuMusic.play(); // Odtwarzanie muzyki tła dla menu
+                        // Reset dino icon position
+                        dinoSprite.setPosition(20, 104);
+                        // Reset coin icon position
+                        coinSprite.setPosition(20, 104 + dinoSprite.getGlobalBounds().height + 20);
+                        // Reset coin counter position
+                        coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
+                        // Reset distance counter position
+                        distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
+                    }
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         player.resetPosition();
@@ -525,7 +540,7 @@ int main() {
 
         // Logika w zależności od stanu gry
         if (gameState == Gameplay) {
-            player.handleInput(deltaTime);
+            player.handleInput(deltaTime, cactusManager.getSpeed());
             player.update(deltaTime);
 	        cactusManager.update(deltaTime);
 	        birdManager.update(deltaTime);
@@ -637,7 +652,8 @@ int main() {
             restartButtonPause.update(sf::Mouse::getPosition(window));
             mainMenuButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == GameOver) {
-            restartButton.update(sf::Mouse::getPosition(window));
+            mainMenuButtonOver.update(sf::Mouse::getPosition(window));
+			resumeButton.update(sf::Mouse::getPosition(window));
             // Remove the exit button from the GameOver screen
             // exitButton.update(sf::Mouse::getPosition(window));
         } else if (gameState == Shop) {
@@ -715,6 +731,7 @@ int main() {
             window.clear(sf::Color::Black);
             window.draw(gameOverBackgroundSprite); // Rysowanie tła trybu GameOver
             restartButton.draw(window); // Draw the restart button for GameOver
+			mainMenuButtonOver.draw(window);
             // Remove the exit button from the GameOver screen
             // exitButton.draw(window);
 

@@ -71,6 +71,7 @@ extern Button hardButton;
 extern Button shopButton;
 extern Button* buyButton[6];
 extern Button buyButtonSkin;
+extern Button mainMenuButtonOver;
 // Moneta
 extern sf::Texture coinTexture;
 extern sf::Sprite coinSprite;
