@@ -24,6 +24,7 @@ void drawScrollableList(sf::RenderWindow& window, const std::vector<std::wstring
     for (const auto& item : items) {
         sf::Text text(item, font, 30);
         text.setPosition(200, yOffset); 
+        text.setFillColor(sf::Color::Black);
         window.draw(text);
         yOffset += 40; 
     }

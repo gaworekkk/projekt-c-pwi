@@ -9,9 +9,11 @@
 #include "Difficulty.h"
 #include "Slider.h"
 #include "ResourceLoader.h"
+#include "Achivements.h"
 #include <stdexcept>
 #include <iostream>
 #include <algorithm> 
+#include <vector> 
 
 enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Pause, GameOver, Shop };
 
@@ -56,11 +58,12 @@ int main() {
     deathSound.setVolume(soundVolume);
 
     // Teksty do wyświetlania
-    std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
-    std::vector<std::wstring> wAchievements;
-    for (const auto& achievement : achievements) {
-        wAchievements.push_back(std::wstring(achievement.begin(), achievement.end()));
-    }
+    std::vector<std::wstring> achievements;
+    achievements.push_back(L"Biegacz (" + std::to_wstring(totalDistance) + L"/" + std::to_wstring(range_distance(totalDistance)) + L")");
+    achievements.push_back(L"Jump man (" + std::to_wstring(jumpCount) + L"/" + std::to_wstring(range_jump(jumpCount)) + L")");
+    achievements.push_back(L"Pora umierać (" + std::to_wstring(deathCount) + L"/" + std::to_wstring(range_death(deathCount)) + L")");
+    achievements.push_back(L"Ja to zawsze miałem łeb do interesów (" + std::to_wstring(coinCount) + L"/" + std::to_wstring(range_coins(coinCount)) + L")");
+
     std::vector<std::wstring> statistics = {};
     statistics.push_back(L"Zdobyte monety: " + std::to_wstring(coinCount));
     statistics.push_back(L"Najlepszy wynik: " + std::to_wstring(bestDistance));
@@ -100,8 +103,8 @@ int main() {
     }
 
     // Zmienne do śledzenia miniętych przeszkód
-    std::vector<bool> cactusPassed;
-    std::vector<bool> birdPassed;
+    std::vector<bool> passedCacti; 
+    std::vector<bool> passedBirds; 
 
     // Główna pętla gry
     while (window.isOpen()) {
@@ -138,6 +141,8 @@ int main() {
                         cactusManager.restart();
 			            birdManager.restart();
                         coinManager.restart();
+                        passedCacti.clear();  
+                        passedBirds.clear();  
                         player.resetPosition();
                         gameState = Gameplay; // Przejście do Gameplay
                         gamesPlayed++;
@@ -152,6 +157,8 @@ int main() {
 			            cactusManager.restart();
                         birdManager.restart();
                         coinManager.restart();
+                        passedCacti.clear(); 
+                        passedBirds.clear();  
                         player.resetPosition();
                         gameState = Gameplay; // Przejście do Gameplay
                         gamesPlayed++;
@@ -173,6 +180,8 @@ int main() {
                     }
                     if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        totalDistance += static_cast<int>(distance);
+                        StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, cactusCount, birdCount, skinState, musicVolume, soundVolume, difficulty);
                         window.close(); // Zamknięcie okna
                     }
                     if (shopButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -268,6 +277,7 @@ int main() {
                     }
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         totalDistance += static_cast<int>(distance);
+                        StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, cactusCount, birdCount, skinState, musicVolume, soundVolume, difficulty);
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = MainMenu; // Powrót do MainMenu
                         backgroundMusic.stop(); // Zatrzymanie muzyki tła dla gry
@@ -311,6 +321,8 @@ int main() {
     			        cactusManager.restart();
                         birdManager.restart(); 
                         coinManager.restart();  
+                        passedCacti.clear();  
+                        passedBirds.clear();
 			            currentCoinCount = 0.0f;
                         coinCountMainMenuText.setString(std::to_wstring(coinCount));
                         distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
@@ -587,25 +599,35 @@ int main() {
             }
 
             // Zliczanie miniętych kaktusów i ptaków
-            if (cactusPassed.size() != cactusBounds.size()) {
-                cactusPassed.assign(cactusBounds.size(), false);
+            float playerRight = player.getGlobalBounds().left + player.getGlobalBounds().width;
+
+            if (passedCacti.size() > cactusBounds.size()) {
+                passedCacti.assign(cactusBounds.size(), false);  
+            } else if (passedCacti.size() < cactusBounds.size()){
+                passedCacti.resize(cactusBounds.size(), false);
             }
-            if (birdPassed.size() != birdBounds.size()) {
-                birdPassed.assign(birdBounds.size(), false);
+
+            if (passedBirds.size() > birdBounds.size()) {
+                passedBirds.assign(birdBounds.size(), false);  
+            } else if (passedBirds.size() < birdBounds.size()){
+                passedBirds.resize(birdBounds.size(), false);
             }
 
             for (size_t i = 0; i < cactusBounds.size(); ++i) {
-                if (!cactusPassed[i] && cactusBounds[i].left + cactusBounds[i].width < player.getGlobalBounds().left) {
+                if (!passedCacti[i] && playerRight > cactusBounds[i].left + cactusBounds[i].width) {
                     cactusCount++;
-                    cactusPassed[i] = true;
+                    passedCacti[i] = true;  
                 }
             }
+
+            // Zliczanie miniętych ptaków
             for (size_t i = 0; i < birdBounds.size(); ++i) {
-                if (!birdPassed[i] && birdBounds[i].left + birdBounds[i].width < player.getGlobalBounds().left) {
+                if (!passedBirds[i] && playerRight > birdBounds[i].left + birdBounds[i].width) {
                     birdCount++;
-                    birdPassed[i] = true;
+                    passedBirds[i] = true;  
                 }
             }
+
         } else if (gameState == Shop) {
             player.updateAnimation(deltaTime);
             player.setFrameDuration(0.5f);
@@ -673,7 +695,7 @@ int main() {
             backButton.draw(window);
         } else if (gameState == Achievements) {
             window.draw(achievementsBackgroundSprite); // Rysowanie tła trybu Achievements
-            drawScrollableList(window, wAchievements, font);
+            drawScrollableList(window, achievements, font);
             backButton.draw(window);
         } else if (gameState == Statistics) {
             window.draw(statisticsBackgroundSprite); // Rysowanie tła trybu Statistics
