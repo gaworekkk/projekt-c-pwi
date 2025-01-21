@@ -605,7 +605,7 @@ poorSkin.setText("");
 				}
 			}
 			int playerFallDelay = 4; //do wyczucia
-			if(((distanceInt-playerFallDelay) % 100 == 0) && ((distanceInt - playerFallDelay)% 50 == 0) && ((distanceInt- playerFallDelay)!=0)){
+			if(((distanceInt-playerFallDelay) % 100 == 0) && ((distanceInt - playerFallDelay)% 200 == 0) && ((distanceInt- playerFallDelay)!=0)){
 				player.turnSkyLevelOff();
 			}
 
