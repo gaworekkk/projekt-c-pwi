@@ -84,10 +84,16 @@ int main() {
     for(int i=0;i<6;i++){
         if (skinState[i]==0){
             pressed=i;
-            buyButton[i]->setText("Wybrano");
+            //buyButton[i]->setText("Wybrano");
+            buyButton[i]->setTexture("Tekstury/extinguished-przyciskUBRANO(small).png", "Tekstury/extinguished-przyciskUBRANO(small).png");
             player.setTexture(dinoTexturePath[i]);
-            buyButtonSkin.setText("Wybrano");
+            //buyButtonSkin.setText("Wybrano");
+            buyButtonSkin.setTexture("Tekstury/extinguished-przyciskUBRANO(small).png", "Tekstury/extinguished-przyciskUBRANO(small).png");
         }
+         else {
+        //buyButton[i]->setText("Skin" + std::to_string(i + 1));
+        buyButton[i]->setTexture("Tekstury/przyciskUBIERZ(small).png", "Tekstury/extinguished-przyciskUBIERZ(small).png");
+    }
     }
 
     // Zmienne do śledzenia miniętych przeszkód
@@ -291,6 +297,7 @@ int main() {
                     //     window.close(); // Zamknięcie okna
                     // }
                 } else if (gameState == Shop) {
+                    
                     if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = MainMenu; // Powrót do MainMenu
@@ -301,30 +308,40 @@ int main() {
                         StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, cactusCount, birdCount, skinState, musicVolume, soundVolume, difficulty);
                         for (int i = 0;i<6;i++){
                             if (skinState[i] == 0){
-                                buyButton[i]->setText("Wybrano");
+                                //buyButton[i]->setText("Wybrano");
+                                buyButton[i]->setTexture("Tekstury/extinguished-przyciskUBRANO(small).png", "Tekstury/extinguished-przyciskUBRANO(small).png");
                             } else {
-                                buyButton[i]->setText("Skin" + std::to_string(i+1));
+                                //buyButton[i]->setText("Skin" + std::to_string(i+1));
+                                buyButton[i]->setTexture("Tekstury/przyciskUBIERZ(small).png", "Tekstury/extinguished-przyciskUBIERZ(small).png");
                             }
+                           
                         }
+                        
                     }
                     
                     for (int i=0;i<6;i++){
+
                         if (buyButton[i]->isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                             buttonSound.play(); // Odtwarzanie dźwięku przycisku
                             player.setTexture(dinoTexturePath[i]); 
                             pressed = i;
-                            buyButton[i]->setText("Wybrano");
+                            //buyButton[i]->setText("Wybrano");
+                            buyButton[i]->setTexture("Tekstury/extinguished-przyciskUBRANO(small).png", "Tekstury/extinguished-przyciskUBRANO(small).png");
                             for (int j=0;j<6;j++){
                                 if (j!=i){
-                                    buyButton[j]->setText("Skin" + std::to_string(j+1));
+                                    //buyButton[j]->setText("Skin" + std::to_string(j+1));
+                                    buyButton[j]->setTexture("Tekstury/przyciskUBIERZ(small).png", "Tekstury/extinguished-przyciskUBIERZ(small).png");
                                 }
                             }
                             if (skinState[i] == 0){
-                                buyButtonSkin.setText("Wybrano");
+                                //buyButtonSkin.setText("Wybrano");
+                                buyButtonSkin.setTexture("Tekstury/extinguished-przyciskUBRANO(small).png", "Tekstury/extinguished-przyciskUBRANO(small).png");
                             } else if (skinState[i] == 2){
-                                buyButtonSkin.setText("Kup");
+                                //buyButtonSkin.setText("Kup");
+                                 buyButtonSkin.setTexture("Tekstury/przyciskKUP(small).png", "Tekstury/extinguished-przyciskKUP(small).png");
                             } else {
-                                buyButtonSkin.setText("Wybierz");
+                                //buyButtonSkin.setText("Wybierz");
+                                buyButtonSkin.setTexture("Tekstury/przyciskUBIERZ(small).png", "Tekstury/extinguished-przyciskUBIERZ(small).png");
                             }
                         }
                     }
@@ -336,16 +353,19 @@ int main() {
                                 coinCountMainMenuText.setString(std::to_wstring(coinCount));
                                 skinState[pressed] = 0;
                                 aktualna=player.getTexture();
-                                buyButtonSkin.setText("Wybrano");
+                                //buyButtonSkin.setText("Wybrano");
+                                buyButtonSkin.setTexture("Tekstury/extinguished-przyciskUBRANO(small).png", "Tekstury/extinguished-przyciskUBRANO(small).png");
                                 for (int j=0;j<6;j++){
                                     if (j!=pressed && skinState[j] == 0){
                                         skinState[j] = 1;
+                                        buyButton[j]->setTexture("Tekstury/przyciskUBIERZ(small).png", "Tekstury/extinguished-przyciskUBIERZ(small).png");
                                     }
                                 }
                             }
                         } else if (skinState[pressed] == 1){
                             skinState[pressed] = 0;
-                            buyButtonSkin.setText("Wybrano");
+                            //buyButtonSkin.setText("Wybrano");
+                            buyButtonSkin.setTexture("Tekstury/extinguished-przyciskUBRANO(small).png", "Tekstury/extinguished-przyciskUBRANO(small).png");
                             aktualna=player.getTexture();
                             for (int j=0;j<6;j++){
                                 if (j!=pressed && skinState[j] != 2){
@@ -401,9 +421,11 @@ int main() {
                         StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, cactusCount, birdCount, skinState, musicVolume, soundVolume, difficulty);
                         for (int i = 0;i<6;i++){
                             if (skinState[i] == 0){
-                                buyButton[i]->setText("Wybrano");
+                                //buyButton[i]->setText("Wybrano");
+                                buyButtonSkin.setTexture("Tekstury/extinguished-przyciskUBRANO(small).png", "Tekstury/extinguished-przyciskUBRANO(small).png");
                             } else {
-                                buyButton[i]->setText("Skin" + std::to_string(i+1));
+                                //buyButton[i]->setText("Skin" + std::to_string(i+1));
+                                buyButtonSkin.setTexture("Tekstury/przyciskUBIERZ(small).png", "Tekstury/extinguished-przyciskUBIERZ(small).png");
                             }
                         }
                     }
@@ -688,6 +710,7 @@ int main() {
             for (int i = 0; i < 6; i++) {
                 buyButton[i]->draw(window);
             }
+            window.draw(dinoFrameSprite); // Rysowanie tekstury dino-frame(big) pod player
             player.draw(window);
         }
         window.display();
