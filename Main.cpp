@@ -132,6 +132,7 @@ int main() {
                         cactusManager.restart();
 			            birdManager.restart();
                         coinManager.restart();
+                        player.resetPosition();
                         gameState = Gameplay; // Przejście do Gameplay
                         gamesPlayed++;
                         menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
@@ -144,6 +145,7 @@ int main() {
 			            cactusManager.restart();
                         birdManager.restart();
                         coinManager.restart();
+                        player.resetPosition();
                         gameState = Gameplay; // Przejście do Gameplay
                         gamesPlayed++;
                         menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
@@ -176,12 +178,15 @@ int main() {
 
                 } else if (gameState == OptionsMenu) {
                     if (easyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        buttonSound.play();
                         difficulty = Difficulty::Easy;
                     }
                     if (normalButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        buttonSound.play();
                         difficulty = Difficulty::Normal;
                     }
                     if (hardButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+                        buttonSound.play();
                         difficulty = Difficulty::Hard;
                     }
                     if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -383,6 +388,7 @@ int main() {
                     if (gameState == OptionsMenu) {
                         cactusManager.setDifficulty(difficulty);
                         birdManager.setDifficulty(difficulty);
+                        coinManager.setObstacleSpawnSpeed(cactusManager.getInitialSpeed());
                         musicSlider->reset();
                         soundSlider->reset();
                         musicVolume = musicSlider->getValue();

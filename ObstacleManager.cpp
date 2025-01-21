@@ -178,26 +178,32 @@ void ObstacleManager::setDifficulty(Difficulty newDifficulty) {
         case Easy:
             if(obstacleType == "cactus"){
                 initialCactusSpeed = 180.0f;
+                skyLevelCactusSpawnInterval = 0.8f;
             } else if(obstacleType == "bird"){
                 initialBirdSpeed = 280.0f;
+                skyLevelBirdSpawnInterval = 0.6f;
             }
             baseInterval = 6.0f;
             break;
         case Normal:
             if(obstacleType == "cactus"){
                 initialCactusSpeed = 250.0f;
+                skyLevelCactusSpawnInterval = 0.5f;
             } else if(obstacleType == "bird"){
                 initialBirdSpeed = 400.0f;
+                skyLevelBirdSpawnInterval = 0.5f;
             }
             baseInterval = 1.5f;
             break;
         case Hard:
             if(obstacleType == "cactus"){
-                initialCactusSpeed = 400.0f;
+                initialCactusSpeed = 375.0f;
+                skyLevelCactusSpawnInterval = 0.3f;
             } else if(obstacleType == "bird"){
-                initialBirdSpeed = 550.0f;
+                initialBirdSpeed = 475.0f;
+                skyLevelBirdSpawnInterval = 0.3f;
             }
-            baseInterval = 0.5f;
+            baseInterval = 0.75f;
             break;
     }
 }
