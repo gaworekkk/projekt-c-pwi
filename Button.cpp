@@ -28,6 +28,9 @@ void Button::draw(sf::RenderWindow& window) {
     window.draw(buttonSprite); // Rysowanie sprite
     window.draw(buttonText);
 }
+void Button::setButtonColor(sf::Color color){
+	button.setFillColor(color);
+}
 void Button::setTextColor(sf::Color color){
 	buttonText.setFillColor(color);
 }
