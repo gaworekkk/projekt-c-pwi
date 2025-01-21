@@ -34,6 +34,8 @@ extern sf::Sprite shopBackgroundSprite;
 extern sf::Texture dinoTexture;
 extern sf::Sprite dinoSprite;
 extern std::string dinoTexturePath[6];
+extern sf::Texture dinoFrameTexture;
+extern sf::Sprite dinoFrameSprite;
 
 // Czcionka
 extern sf::Font font;

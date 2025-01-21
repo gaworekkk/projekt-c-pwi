@@ -28,10 +28,8 @@ void CoinManager::update(float deltaTime, sf::FloatRect playerBounds, int& coinC
     spawnTimer += deltaTime;
 
     // Dostosowanie spawnInterval na podstawie obstacleSpawnSpeed
-    float adjustedSpawnInterval = spawnInterval - (obstacleSpawnSpeed * 0.05f); 
-    if (adjustedSpawnInterval < 1.0f) { // Minimalny czas miedzy monetami
-        adjustedSpawnInterval = 1.0f;
-    }
+    float adjustedSpawnInterval = spawnInterval - (obstacleSpawnSpeed / 400);
+
 	if(isSkyLevelOn){
 		adjustedSpawnInterval /= 3;
 	}

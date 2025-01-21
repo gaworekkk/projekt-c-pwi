@@ -57,7 +57,7 @@ Button easyButton(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
 Button normalButton(sf::Vector2f(324, 54), sf::Vector2f(450, 180), " ", font);
 Button hardButton(sf::Vector2f(324, 54), sf::Vector2f(450, 240), " ", font);
 Button shopButton(sf::Vector2f(54, 54), sf::Vector2f(755, 486), " ", font);
-Button buyButtonSkin(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "Kup", font);
+Button buyButtonSkin(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "", font);
 
 // Moneta
 sf::Texture coinTexture;
@@ -84,6 +84,7 @@ sf::Text distanceText2;
 sf::Text bestScoreText;
 sf::Text yourScoreText;
 sf::Text coinsText;
+
 
 void loadOneBackground(sf::Texture& texture, sf::Sprite& sprite, const std::string& filePath, sf::RenderWindow& window) {
     // Załaduj teksturę tła
@@ -166,6 +167,9 @@ void loadBuffers(){
 
 Button* buyButton[6];
 
+sf::Texture dinoFrameTexture;
+sf::Sprite dinoFrameSprite;
+
 void loadButtons(){
     // Ustawienia przycisków
     storyButton = Button(sf::Vector2f(324, 54), sf::Vector2f(250, 372), " ", font);
@@ -216,7 +220,7 @@ void loadButtons(){
     shopButton = Button(sf::Vector2f(54, 54), sf::Vector2f(755, 486), " ", font);
     shopButton.setTexture("Tekstury/shop.png", "Tekstury/kliknięte przyciski/clicked-shop.png");
 
-    buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "Kup", font);
+    buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 400), " ", font);
 
     sf::Vector2f sizes[6] = {
         {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}
@@ -226,12 +230,23 @@ void loadButtons(){
     };
 
     std::wstring labels[6] = {
-        L"Skin1", L"Skin2", L"Skin3", L"Skin4", L"Skin5", L"Skin6"
+        L" ", L" ", L" ", L" ", L" ", L" "
     };
 
     for (int i = 0; i < 6; ++i) {
         buyButton[i] =new Button(sizes[i], positions[i], labels[i], font);
     }
+
+    
+
+    if (!dinoFrameTexture.loadFromFile("Tekstury/dino-frame(big).png")) {
+        throw std::runtime_error("Nie udało się załadować tekstury: Tekstury/dino-frame(big).png");
+    }
+    dinoFrameSprite.setTexture(dinoFrameTexture);
+    // Ustaw pozycję dinoFrameSprite
+    dinoFrameSprite.setPosition(790, 90); // Przykładowa pozycja, dostosuj według potrzeb
+    // Ustaw skalę dinoFrameSprite, aby zwiększyć jego rozmiar
+    dinoFrameSprite.setScale(3.7f, 3.7f); // Przykładowa skala, dostosuj według potrzeb
 }
 
 void loadCoins(){
