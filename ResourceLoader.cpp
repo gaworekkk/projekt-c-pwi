@@ -21,7 +21,7 @@ sf::Sprite shopBackgroundSprite;
 // Dino
 sf::Texture dinoTexture;
 sf::Sprite dinoSprite;
-std::string dinoTexturePath[6] = {"Tekstury/skórki dino/dino2(run).gif", "Tekstury/skórki dino/dino 4 (klatki)/dino_sprite_sheet.png", "Tekstury/skórki dino/dino5(run).gif", "Tekstury/skórki dino/dino6(run).gif", "Tekstury/skórki dino/dino7(run).gif", "Tekstury/skórki dino/dino8(run).gif"};
+std::string dinoTexturePath[6] = {"Tekstury/skórki dino/dino2_sprite_sheet.png", "Tekstury/skórki dino/dino 4 (klatki)/dino_sprite_sheet.png", "Tekstury/skórki dino/dino5_sprite_sheet.png", "Tekstury/skórki dino/dino6run_spritesheet.png", "Tekstury/skórki dino/dino7run_spritesheet.png", "Tekstury/skórki dino/dino8run_spritesheet.png"};
 
 // Czcionka
 sf::Font font;
@@ -57,7 +57,7 @@ Button easyButton(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
 Button normalButton(sf::Vector2f(324, 54), sf::Vector2f(450, 180), " ", font);
 Button hardButton(sf::Vector2f(324, 54), sf::Vector2f(450, 240), " ", font);
 Button shopButton(sf::Vector2f(54, 54), sf::Vector2f(755, 486), " ", font);
-Button buyButtonSkin(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "Kup", font);
+Button buyButtonSkin(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "", font);
 
 // Moneta
 sf::Texture coinTexture;
@@ -84,6 +84,7 @@ sf::Text distanceText2;
 sf::Text bestScoreText;
 sf::Text yourScoreText;
 sf::Text coinsText;
+
 
 void loadOneBackground(sf::Texture& texture, sf::Sprite& sprite, const std::string& filePath, sf::RenderWindow& window) {
     // Załaduj teksturę tła
@@ -131,10 +132,10 @@ void loadFont(){
     }
 }
 
-void loadSliders(){
+void loadSliders(float musicVolume, float soundVolume){
     // Ustawienia dla sliderów
-    musicSlider = new Slider(545, 313, 110, 20, font);
-    soundSlider = new Slider(545, 351, 110, 20, font);
+    musicSlider = new Slider(545, 313, 110, 20, musicVolume, font);
+    soundSlider = new Slider(545, 351, 110, 20, soundVolume, font);
 }
 
 void loadOneMusic(sf::Music& music, const std::string& filePath){
@@ -165,6 +166,9 @@ void loadBuffers(){
 }
 
 Button* buyButton[6];
+
+sf::Texture dinoFrameTexture;
+sf::Sprite dinoFrameSprite;
 
 void loadButtons(){
     // Ustawienia przycisków
@@ -216,7 +220,7 @@ void loadButtons(){
     shopButton = Button(sf::Vector2f(54, 54), sf::Vector2f(755, 486), " ", font);
     shopButton.setTexture("Tekstury/shop.png", "Tekstury/kliknięte przyciski/clicked-shop.png");
 
-    buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "Kup", font);
+    buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 400), " ", font);
 
     sf::Vector2f sizes[6] = {
         {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}
@@ -226,12 +230,23 @@ void loadButtons(){
     };
 
     std::wstring labels[6] = {
-        L"Skin1", L"Skin2", L"Skin3", L"Skin4", L"Skin5", L"Skin6"
+        L" ", L" ", L" ", L" ", L" ", L" "
     };
 
     for (int i = 0; i < 6; ++i) {
         buyButton[i] =new Button(sizes[i], positions[i], labels[i], font);
     }
+
+    
+
+    if (!dinoFrameTexture.loadFromFile("Tekstury/dino-frame(big).png")) {
+        throw std::runtime_error("Nie udało się załadować tekstury: Tekstury/dino-frame(big).png");
+    }
+    dinoFrameSprite.setTexture(dinoFrameTexture);
+    // Ustaw pozycję dinoFrameSprite
+    dinoFrameSprite.setPosition(790, 90); // Przykładowa pozycja, dostosuj według potrzeb
+    // Ustaw skalę dinoFrameSprite, aby zwiększyć jego rozmiar
+    dinoFrameSprite.setScale(3.7f, 3.7f); // Przykładowa skala, dostosuj według potrzeb
 }
 
 void loadCoins(){
@@ -306,11 +321,11 @@ void loadTexts(int coinCount){
     coinsText.setFillColor(sf::Color::White);
 }
 
-void loadAllResources(sf::RenderWindow& window, int coinCount) {
+void loadAllResources(sf::RenderWindow& window, int coinCount, float musicVolume, float soundVolume) {
     loadBackgrounds(window);
     loadDino();
     loadFont();
-    loadSliders();
+    loadSliders(musicVolume, soundVolume);
     loadMusic();
     menuMusic.play();
     loadBuffers();

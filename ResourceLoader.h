@@ -34,6 +34,8 @@ extern sf::Sprite shopBackgroundSprite;
 extern sf::Texture dinoTexture;
 extern sf::Sprite dinoSprite;
 extern std::string dinoTexturePath[6];
+extern sf::Texture dinoFrameTexture;
+extern sf::Sprite dinoFrameSprite;
 
 // Czcionka
 extern sf::Font font;
@@ -98,12 +100,12 @@ extern sf::Text yourScoreText;
 extern sf::Text coinsText;
 
 // Funkcje
-void loadAllResources(sf::RenderWindow& window, int coinCount);
+void loadAllResources(sf::RenderWindow& window, int coinCount, float musicVolume, float soundVolume);
 void loadOneBackground(sf::Texture& texture, sf::Sprite& sprite, const std::string& filePath, sf::RenderWindow& window);
 void loadBackgrounds(sf::RenderWindow& window);
 void loadDino();
 void loadFont();
-void loadSliders();
+void loadSliders(float musicVolume, float soundVolume);
 void loadMusic();
 void loadOneMusic(sf::Music& music, const std::string& filePath);
 void loadBuffers();

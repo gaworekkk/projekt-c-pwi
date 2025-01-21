@@ -10,9 +10,18 @@ extern GameState gameState;
 ObstacleManager::ObstacleManager(float windowWidth, float windowHeight, std::string Type)
     : screenWidth(windowWidth), birdCounter(0), screenHeight(windowHeight), isSkyLevelOn(false), obstacleType(Type), obstacleSpawnTimer(0.f) {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
-    if(!cactusTexture.loadFromFile("Tekstury/kaktusy/kaktus(50x84).png") || !birdTexture.loadFromFile("Tekstury/crow.gif")){
-	    throw std::runtime_error("Nie udało się załadować tekstury przeszkody!");
+    if(!cactusTexture1.loadFromFile("Tekstury/kaktusy/kaktus(50x100).png") || !birdTexture.loadFromFile("Tekstury/crow.gif")){
     }
+	if(!(
+		cactusTexture1.loadFromFile("Tekstury/kaktusy/kaktus(50x100).png")&&
+		cactusTexture2.loadFromFile("Tekstury/kaktusy/kaktus(50x50).png")&&
+		cactusTexture3.loadFromFile("Tekstury/kaktusy/kaktus(50x64).png")&&
+		cactusTexture4.loadFromFile("Tekstury/kaktusy/kaktus(50x74).png")&&
+		cactusTexture5.loadFromFile("Tekstury/kaktusy/kaktus(50x84).png")&&
+		birdTexture.loadFromFile("Tekstury/crow.gif"))){
+			throw std::runtime_error("Nie udało się załadować tekstury przeszkody!");
+	}
+
     if(obstacleType == "cactus"){
 	    speed = initialCactusSpeed;
     }else if(obstacleType == "bird"){
@@ -66,13 +75,28 @@ void ObstacleManager::draw(sf::RenderWindow& window) {
 }
 
 void ObstacleManager::generateObstacle() {
+
     float obstacleHeight;
     float obstacleWidth;
     float obstacleY;
     sf::Texture obstacleTexture;
     if(obstacleType == "cactus"){
-	    obstacleY = groundHeight - cactusHeight;
-	    obstacles.push_back(Obstacle(screenWidth, groundHeight - cactusHeight, cactusWidth, cactusHeight, cactusTexture));    
+		int cactusNum = rand()%5;
+		if(cactusNum == 1){
+obstacles.push_back(Obstacle(screenWidth, groundHeight - cactusHeight1, cactusWidth, cactusHeight1, cactusTexture1));
+		}
+		if(cactusNum == 2){
+obstacles.push_back(Obstacle(screenWidth, groundHeight - cactusHeight2, cactusWidth, cactusHeight2, cactusTexture2));
+		}
+		if(cactusNum == 3){
+obstacles.push_back(Obstacle(screenWidth, groundHeight - cactusHeight3, cactusWidth, cactusHeight3, cactusTexture3));
+		}
+		if(cactusNum == 4){
+obstacles.push_back(Obstacle(screenWidth, groundHeight - cactusHeight4, cactusWidth, cactusHeight4, cactusTexture4));
+		}
+		if(cactusNum == 5){
+obstacles.push_back(Obstacle(screenWidth, groundHeight - cactusHeight5, cactusWidth, cactusHeight5, cactusTexture5));
+		}	
     }else if(obstacleType == "bird"){
 		int skyLaneNum;
 		if(isSkyLevelOn){
@@ -154,26 +178,32 @@ void ObstacleManager::setDifficulty(Difficulty newDifficulty) {
         case Easy:
             if(obstacleType == "cactus"){
                 initialCactusSpeed = 180.0f;
+                skyLevelCactusSpawnInterval = 0.8f;
             } else if(obstacleType == "bird"){
                 initialBirdSpeed = 280.0f;
+                skyLevelBirdSpawnInterval = 0.6f;
             }
             baseInterval = 6.0f;
             break;
         case Normal:
             if(obstacleType == "cactus"){
                 initialCactusSpeed = 250.0f;
+                skyLevelCactusSpawnInterval = 0.5f;
             } else if(obstacleType == "bird"){
                 initialBirdSpeed = 400.0f;
+                skyLevelBirdSpawnInterval = 0.5f;
             }
             baseInterval = 1.5f;
             break;
         case Hard:
             if(obstacleType == "cactus"){
-                initialCactusSpeed = 400.0f;
+                initialCactusSpeed = 375.0f;
+                skyLevelCactusSpawnInterval = 0.3f;
             } else if(obstacleType == "bird"){
-                initialBirdSpeed = 550.0f;
+                initialBirdSpeed = 475.0f;
+                skyLevelBirdSpawnInterval = 0.3f;
             }
-            baseInterval = 0.5f;
+            baseInterval = 0.75f;
             break;
     }
 }
