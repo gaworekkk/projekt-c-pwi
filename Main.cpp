@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-// #include <SFML/Audio.hpp>
+#include <SFML/Audio.hpp>
 #include "Player.h"
 #include "Button.h"
 #include "ObstacleManager.h"
@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <algorithm> 
+#include <vector> 
 
 enum GameState { MainMenu, OptionsMenu, Achievements, Statistics, Gameplay, Pause, GameOver, Shop };
 
@@ -48,11 +49,11 @@ int main() {
     }
     cactusManager.setDifficulty(difficulty);
     birdManager.setDifficulty(difficulty);
-    // menuMusic.setVolume(musicVolume);
-    // backgroundMusic.setVolume(musicVolume);
-    // buttonSound.setVolume(soundVolume);
-    // jumpSound.setVolume(soundVolume);
-    // deathSound.setVolume(soundVolume);
+    menuMusic.setVolume(musicVolume);
+    backgroundMusic.setVolume(musicVolume);
+    buttonSound.setVolume(soundVolume);
+    jumpSound.setVolume(soundVolume);
+    deathSound.setVolume(soundVolume);
 
     // Teksty do wyświetlania
     std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
@@ -97,8 +98,8 @@ int main() {
     }
 
     // Zmienne do śledzenia miniętych przeszkód
-    vector<bool> passedCacti;
-    vector<bool> passedBirds;
+    std::vector<bool> passedCacti; 
+    std::vector<bool> passedBirds; 
 
     // Główna pętla gry
     while (window.isOpen()) {
@@ -126,53 +127,55 @@ int main() {
                     statistics[6] = L"Liczba miniętych kaktusów: " + std::to_wstring(cactusCount);
                     statistics[7] = L"Liczba miniętych ptaków: " + std::to_wstring(birdCount);
                     if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         distance = 0.0f;
                         currentCoinCount = 0.0f;
                         cactusManager.restart();
 			            birdManager.restart();
                         coinManager.restart();
                         passedCacti.clear();  
-                        passedBirds.clear(); 
+                        passedBirds.clear();  
                         player.resetPosition();
                         gameState = Gameplay; // Przejście do Gameplay
                         gamesPlayed++;
-                        // menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
-                        // backgroundMusic.play(); // Odtwarzanie muzyki tła dla gry
+                        menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
+                        backgroundMusic.play(); // Odtwarzanie muzyki tła dla gry
                     }
                     if (endlessButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         distance = 0.0f;
                         currentCoinCount = 0.0f;
 			            cactusManager.restart();
                         birdManager.restart();
                         coinManager.restart();
+                        passedCacti.clear(); 
+                        passedBirds.clear();  
                         player.resetPosition();
                         gameState = Gameplay; // Przejście do Gameplay
                         gamesPlayed++;
-                        // menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
-                        // backgroundMusic.play(); // Odtwarzanie muzyki tła dla gry
+                        menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
+                        backgroundMusic.play(); // Odtwarzanie muzyki tła dla gry
                     }
                     if (optionsButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = OptionsMenu; // Przejście do OptionsMenu
                     }
                     if (achievementsButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = Achievements; // Przejście do Achievements
                     }
                     if (statisticsButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = Statistics; // Przejście do Statistics
                     }
                     if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         totalDistance += static_cast<int>(distance);
                         StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, cactusCount, birdCount, skinState, musicVolume, soundVolume, difficulty);
                         window.close(); // Zamknięcie okna
                     }
                     if (shopButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = Shop; // Przejście do Shop
                         aktualna=player.getTexture();
                         player.setPosition(sf::Vector2f(800, 100));
@@ -194,7 +197,7 @@ int main() {
                         difficulty = Difficulty::Hard;
                     }
                     if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         cactusManager.setDifficulty(difficulty);
                         birdManager.setDifficulty(difficulty);
                         musicSlider->reset();
@@ -207,28 +210,28 @@ int main() {
 
                 } else if (gameState == Achievements) {
                     if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = MainMenu; // Powrót do MainMenu
                     }
 
                 } else if (gameState == Statistics) {
                     if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = MainMenu; // Powrót do MainMenu
                     }
 
                 } else if (gameState == Gameplay) {
                     if (pauseButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = Pause; // Przejście do Pause
-                        // backgroundMusic.pause(); // Zatrzymanie muzyki tła dla gry
+                        backgroundMusic.pause(); // Zatrzymanie muzyki tła dla gry
                     }
 
                 } else if (gameState == Pause) {
                     if (resumeButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = Gameplay; // Powrót do Gameplay
-                        // backgroundMusic.play(); // Wznowienie muzyki tła dla gry
+                        backgroundMusic.play(); // Wznowienie muzyki tła dla gry
                         // Reset dino icon position
                         dinoSprite.setPosition(20, 104);
                         // Reset coin icon position
@@ -239,7 +242,7 @@ int main() {
                         distanceText.setPosition(40 + dinoSprite.getGlobalBounds().width, 104 + (dinoSprite.getGlobalBounds().height / 2) - (distanceText.getGlobalBounds().height / 2) - 20);
                     }
                     if (restartButtonPause.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         totalDistance += static_cast<int>(distance);
                         player.resetPosition();
                         Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
@@ -252,7 +255,7 @@ int main() {
                         coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
                         gameState = Gameplay; // Restart gry
                         gamesPlayed++;
-                        // backgroundMusic.play(); // Odtwarzanie muzyki tła od nowa
+                        backgroundMusic.play(); // Odtwarzanie muzyki tła od nowa
                         // Reset dino icon position
                         dinoSprite.setPosition(20, 104);
                         // Reset coin icon position
@@ -265,10 +268,10 @@ int main() {
                     if (mainMenuButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         totalDistance += static_cast<int>(distance);
                         StatisticsManager::saveStatistics(coinCount, bestDistance, totalDistance, jumpCount, deathCount, gamesPlayed, cactusCount, birdCount, skinState, musicVolume, soundVolume, difficulty);
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = MainMenu; // Powrót do MainMenu
-                        // backgroundMusic.stop(); // Zatrzymanie muzyki tła dla gry
-                        // menuMusic.play(); // Odtwarzanie muzyki tła dla menu
+                        backgroundMusic.stop(); // Zatrzymanie muzyki tła dla gry
+                        menuMusic.play(); // Odtwarzanie muzyki tła dla menu
                         // Reset dino icon position
                         dinoSprite.setPosition(20, 104);
                         // Reset coin icon position
@@ -286,7 +289,7 @@ int main() {
                     currentCoinCount = 0.0f;
                     coinCountMainMenuText.setString(std::to_wstring(coinCount));
                     if (restartButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         player.resetPosition();
                         Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
                         distance = 0.0f;
@@ -301,7 +304,7 @@ int main() {
                         coinCountText.setPosition(49 + coinSprite.getGlobalBounds().width, 99 + dinoSprite.getGlobalBounds().height + 20 + (coinSprite.getGlobalBounds().height / 2) - (coinCountText.getGlobalBounds().height / 2) - 20);
                         gameState = Gameplay; // Restart gry
                         gamesPlayed++;
-                        // backgroundMusic.play(); // Odtwarzanie muzyki tła od nowa
+                        backgroundMusic.play(); // Odtwarzanie muzyki tła od nowa
                     }
                     // Remove the exit button functionality from the GameOver screen
                     // if (exitButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
@@ -311,7 +314,7 @@ int main() {
                 } else if (gameState == Shop) {
                     
                     if (backButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = MainMenu; // Powrót do MainMenu
                         player.resetPosition();
                         player.resetSize();
@@ -334,7 +337,7 @@ int main() {
                     for (int i=0;i<6;i++){
 
                         if (buyButton[i]->isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                            // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                            buttonSound.play(); // Odtwarzanie dźwięku przycisku
                             player.setTexture(dinoTexturePath[i]); 
                             pressed = i;
                             //buyButton[i]->setText("Wybrano");
@@ -358,7 +361,7 @@ int main() {
                         }
                     }
                     if (buyButtonSkin.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
-                        // buttonSound.play(); // Odtwarzanie dźwięku przycisku
+                        buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         if (skinState[pressed] == 2){
                             if (coinCount >= 1){
                                 coinCount -= 1;
@@ -411,11 +414,11 @@ int main() {
                     }
                     if (gameState == Gameplay) {
                         gameState = Pause; // Przejście do Pause
-                        // backgroundMusic.pause(); // Zatrzymanie muzyki tła dla gry
+                        backgroundMusic.pause(); // Zatrzymanie muzyki tła dla gry
                     } 
                     else if (gameState == Pause) {
                         gameState = Gameplay; // Powrót do Gameplay
-                        // backgroundMusic.play(); // Wznowienie muzyki tła dla gry
+                        backgroundMusic.play(); // Wznowienie muzyki tła dla gry
                         // Reset dino icon position
                         dinoSprite.setPosition(20, 104);
                         // Reset coin icon position
@@ -459,8 +462,8 @@ int main() {
                         currentCoinCount = 0.0f; // Reset coin counter
                         gameState = Gameplay; // Restart gry
                         gamesPlayed++;
-                        // backgroundMusic.stop(); // Zatrzymanie muzyki tła
-                        // backgroundMusic.play(); // Odtwarzanie muzyki tła od nowa
+                        backgroundMusic.stop(); // Zatrzymanie muzyki tła
+                        backgroundMusic.play(); // Odtwarzanie muzyki tła od nowa
                         // Reset dino icon position
                         dinoSprite.setPosition(20, 104);
                         // Reset coin icon position
@@ -473,7 +476,7 @@ int main() {
                 }
                 if (event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Up) {
                     if (!isJumping && player.getGlobalBounds().top >= standardLevel && gameState == Gameplay) {
-                        // jumpSound.play(); // Odtwarzanie dźwięku skoku
+                        jumpSound.play(); // Odtwarzanie dźwięku skoku
                         jumpCount++;
                         isJumping = true;
                     }
@@ -493,11 +496,11 @@ int main() {
                 soundSlider->update(event, window);
                 musicVolume = musicSlider->getValue();
                 soundVolume = soundSlider->getValue();
-                // menuMusic.setVolume(musicVolume);
-                // backgroundMusic.setVolume(musicVolume);
-                // buttonSound.setVolume(soundVolume);
-                // jumpSound.setVolume(soundVolume);
-                // deathSound.setVolume(soundVolume);
+                menuMusic.setVolume(musicVolume);
+                backgroundMusic.setVolume(musicVolume);
+                buttonSound.setVolume(soundVolume);
+                jumpSound.setVolume(soundVolume);
+                deathSound.setVolume(soundVolume);
             }
         }
 
@@ -558,18 +561,18 @@ int main() {
                 deathCount++;
                 totalDistance += static_cast<int>(distance); 
                 gameState = GameOver;
-                // backgroundMusic.stop(); // Zatrzymanie muzyki tła dla gry
-                // deathSound.play(); // Odtwarzanie dźwięku śmierci
+                backgroundMusic.stop(); // Zatrzymanie muzyki tła dla gry
+                deathSound.play(); // Odtwarzanie dźwięku śmierci
             }
 
             // Zliczanie miniętych kaktusów i ptaków
             float playerRight = player.getGlobalBounds().left + player.getGlobalBounds().width;
 
             if (passedCacti.size() < cactusBounds.size()) {
-                passedCacti.resize(cactusBounds.size(), false);
+                passedCacti.resize(cactusBounds.size(), false);  
             }
             if (passedBirds.size() < birdBounds.size()) {
-                passedBirds.resize(birdBounds.size(), false);
+                passedBirds.resize(birdBounds.size(), false);  
             }
 
             for (size_t i = 0; i < cactusBounds.size(); ++i) {
@@ -583,7 +586,7 @@ int main() {
             for (size_t i = 0; i < birdBounds.size(); ++i) {
                 if (!passedBirds[i] && playerRight > birdBounds[i].left + birdBounds[i].width) {
                     birdCount++;
-                    passedBirds[i] = true; 
+                    passedBirds[i] = true;  
                 }
             }
 
@@ -623,9 +626,9 @@ int main() {
 
         // Aktualizacja przycisków i sliderów zależnie od stanu
         if (gameState == MainMenu) {
-            // if (menuMusic.getStatus() != sf::Music::Playing) {
-            //     menuMusic.play(); // Odtwarzanie muzyki tła dla menu
-            // }
+            if (menuMusic.getStatus() != sf::Music::Playing) {
+                menuMusic.play(); // Odtwarzanie muzyki tła dla menu
+            }
             storyButton.update(sf::Mouse::getPosition(window));
             endlessButton.update(sf::Mouse::getPosition(window));
             optionsButton.update(sf::Mouse::getPosition(window));
