@@ -122,6 +122,23 @@ int main() {
     std::vector<bool> passedCacti; 
     std::vector<bool> passedBirds; 
 
+    // Load textures for achievements
+    sf::Texture bronzeMedalTexture, silverMedalTexture, goldMedalTexture, achievementFrameTexture;
+    if (!bronzeMedalTexture.loadFromFile("Tekstury/bronze-medal.png") ||
+        !silverMedalTexture.loadFromFile("Tekstury/silver-medal.png") ||
+        !goldMedalTexture.loadFromFile("Tekstury/gold-medal.png") ||
+        !achievementFrameTexture.loadFromFile("Tekstury/archievment-frame.png")) {
+        std::cerr << "Error loading achievement textures" << std::endl;
+        return -1;
+    }
+
+    sf::Sprite achievementSprite;
+    achievementSprite.setScale(2.0f, 2.0f); // Scale the achievement sprite to 2 times its size
+
+    sf::Sprite achievementFrameSprite;
+    achievementFrameSprite.setTexture(achievementFrameTexture);
+    achievementFrameSprite.setScale(2.0f, 2.0f); // Scale the achievement frame sprite to 2 times its size
+
     // Główna pętla gry
     while (window.isOpen()) {
         deltaTime = clock.restart().asSeconds();
@@ -768,7 +785,34 @@ poorSkin.setText("");
             backButton.draw(window);
         } else if (gameState == Achievements) {
             window.draw(achievementsBackgroundSprite); // Rysowanie tła trybu Achievements
-            drawScrollableList(window, achievements, font);
+            float yPosition = 150.0f; // Starting y position for the frames, lowered by 50 pixels
+            float xCenter = window.getSize().x / 2.0f; // Center of the window
+            for (size_t i = 0; i < achievements.size(); ++i) {
+                // Draw the achievement frame
+                achievementFrameSprite.setPosition(xCenter - achievementFrameSprite.getGlobalBounds().width / 2, yPosition);
+                window.draw(achievementFrameSprite);
+
+                // Draw the achievement text
+                sf::Text achievementText(achievements[i], font, 30);
+                achievementText.setFillColor(sf::Color::Black);
+                achievementText.setPosition(xCenter - achievementText.getGlobalBounds().width / 2, yPosition + 40); // Adjust position for scaled frame
+                window.draw(achievementText);
+
+                // Determine which texture to use based on the achievement range
+                if (range_distance(totalDistance) == 1000) {
+                    achievementSprite.setTexture(bronzeMedalTexture);
+                } else if (range_distance(totalDistance) == 10000) {
+                    achievementSprite.setTexture(silverMedalTexture);
+                } else if (range_distance(totalDistance) == 100000) {
+                    achievementSprite.setTexture(goldMedalTexture);
+                }
+
+                // Scale the achievement sprite to 1.2 times its size
+                achievementSprite.setScale(1.2f, 1.2f);
+
+                // Draw the achievement sprite at the same position as the achievement frame
+                yPosition += achievementFrameSprite.getGlobalBounds().height + 5; // Move to the next frame position with 5 pixels gap
+            }
             backButton.draw(window);
         } else if (gameState == Statistics) {
             window.draw(statisticsBackgroundSprite); // Rysowanie tła trybu Statistics
