@@ -9,6 +9,7 @@
 #include "Difficulty.h"
 #include "Slider.h"
 #include "ResourceLoader.h"
+#include "Achivements.h"
 #include <stdexcept>
 #include <iostream>
 #include <algorithm> 
@@ -56,6 +57,7 @@ int main() {
     deathSound.setVolume(soundVolume);
 
     // Teksty do wyświetlania
+
     std::vector<std::string> achievements = {"Achievement 1", "Achievement 2", "Achievement 3"};
     std::vector<std::wstring> wAchievements;
     for (const auto& achievement : achievements) {
@@ -81,6 +83,7 @@ int main() {
         std::to_wstring(cactusCount),
         std::to_wstring(birdCount)
     };
+
 
     
     float deltaTime;
@@ -723,7 +726,7 @@ int main() {
             window.draw(coinCountText);
         } else if (gameState == Achievements) {
             window.draw(achievementsBackgroundSprite); // Rysowanie tła trybu Achievements
-            drawScrollableList(window, wAchievements, font);
+            drawScrollableList(window, achievements, font);
             backButton.draw(window);
         } else if (gameState == Statistics) {
             window.draw(statisticsBackgroundSprite); // Rysowanie tła trybu Statistics
