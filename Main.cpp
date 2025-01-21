@@ -710,6 +710,7 @@ int main() {
             for (int i = 0; i < 6; i++) {
                 buyButton[i]->draw(window);
             }
+            window.draw(dinoFrameSprite); // Rysowanie tekstury dino-frame(big) pod player
             player.draw(window);
         }
         window.display();

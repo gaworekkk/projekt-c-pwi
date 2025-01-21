@@ -85,6 +85,7 @@ sf::Text bestScoreText;
 sf::Text yourScoreText;
 sf::Text coinsText;
 
+
 void loadOneBackground(sf::Texture& texture, sf::Sprite& sprite, const std::string& filePath, sf::RenderWindow& window) {
     // Załaduj teksturę tła
     if (!texture.loadFromFile(filePath)) {
@@ -166,6 +167,9 @@ void loadBuffers(){
 
 Button* buyButton[6];
 
+sf::Texture dinoFrameTexture;
+sf::Sprite dinoFrameSprite;
+
 void loadButtons(){
     // Ustawienia przycisków
     storyButton = Button(sf::Vector2f(324, 54), sf::Vector2f(250, 372), " ", font);
@@ -232,6 +236,17 @@ void loadButtons(){
     for (int i = 0; i < 6; ++i) {
         buyButton[i] =new Button(sizes[i], positions[i], labels[i], font);
     }
+
+    
+
+    if (!dinoFrameTexture.loadFromFile("Tekstury/dino-frame(big).png")) {
+        throw std::runtime_error("Nie udało się załadować tekstury: Tekstury/dino-frame(big).png");
+    }
+    dinoFrameSprite.setTexture(dinoFrameTexture);
+    // Ustaw pozycję dinoFrameSprite
+    dinoFrameSprite.setPosition(790, 90); // Przykładowa pozycja, dostosuj według potrzeb
+    // Ustaw skalę dinoFrameSprite, aby zwiększyć jego rozmiar
+    dinoFrameSprite.setScale(3.7f, 3.7f); // Przykładowa skala, dostosuj według potrzeb
 }
 
 void loadCoins(){
