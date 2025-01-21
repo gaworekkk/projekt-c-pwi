@@ -590,35 +590,6 @@ int main() {
                 }
             }
 
-
-        } else if (gameState == MainMenu) {
-            player.updateAnimation(deltaTime);
-            player.setFrameDuration(0.5f);
-
-        } else if (gameState == OptionsMenu) {
-            player.updateAnimation(deltaTime);
-            player.setFrameDuration(0.5f);
-
-        } else if (gameState == Achievements) {
-            player.updateAnimation(deltaTime);
-            player.setFrameDuration(0.5f);
-
-        } else if (gameState == Statistics) {
-            player.updateAnimation(deltaTime);
-            player.setFrameDuration(0.5f);
-
-        } else if (gameState == Gameplay) {
-            player.updateAnimation(deltaTime);
-            player.setFrameDuration(0.1f);
-        } else if (gameState == Pause) {
-            player.updateAnimation(deltaTime);
-            player.setFrameDuration(0.5f);
-
-
-        } else if (gameState == GameOver) {
-            restartButton.update(sf::Mouse::getPosition(window));
-            // exitButton.update(sf::Mouse::getPosition(window));
-
         } else if (gameState == Shop) {
             player.updateAnimation(deltaTime);
             player.setFrameDuration(0.5f);
