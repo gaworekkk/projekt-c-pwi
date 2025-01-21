@@ -58,8 +58,10 @@ Button easyButton(sf::Vector2f(324, 54), sf::Vector2f(450, 120), " ", font);
 Button normalButton(sf::Vector2f(324, 54), sf::Vector2f(450, 180), " ", font);
 Button hardButton(sf::Vector2f(324, 54), sf::Vector2f(450, 240), " ", font);
 Button shopButton(sf::Vector2f(54, 54), sf::Vector2f(755, 486), " ", font);
-Button buyButtonSkin(sf::Vector2f(200, 40), sf::Vector2f(800, 400), "", font);
-
+Button buyButtonSkin(sf::Vector2f(200, 40), sf::Vector2f(800, 490), "", font);
+Button priceSkin(sf::Vector2f(200, 50), sf::Vector2f(800, 450), "", font);
+Button nameSkin(sf::Vector2f(200, 50), sf::Vector2f(800, 470), "", font);
+Button poorSkin(sf::Vector2f(200, 40), sf::Vector2f(800, 440), " ", font);
 // Moneta
 sf::Texture coinTexture;
 sf::Sprite coinSprite;
@@ -225,8 +227,13 @@ void loadButtons(){
     shopButton = Button(sf::Vector2f(54, 54), sf::Vector2f(755, 486), " ", font);
     shopButton.setTexture("Tekstury/shop.png", "Tekstury/kliknięte przyciski/clicked-shop.png");
 
-    buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 400), " ", font);
-
+    buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 490), " ", font);
+	priceSkin = Button(sf::Vector2f(200, 50), sf::Vector2f(800, 420), "", font);
+	nameSkin = Button(sf::Vector2f(200, 50), sf::Vector2f(800, 390), "", font);
+	nameSkin.setTextColor(sf::Color::Black);
+	priceSkin.setTextColor(sf::Color::Black);
+ buyButtonSkin = Button(sf::Vector2f(200, 40), sf::Vector2f(800, 500), " ", font);
+	poorSkin = Button(sf::Vector2f(200, 50), sf::Vector2f(800, 445), "", font);
 
     sf::Vector2f sizes[6] = {
         {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}, {200, 50}
@@ -252,7 +259,7 @@ void loadButtons(){
     }
     dinoFrameSprite.setTexture(dinoFrameTexture);
     // Ustaw pozycję dinoFrameSprite
-    dinoFrameSprite.setPosition(790, 90); // Przykładowa pozycja, dostosuj według potrzeb
+    dinoFrameSprite.setPosition(790, 150); // Przykładowa pozycja, dostosuj według potrzeb
     // Ustaw skalę dinoFrameSprite, aby zwiększyć jego rozmiar
     dinoFrameSprite.setScale(3.7f, 3.7f); // Przykładowa skala, dostosuj według potrzeb
 }

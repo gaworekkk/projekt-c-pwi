@@ -15,7 +15,7 @@ public:
 
     std::string getText() const; // Pobranie tekstu z przycisku
  void setTextColor(sf::Color color);
-   
+ void setButtonColor(sf::Color color);  
 
 private:
     sf::RectangleShape button; // Kształt przycisku
