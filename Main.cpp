@@ -568,11 +568,16 @@ int main() {
             // Zliczanie miniętych kaktusów i ptaków
             float playerRight = player.getGlobalBounds().left + player.getGlobalBounds().width;
 
-            if (passedCacti.size() < cactusBounds.size()) {
-                passedCacti.resize(cactusBounds.size(), false);  
+            if (passedCacti.size() > cactusBounds.size()) {
+                passedCacti.assign(cactusBounds.size(), false);  
+            } else if (passedCacti.size() < cactusBounds.size()){
+                passedCacti.resize(cactusBounds.size(), false);
             }
-            if (passedBirds.size() < birdBounds.size()) {
-                passedBirds.resize(birdBounds.size(), false);  
+
+            if (passedBirds.size() > birdBounds.size()) {
+                passedBirds.assign(birdBounds.size(), false);  
+            } else if (passedBirds.size() < birdBounds.size()){
+                passedBirds.resize(birdBounds.size(), false);
             }
 
             for (size_t i = 0; i < cactusBounds.size(); ++i) {
