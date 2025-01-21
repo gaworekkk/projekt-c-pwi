@@ -1,5 +1,7 @@
 #include "Button.h"
 #include <stdexcept>
+#include <SFML/Graphics.hpp>
+
 
 Button::Button(const sf::Vector2f& size, const sf::Vector2f& position, const sf::String& text, const sf::Font& font) : isHovered(true) {
     button.setSize(size);
@@ -26,7 +28,9 @@ void Button::draw(sf::RenderWindow& window) {
     window.draw(buttonSprite); // Rysowanie sprite
     window.draw(buttonText);
 }
-
+void Button::setTextColor(sf::Color color){
+	buttonText.setFillColor(color);
+}
 void Button::update(const sf::Vector2i& mousePos) {
     if (button.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
         if (!isHovered) {

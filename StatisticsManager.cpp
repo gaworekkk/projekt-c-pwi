@@ -11,12 +11,12 @@ void StatisticsManager::saveStatistics(int coinCount, int bestDistance, int tota
         {"games_played", gamesPlayed},
         {"cactus_count", cactusCount},
         {"bird_count", birdCount},
-        {"Skin1", skinState[0]},
-        {"Skin2", skinState[1]},
-        {"Skin3", skinState[2]},
-        {"Skin4", skinState[3]},
-        {"Skin5", skinState[4]},
-        {"Skin6", skinState[5]},
+        {"Dino", skinState[0]},
+        {"Rascal", skinState[1]},
+        {"Albino", skinState[2]},
+        {"Smurf", skinState[3]},
+        {"Shadow", skinState[4]},
+        {"Dragon", skinState[5]},
         {"music_volume", musicVolume},
         {"sound_volume", soundVolume},
         {"difficulty", difficulty}
@@ -42,12 +42,12 @@ void StatisticsManager::loadStatistics(int& coinCount, int& bestDistance, int& t
         gamesPlayed = statsJson.value("games_played", 0);
         cactusCount = statsJson.value("cactus_count", 0);
         birdCount = statsJson.value("bird_count", 0);
-        skinState[0] = statsJson.value("Skin1", 0);
-        skinState[1] = statsJson.value("Skin2", 2);
-        skinState[2] = statsJson.value("Skin3", 2);
-        skinState[3] = statsJson.value("Skin4", 2);
-        skinState[4] = statsJson.value("Skin5", 2);
-        skinState[5] = statsJson.value("Skin6", 2);
+        skinState[0] = statsJson.value("Dino", 0);
+        skinState[1] = statsJson.value("Rascal", 2);
+        skinState[2] = statsJson.value("Albino", 2);
+        skinState[3] = statsJson.value("Smurf", 2);
+        skinState[4] = statsJson.value("Shadow", 2);
+        skinState[5] = statsJson.value("Dragon", 2);
         musicVolume = statsJson.value("music_volume", 100);
         soundVolume = statsJson.value("sound_volume", 100);
         difficulty = statsJson.value("difficulty", Difficulty::Normal);

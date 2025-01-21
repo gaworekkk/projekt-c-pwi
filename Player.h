@@ -7,7 +7,7 @@ class Player {
 public:
     Player(const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color, const std::string& textureFile, int frameCount, float frameDuration);
     Player& operator=(const Player& other);
-    void handleInput(float deltaTime);
+    void handleInput(float deltaTime, float tempSpeed);
     void update(float deltaTime);
     void draw(sf::RenderWindow& window);
     void resetPosition(); // Nowa metoda

@@ -85,13 +85,13 @@ sf::FloatRect Player::getGlobalBounds() {
     return player.getGlobalBounds();
 }
 // Obsługa wejścia gracza
-void Player::handleInput(float deltaTime) {
+void Player::handleInput(float deltaTime, float tempSpeed) {
 
     // Ruch w lewo i prawo
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-        velocity.x = -moveSpeed;
+        velocity.x = -tempSpeed;
     } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-        velocity.x = moveSpeed;
+        velocity.x = tempSpeed*0.8;
     } else {
         velocity.x = 0.f;
     }
