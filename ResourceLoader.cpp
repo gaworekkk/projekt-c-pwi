@@ -41,7 +41,7 @@ sf::SoundBuffer buttonBuffer;
 sf::Sound buttonSound;
 
 // Przyciski
-Button storyButton(sf::Vector2f(324, 54), sf::Vector2f(250, 372), " ", font);
+Button storyButton(sf::Vector2f(324, 54), sf::Vector2f(350, 372), " ", font);
 Button endlessButton(sf::Vector2f(324, 54), sf::Vector2f(626, 372), " ", font);
 Button optionsButton(sf::Vector2f(54, 54), sf::Vector2f(209, 486), " ", font);
 Button achievementsButton(sf::Vector2f(54, 54), sf::Vector2f(391, 486), " ", font);
@@ -169,11 +169,11 @@ Button* buyButton[6];
 
 void loadButtons(){
     // Ustawienia przycisków
-    storyButton = Button(sf::Vector2f(324, 54), sf::Vector2f(250, 372), " ", font);
+    storyButton = Button(sf::Vector2f(324, 54), sf::Vector2f(440, 372), " ", font);
     storyButton.setTexture("Tekstury/przyciskSTART.png", "Tekstury/kliknięte przyciski/clicked-przyciskSTART.png");
     
-    endlessButton = Button(sf::Vector2f(324, 54), sf::Vector2f(626, 372), " ", font);
-    endlessButton.setTexture("Tekstury/przyciskENDLESS.png", "Tekstury/kliknięte przyciski/clicked-przyciskENDLESS.png");
+    //endlessButton = Button(sf::Vector2f(324, 54), sf::Vector2f(626, 372), " ", font);
+    //endlessButton.setTexture("Tekstury/przyciskENDLESS.png", "Tekstury/kliknięte przyciski/clicked-przyciskENDLESS.png");
     
     optionsButton = Button(sf::Vector2f(54, 54), sf::Vector2f(209, 486), " ", font);
     optionsButton.setTexture("Tekstury/settings.png", "Tekstury/kliknięte przyciski/clicked-settings.png");

@@ -121,6 +121,9 @@ int main() {
                     statistics[6] = L"Liczba miniętych kaktusów: " + std::to_wstring(cactusCount);
                     statistics[7] = L"Liczba miniętych ptaków: " + std::to_wstring(birdCount);
                     if (storyButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
+						player.resetPosition();
+                        Player player(sf::Vector2f(80, 80), sf::Vector2f(100, 500), sf::Color::White, "Tekstury/skórki dino/dino_sprite_sheet.png", 3, 0.1f); // 3 klatki animacji, 0.1 sekundy na klatkę
+
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         distance = 0.0f;
                         currentCoinCount = 0.0f;
@@ -132,6 +135,7 @@ int main() {
                         menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
                         backgroundMusic.play(); // Odtwarzanie muzyki tła dla gry
                     }
+					/*
                     if (endlessButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         distance = 0.0f;
@@ -144,6 +148,7 @@ int main() {
                         menuMusic.stop(); // Zatrzymanie muzyki tła dla menu
                         backgroundMusic.play(); // Odtwarzanie muzyki tła dla gry
                     }
+					*/
                     if (optionsButton.isClicked(sf::Mouse::getPosition(window), event.mouseButton)) {
                         buttonSound.play(); // Odtwarzanie dźwięku przycisku
                         gameState = OptionsMenu; // Przejście do OptionsMenu
@@ -630,7 +635,7 @@ int main() {
                 menuMusic.play(); // Odtwarzanie muzyki tła dla menu
             }
             storyButton.update(sf::Mouse::getPosition(window));
-            endlessButton.update(sf::Mouse::getPosition(window));
+            //endlessButton.update(sf::Mouse::getPosition(window));
             optionsButton.update(sf::Mouse::getPosition(window));
             achievementsButton.update(sf::Mouse::getPosition(window));
             statisticsButton.update(sf::Mouse::getPosition(window));
@@ -666,7 +671,7 @@ int main() {
         if (gameState == MainMenu) {
             window.draw(backgroundSprite); // Rysowanie tła
             storyButton.draw(window);
-            endlessButton.draw(window);
+            //endlessButton.draw(window);
             optionsButton.draw(window);
             achievementsButton.draw(window);
             statisticsButton.draw(window);
